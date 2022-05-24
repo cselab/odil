@@ -1,6 +1,7 @@
-# odil
+# Optimizing a Discrete Loss (ODIL)
 
-## Publications
+This repository will contain the source code and configuration
+to reproduce results from
 
 1. Karnakov P, Litvinov S, Koumoutsakos P. Optimizing a DIscrete Loss
    (ODIL) to solve forward and inverse problems for partial
