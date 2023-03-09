@@ -1,0 +1,29 @@
+axes.autolimit_mode: round_numbers
+axes.linewidth: 0.6
+axes.prop_cycle: cycler('color', ['ff1f5b', '00cd6c', '009ade', 'af58ba', 'ffc61e', 'f28522', 'a0b1ba', 'a6761d', 'e9002d', 'ffaa00', '00b000'])
+axes.spines.right: False
+axes.spines.top: False
+axes.unicode_minus: False
+axes.xmargin: 0
+axes.ymargin: 0
+figure.dpi: 300
+figure.figsize: 2.8, 2.2
+font.family: sans-serif
+font.size: 8
+legend.frameon: False
+legend.handlelength:  1.85
+lines.linewidth: 1
+lines.markersize: 2
+pdf.fonttype: 42
+ps.fonttype: 42
+savefig.bbox: tight
+savefig.transparent: True
+svg.hashsalt: 2022
+xtick.major.size: 2.5
+xtick.major.width: 0.6
+xtick.minor.size: 1.5
+xtick.minor.width: 0.4
+ytick.major.size: 2.5
+ytick.major.width: 0.6
+ytick.minor.size: 1.5
+ytick.minor.width: 0.4

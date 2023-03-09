@@ -1,0 +1,531 @@
+./body3d.py --outdir out_body2d --dim 2 --double 1 --body half --blend 1 --optimizer lbfgsb --ref_path ref_half_blend1_lamb1/ref.pickle --optimizer newton --mg 0 --linsolver direct --plot_every 10 --report_every 1 --history_every 1 --checkpoint_every 10
+Entering 'out_body2d'
+levels [129, 65] [65, 33] [33, 17] [17, 9] [9, 5] [5, 3]
+Loading reference solution from '../ref_half_blend1_lamb1/ref.pickle'
+Running Newton optimizer
+
+epoch=00000
+residual: 0.1728, 0, 0, 0
+walltime: 5.897 s
+vx_00000.xmf vy_00000.xmf p_00000.xmf
+state_000000.pickle
+
+epoch=00001
+residual: 0.9428, 0.71192, 0.052069, 0
+walltime: 7.917 s
+walltime/epoch: 7914.682 ms
+
+epoch=00002
+residual: 0.28793, 0.28805, 0.035531, 0
+walltime: 9.860 s
+walltime/epoch: 1942.270 ms
+
+epoch=00003
+residual: 0.084401, 0.069799, 0.01003, 0
+walltime: 11.822 s
+walltime/epoch: 1961.974 ms
+
+epoch=00004
+residual: 0.027792, 0.021639, 0.0024758, 0
+walltime: 13.812 s
+walltime/epoch: 1990.165 ms
+
+epoch=00005
+residual: 0.0098259, 0.0083196, 0.00065317, 0
+walltime: 15.739 s
+walltime/epoch: 1927.029 ms
+
+epoch=00006
+residual: 0.0033538, 0.0031259, 0.00022356, 0
+walltime: 17.751 s
+walltime/epoch: 2011.939 ms
+
+epoch=00007
+residual: 0.0012472, 0.0013052, 6.4544e-05, 0
+walltime: 19.687 s
+walltime/epoch: 1935.711 ms
+
+epoch=00008
+residual: 0.00050619, 0.00057657, 1.8889e-05, 0
+walltime: 21.603 s
+walltime/epoch: 1916.264 ms
+
+epoch=00009
+residual: 0.00021862, 0.00026365, 6.9236e-06, 0
+walltime: 23.513 s
+walltime/epoch: 1910.597 ms
+
+epoch=00010
+residual: 0.00010084, 0.00012607, 2.5185e-06, 0
+walltime: 25.432 s
+walltime/epoch: 1918.178 ms
+vx_00001.xmf vy_00001.xmf p_00001.xmf
+state_000010.pickle
+
+epoch=00011
+residual: 4.8166e-05, 6.2053e-05, 1.0478e-06, 0
+walltime: 27.780 s
+walltime/epoch: 2348.205 ms
+
+epoch=00012
+residual: 2.3954e-05, 3.1704e-05, 4.0321e-07, 0
+walltime: 30.636 s
+walltime/epoch: 2856.598 ms
+
+epoch=00013
+residual: 1.23e-05, 1.6703e-05, 1.9067e-07, 0
+walltime: 32.984 s
+walltime/epoch: 2347.246 ms
+
+epoch=00014
+residual: 6.5038e-06, 9.0276e-06, 9.241e-08, 0
+walltime: 34.908 s
+walltime/epoch: 1924.630 ms
+
+epoch=00015
+residual: 3.5284e-06, 4.9765e-06, 4.589e-08, 0
+walltime: 36.816 s
+walltime/epoch: 1908.096 ms
+
+epoch=00016
+residual: 1.9562e-06, 2.784e-06, 2.3499e-08, 0
+walltime: 38.724 s
+walltime/epoch: 1907.535 ms
+
+epoch=00017
+residual: 1.1028e-06, 1.5744e-06, 1.233e-08, 0
+walltime: 40.636 s
+walltime/epoch: 1911.976 ms
+
+epoch=00018
+residual: 6.2955e-07, 8.9758e-07, 6.5664e-09, 0
+walltime: 42.634 s
+walltime/epoch: 1997.576 ms
+
+epoch=00019
+residual: 3.6274e-07, 5.1484e-07, 3.5376e-09, 0
+walltime: 44.558 s
+walltime/epoch: 1924.844 ms
+
+epoch=00020
+residual: 2.1048e-07, 2.9671e-07, 1.9249e-09, 0
+walltime: 46.458 s
+walltime/epoch: 1899.560 ms
+vx_00002.xmf vy_00002.xmf p_00002.xmf
+state_000020.pickle
+
+epoch=00021
+residual: 1.228e-07, 1.7165e-07, 1.0548e-09, 0
+walltime: 48.365 s
+walltime/epoch: 1906.600 ms
+
+epoch=00022
+residual: 7.1952e-08, 9.9625e-08, 5.8087e-10, 0
+walltime: 50.309 s
+walltime/epoch: 1944.514 ms
+
+epoch=00023
+residual: 4.2305e-08, 5.7985e-08, 3.2102e-10, 0
+walltime: 52.212 s
+walltime/epoch: 1903.054 ms
+
+epoch=00024
+residual: 2.4946e-08, 3.3834e-08, 1.7798e-10, 0
+walltime: 54.146 s
+walltime/epoch: 1933.609 ms
+
+epoch=00025
+residual: 1.4746e-08, 1.9786e-08, 9.8976e-11, 0
+walltime: 56.247 s
+walltime/epoch: 2101.486 ms
+
+epoch=00026
+residual: 8.7356e-09, 1.1594e-08, 5.5214e-11, 0
+walltime: 58.250 s
+walltime/epoch: 2002.401 ms
+
+epoch=00027
+residual: 5.1846e-09, 6.8067e-09, 3.09e-11, 0
+walltime: 60.658 s
+walltime/epoch: 2408.429 ms
+
+epoch=00028
+residual: 3.0822e-09, 4.0027e-09, 1.7349e-11, 0
+walltime: 63.434 s
+walltime/epoch: 2775.377 ms
+
+epoch=00029
+residual: 1.8351e-09, 2.3574e-09, 9.7722e-12, 0
+walltime: 65.433 s
+walltime/epoch: 1999.861 ms
+
+epoch=00030
+residual: 1.0941e-09, 1.3903e-09, 5.5223e-12, 0
+walltime: 67.585 s
+walltime/epoch: 2151.644 ms
+vx_00003.xmf vy_00003.xmf p_00003.xmf
+state_000030.pickle
+
+epoch=00031
+residual: 6.5311e-10, 8.21e-10, 3.1302e-12, 0
+walltime: 69.518 s
+walltime/epoch: 1932.406 ms
+
+epoch=00032
+residual: 3.903e-10, 4.8537e-10, 1.7798e-12, 0
+walltime: 71.787 s
+walltime/epoch: 2269.263 ms
+
+epoch=00033
+residual: 2.3348e-10, 2.8725e-10, 1.015e-12, 0
+walltime: 74.134 s
+walltime/epoch: 2347.330 ms
+
+epoch=00034
+residual: 1.398e-10, 1.7016e-10, 5.8027e-13, 0
+walltime: 76.752 s
+walltime/epoch: 2618.208 ms
+
+epoch=00035
+residual: 8.3777e-11, 1.0089e-10, 3.3293e-13, 0
+walltime: 78.925 s
+walltime/epoch: 2172.271 ms
+
+epoch=00036
+residual: 5.0244e-11, 5.986e-11, 1.9146e-13, 0
+walltime: 81.611 s
+walltime/epoch: 2686.783 ms
+
+epoch=00037
+residual: 3.0155e-11, 3.5542e-11, 1.1043e-13, 0
+walltime: 84.043 s
+walltime/epoch: 2431.347 ms
+
+epoch=00038
+residual: 1.8109e-11, 2.1116e-11, 6.427e-14, 0
+walltime: 86.457 s
+walltime/epoch: 2414.596 ms
+
+epoch=00039
+residual: 1.0881e-11, 1.2552e-11, 3.8213e-14, 0
+walltime: 88.774 s
+walltime/epoch: 2316.898 ms
+
+epoch=00040
+residual: 6.5418e-12, 7.4646e-12, 2.3742e-14, 0
+walltime: 90.948 s
+walltime/epoch: 2174.098 ms
+vx_00004.xmf vy_00004.xmf p_00004.xmf
+state_000040.pickle
+
+epoch=00041
+residual: 3.9359e-12, 4.4411e-12, 1.6104e-14, 0
+walltime: 92.856 s
+walltime/epoch: 1907.058 ms
+
+epoch=00042
+residual: 2.3686e-12, 2.6432e-12, 1.2602e-14, 0
+walltime: 94.771 s
+walltime/epoch: 1915.859 ms
+
+epoch=00043
+residual: 1.4258e-12, 1.5737e-12, 1.1313e-14, 0
+walltime: 97.394 s
+walltime/epoch: 2622.551 ms
+
+epoch=00044
+residual: 8.5853e-13, 9.3722e-13, 1.0778e-14, 0
+walltime: 100.353 s
+walltime/epoch: 2959.183 ms
+
+epoch=00045
+residual: 5.1807e-13, 5.5811e-13, 9.9791e-15, 0
+walltime: 102.750 s
+walltime/epoch: 2396.530 ms
+
+epoch=00046
+residual: 3.1296e-13, 3.3238e-13, 1.0166e-14, 0
+walltime: 104.897 s
+walltime/epoch: 2147.738 ms
+
+epoch=00047
+residual: 1.8933e-13, 1.9802e-13, 1.0139e-14, 0
+walltime: 107.153 s
+walltime/epoch: 2255.274 ms
+
+epoch=00048
+residual: 1.1535e-13, 1.1817e-13, 9.7672e-15, 0
+walltime: 109.187 s
+walltime/epoch: 2034.367 ms
+
+epoch=00049
+residual: 7.1885e-14, 7.0692e-14, 9.8941e-15, 0
+walltime: 111.310 s
+walltime/epoch: 2122.710 ms
+
+epoch=00050
+residual: 4.7146e-14, 4.2404e-14, 9.7415e-15, 0
+walltime: 113.710 s
+walltime/epoch: 2400.055 ms
+vx_00005.xmf vy_00005.xmf p_00005.xmf
+state_000050.pickle
+
+epoch=00051
+residual: 3.4486e-14, 2.5765e-14, 9.7711e-15, 0
+walltime: 115.864 s
+walltime/epoch: 2154.292 ms
+
+epoch=00052
+residual: 2.7422e-14, 1.6353e-14, 9.5726e-15, 0
+walltime: 118.513 s
+walltime/epoch: 2648.438 ms
+
+epoch=00053
+residual: 2.4602e-14, 1.1059e-14, 9.8812e-15, 0
+walltime: 120.754 s
+walltime/epoch: 2240.911 ms
+
+epoch=00054
+residual: 2.4263e-14, 8.5289e-15, 9.8639e-15, 0
+walltime: 122.669 s
+walltime/epoch: 1915.621 ms
+
+epoch=00055
+residual: 2.3113e-14, 7.4134e-15, 9.7557e-15, 0
+walltime: 124.649 s
+walltime/epoch: 1979.523 ms
+
+epoch=00056
+residual: 2.2681e-14, 7.1253e-15, 9.6759e-15, 0
+walltime: 126.801 s
+walltime/epoch: 2152.611 ms
+
+epoch=00057
+residual: 2.3922e-14, 6.8131e-15, 9.9623e-15, 0
+walltime: 128.729 s
+walltime/epoch: 1927.760 ms
+
+epoch=00058
+residual: 2.3462e-14, 6.9275e-15, 9.942e-15, 0
+walltime: 130.693 s
+walltime/epoch: 1963.489 ms
+
+epoch=00059
+residual: 2.4094e-14, 6.7681e-15, 9.9068e-15, 0
+walltime: 132.993 s
+walltime/epoch: 2300.446 ms
+
+epoch=00060
+residual: 2.4127e-14, 6.848e-15, 9.9286e-15, 0
+walltime: 135.453 s
+walltime/epoch: 2460.054 ms
+vx_00006.xmf vy_00006.xmf p_00006.xmf
+state_000060.pickle
+
+epoch=00061
+residual: 2.3405e-14, 6.6878e-15, 1.0038e-14, 0
+walltime: 137.631 s
+walltime/epoch: 2178.236 ms
+
+epoch=00062
+residual: 2.3697e-14, 6.7595e-15, 9.8949e-15, 0
+walltime: 140.070 s
+walltime/epoch: 2438.414 ms
+
+epoch=00063
+residual: 2.3539e-14, 6.7605e-15, 1.0045e-14, 0
+walltime: 142.259 s
+walltime/epoch: 2189.115 ms
+
+epoch=00064
+residual: 2.3136e-14, 6.9472e-15, 9.7241e-15, 0
+walltime: 144.390 s
+walltime/epoch: 2131.188 ms
+
+epoch=00065
+residual: 2.3764e-14, 6.611e-15, 9.7515e-15, 0
+walltime: 146.657 s
+walltime/epoch: 2266.781 ms
+
+epoch=00066
+residual: 2.3652e-14, 6.6455e-15, 9.8768e-15, 0
+walltime: 148.961 s
+walltime/epoch: 2303.999 ms
+
+epoch=00067
+residual: 2.3281e-14, 6.7678e-15, 9.6592e-15, 0
+walltime: 150.937 s
+walltime/epoch: 1975.732 ms
+
+epoch=00068
+residual: 2.3141e-14, 6.5348e-15, 9.9731e-15, 0
+walltime: 153.181 s
+walltime/epoch: 2244.336 ms
+
+epoch=00069
+residual: 2.3247e-14, 6.9525e-15, 1.0163e-14, 0
+walltime: 155.488 s
+walltime/epoch: 2306.996 ms
+
+epoch=00070
+residual: 2.3434e-14, 7.1603e-15, 1.0061e-14, 0
+walltime: 157.654 s
+walltime/epoch: 2165.729 ms
+vx_00007.xmf vy_00007.xmf p_00007.xmf
+state_000070.pickle
+
+epoch=00071
+residual: 2.4266e-14, 6.9911e-15, 9.9428e-15, 0
+walltime: 159.662 s
+walltime/epoch: 2008.081 ms
+
+epoch=00072
+residual: 2.3264e-14, 6.8007e-15, 9.7763e-15, 0
+walltime: 161.654 s
+walltime/epoch: 1992.365 ms
+
+epoch=00073
+residual: 2.2337e-14, 6.8005e-15, 9.4533e-15, 0
+walltime: 163.718 s
+walltime/epoch: 2063.567 ms
+
+epoch=00074
+residual: 2.3249e-14, 6.5038e-15, 9.9696e-15, 0
+walltime: 165.771 s
+walltime/epoch: 2052.774 ms
+
+epoch=00075
+residual: 2.2489e-14, 6.8014e-15, 9.8001e-15, 0
+walltime: 167.821 s
+walltime/epoch: 2050.276 ms
+
+epoch=00076
+residual: 2.2685e-14, 6.8733e-15, 9.7015e-15, 0
+walltime: 169.940 s
+walltime/epoch: 2119.268 ms
+
+epoch=00077
+residual: 2.3084e-14, 6.7852e-15, 9.808e-15, 0
+walltime: 172.259 s
+walltime/epoch: 2318.342 ms
+
+epoch=00078
+residual: 2.2722e-14, 6.8951e-15, 9.7667e-15, 0
+walltime: 174.167 s
+walltime/epoch: 1908.668 ms
+
+epoch=00079
+residual: 2.3394e-14, 6.6787e-15, 9.9985e-15, 0
+walltime: 176.109 s
+walltime/epoch: 1941.342 ms
+
+epoch=00080
+residual: 2.3216e-14, 6.7338e-15, 9.8624e-15, 0
+walltime: 178.027 s
+walltime/epoch: 1918.223 ms
+vx_00008.xmf vy_00008.xmf p_00008.xmf
+state_000080.pickle
+
+epoch=00081
+residual: 2.4119e-14, 6.8889e-15, 9.976e-15, 0
+walltime: 179.943 s
+walltime/epoch: 1915.632 ms
+
+epoch=00082
+residual: 2.3831e-14, 6.9919e-15, 1.008e-14, 0
+walltime: 181.884 s
+walltime/epoch: 1941.317 ms
+
+epoch=00083
+residual: 2.4107e-14, 7.084e-15, 9.9624e-15, 0
+walltime: 184.140 s
+walltime/epoch: 2255.680 ms
+
+epoch=00084
+residual: 2.385e-14, 7.1161e-15, 9.7601e-15, 0
+walltime: 186.311 s
+walltime/epoch: 2171.315 ms
+
+epoch=00085
+residual: 2.3631e-14, 6.8177e-15, 9.9018e-15, 0
+walltime: 188.234 s
+walltime/epoch: 1922.900 ms
+
+epoch=00086
+residual: 2.3841e-14, 6.8537e-15, 1.0055e-14, 0
+walltime: 190.200 s
+walltime/epoch: 1966.032 ms
+
+epoch=00087
+residual: 2.3825e-14, 7.0595e-15, 9.9974e-15, 0
+walltime: 192.378 s
+walltime/epoch: 2178.056 ms
+
+epoch=00088
+residual: 2.3707e-14, 7.1528e-15, 9.9029e-15, 0
+walltime: 194.587 s
+walltime/epoch: 2209.229 ms
+
+epoch=00089
+residual: 2.3755e-14, 6.9764e-15, 9.8156e-15, 0
+walltime: 196.582 s
+walltime/epoch: 1995.057 ms
+
+epoch=00090
+residual: 2.3552e-14, 6.8392e-15, 9.5918e-15, 0
+walltime: 198.779 s
+walltime/epoch: 2196.828 ms
+vx_00009.xmf vy_00009.xmf p_00009.xmf
+state_000090.pickle
+
+epoch=00091
+residual: 2.3451e-14, 6.7002e-15, 1.009e-14, 0
+walltime: 200.749 s
+walltime/epoch: 1969.368 ms
+
+epoch=00092
+residual: 2.3458e-14, 6.9287e-15, 1.0092e-14, 0
+walltime: 203.082 s
+walltime/epoch: 2333.748 ms
+
+epoch=00093
+residual: 2.3576e-14, 7.1124e-15, 9.943e-15, 0
+walltime: 205.026 s
+walltime/epoch: 1943.851 ms
+
+epoch=00094
+residual: 2.3621e-14, 6.8426e-15, 1.0244e-14, 0
+walltime: 207.198 s
+walltime/epoch: 2171.502 ms
+
+epoch=00095
+residual: 2.3936e-14, 7.0005e-15, 1.0049e-14, 0
+walltime: 209.160 s
+walltime/epoch: 1962.303 ms
+
+epoch=00096
+residual: 2.3413e-14, 7.2337e-15, 9.9409e-15, 0
+walltime: 211.376 s
+walltime/epoch: 2215.859 ms
+
+epoch=00097
+residual: 2.3398e-14, 7.0425e-15, 9.7251e-15, 0
+walltime: 213.637 s
+walltime/epoch: 2261.031 ms
+
+epoch=00098
+residual: 2.3235e-14, 6.8298e-15, 9.7407e-15, 0
+walltime: 215.620 s
+walltime/epoch: 1983.213 ms
+
+epoch=00099
+residual: 2.3672e-14, 6.8652e-15, 9.9453e-15, 0
+walltime: 217.805 s
+walltime/epoch: 2184.456 ms
+
+epoch=00100
+residual: 2.4049e-14, 6.9255e-15, 9.9373e-15, 0
+walltime: 219.897 s
+walltime/epoch: 2092.017 ms
+vx_00010.xmf vy_00010.xmf p_00010.xmf
+state_000100.pickle

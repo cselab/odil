@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>mODIL</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, minimal-ui">
+  <link rel="stylesheet" href="..//dist/reset.css">
+  <link rel="stylesheet" href="..//dist/reveal.css">
+  <style>
+    .reveal .sourceCode {  /* see #7635 */
+      overflow: visible;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="..//dist/theme/am205.css" id="theme">
+  <link rel="stylesheet" href="..//plugin/highlight/gruvbox-dark.css">
+</head>
+<body>
+
+  <style>
+.katex{
+  font-size:1em;
+}
+  </style>
+
+  <div class="reveal">
+    <div class="slides">
+
+<section class="slide level2">
+<h2>mODIL (multiresolution ODIL)<br>Optimizing a Discrete Loss</h2>
+<blockquote>
+<p><a href="https://arxiv.org/abs/2303.04679">[arXiv:2303.04679]</a></p>
+</blockquote>
+<style>
+.bodyimg img,
+.bodyimg video {
+  max-width:290px;margin:-5px -10px -15px -10px;
+}
+</style>
+<script>
+function pause_all(elem, nparent=2, rate=1.) {
+  for (let i = 0; i < nparent; i++) {
+    elem = elem.parentNode;
+  }
+  elem.querySelectorAll('video').forEach((video) => {
+    if (video.paused) {
+      video.playbackRate = rate;
+      video.play();
+    } else {
+      video.pause();
+    }
+  })
+}
+function stop_all(elem, nparent=2) {
+  for (let i = 0; i < nparent; i++) {
+    elem = elem.parentNode;
+  }
+  elem.querySelectorAll('video').forEach((video) => {
+    video.pause();
+    video.currentTime = 0;
+  })
+}
+</script>
+</section>
+<section class="slide level2">
+<h2>Multigrid Decomposition</h2>
+<ul>
+<li>Idea to <span class="color5">speed up the convergence of optimizers</span> (L-BFGS, Adam, etc)</li>
+<li>Use a hierarchy of grids, e.g. $N_1=65,\; N_2=33, \dots, N_L=3$</li>
+<li>Decompose the solution $u$ on the fine grid $N_1$ as
+\[
+
+u = M_L(u_1, u_2, \dots, u_L) = u_1 + T_1 u_2 + T_1 T_2 u_3 + \dots + T_1\dots T_{L-1} u_L
+
+\]
+where $T_i$ is an interpolation operator from grid $N_{i+1}$ to $N_{i}$</li>
+<li>Instead of minimizing the loss
+\[
+L(u) \rightarrow \min
+\]
+minimize
+\[
+L(M_L(u_1, u_2, \dots)) \rightarrow \min
+\]
+</li>
+</ul>
+</section>
+<section class="slide level2">
+<h2>Multigrid Decomposition</h2>
+<div class="rowf">
+<div class="columnf3" style="text-align:left;width:41%;margin-right:-6%">
+<ul>
+<li>Cavity 2D</li>
+<li>L-BFGS</li>
+<li>$\mathrm{Re}=100$</li>
+<li>grid $65\times 65$</li>
+<li><span class="color5">10x speedup</span> with 5 levels<br />
+(65, 33, 17, 9, 5)
+</div></li>
+</ul>
+<div class="columnf3" style="text-align:left;width:32%;">
+<img style="height:180px;" data-src="media/mgopt/cav2d_re100_bfgs/train_loss.svg"></img>
+</div>
+<div class="columnf3" style="text-align:left;width:32%;">
+<img style="height:180px;" data-src="media/mgopt/cav2d_re100_bfgs/train_err.svg"></img>
+</div>
+</div>
+</section>
+<section class="slide level2">
+<h2>Multigrid Decomposition</h2>
+<div class="rowf">
+<div class="columnf3" style="text-align:left;width:41%;margin-right:-6%">
+<ul>
+<li>Cavity 2D</li>
+<li>L-BFGS</li>
+<li>$\mathrm{Re}=400$</li>
+<li>grid $65\times 65$</li>
+<li><span class="color5">10x speedup</span> with 5 levels<br />
+(65, 33, 17, 9, 5)
+</div></li>
+</ul>
+<div class="columnf3" style="text-align:left;width:32%;">
+<img style="height:180px;" data-src="media/mgopt/cav2d_re400_bfgs/train_loss.svg"></img>
+</div>
+<div class="columnf3" style="text-align:left;width:32%;">
+<img style="height:180px;" data-src="media/mgopt/cav2d_re400_bfgs/train_err.svg"></img>
+</div>
+</div>
+</section>
+<section class="slide level2">
+<h2>Multigrid Decomposition</h2>
+<div class="rowf">
+<div class="columnf3" style="text-align:left;width:41%;margin-right:-6%">
+<ul>
+<li>Poisson 1D</li>
+<li>Adam</li>
+<li>grid $65$
+</div></li>
+</ul>
+<div class="columnf3" style="text-align:left;width:32%;">
+<img style="height:180px;" data-src="media/mgopt/1d_adam/train_loss.svg"></img>
+</div>
+<div class="columnf3" style="text-align:left;width:32%;">
+<img style="height:180px;" data-src="media/mgopt/1d_adam/train_err.svg"></img>
+</div>
+</div>
+</section>
+<section class="slide level2">
+<h2>Optical Flow</h2>
+<ul>
+<li><span class="color5">Optical flow problem: velocity from tracer field</span></li>
+<li>Find a velocity field $\mathbf{u}(x,y,t)$ given that the tracer field $c(x,y,t)$<br />
+satisfies the advection equation
+\[
+\frac{\partial c}{\partial t} + \mathbf{u}\cdot\nabla{c} = 0
+\]
+and takes known initial $\left.c\right|_{t=0}=c_0$ and final $\left.c\right|_{t=1}=c_1$ values</li>
+<li>The loss function is a discretization of
+\[
+\begin{align*}
+L(c,\mathbf{u})&amp;\textstyle=
+  \int\big(\frac{\partial c}{\partial t}+\mathbf{u}\cdot\nabla{c}\big)^2
+  {\rm d}x {\rm d}y {\rm d}t
+  +\int(\left.c\right|_{t=0}-c_0)^2 {\rm d}x {\rm d}y
+  +\int(\left.c\right|_{t=1}-c_1)^2 {\rm d}x {\rm d}y
+  \\
+  &amp;\textstyle
+  +\int|k_\mathrm{xreg}\nabla^2 \mathbf{u}|^2{\rm d}x{\rm d}y {\rm d}t
+  +\int|k_\mathrm{treg}\frac{\partial}{\partial t} \mathbf{u}|^2{\rm d}x{\rm d}y {\rm d}t
+  \end{align*}
+
+\]
+</li>
+<li>Grid of $65\times 65\times 65$ points</li>
+</ul>
+</section>
+<section class="slide level2">
+<h2>Optical Flow <a id='123' onclick="pause_all(this, 2, 0.25)" style="cursor: pointer;">⏯</a> <a id='123' onclick="stop_all(this)" style="cursor: pointer;">⏹</a></h2>
+<div class="rowf">
+<div class="columnf" style="text-align:left;width:60%;">
+<ul>
+<li>Adam, grid $N=129$, 7 levels
+<ul>
+<li>runtime 360 ms / epoch (GPU)</li>
+<li>runtime 1000 ms / epoch (CPU)</li>
+<li>500 epochs
+</div>
+<div class="columnf" style="text-align:left;width:40%;">
+<video height="150px" data-autoplay loop>
+<source data-src="media/mgopt/adv2d/nx129_lvl7/u.webm" type="video/webm">
+</video>
+</div>
+</div></li>
+</ul></li>
+</ul>
+<div class="rowf">
+<div class="columnf" style="text-align:left;width:60%;">
+<ul>
+<li>Adam, grid $N=257$, 7 levels
+<ul>
+<li>runtime 550 ms / epoch (GPU)</li>
+<li>runtime 14 000 ms / epoch (CPU)</li>
+<li>500 epochs
+</div>
+<div class="columnf" style="text-align:left;width:40%;">
+<video height="150px" data-autoplay loop>
+<source data-src="media/mgopt/adv2d/nx257_lvl7/u.webm" type="video/webm">
+</video>
+</div>
+</div></li>
+</ul></li>
+</ul>
+<div class="rowf">
+<div class="columnf" style="text-align:left;width:60%;">
+<ul>
+<li>Adam, grid $N=257$, 5 levels
+<ul>
+<li>runtime 480 ms / epoch (GPU)</li>
+<li>500 epochs
+</div>
+<div class="columnf" style="text-align:left;width:40%;">
+<video height="150px" data-autoplay loop>
+<source data-src="media/mgopt/adv2d/nx257_lvl5/u.webm" type="video/webm">
+</video>
+</div>
+</div></li>
+</ul></li>
+</ul>
+</section>
+<section class="slide level2">
+<h2>Optical Flow</h2>
+<div class="rowf">
+<div class="columnf3" style="text-align:left;width:41%;margin-right:-6%">
+<ul>
+<li>Optical flow</li>
+<li>Adam
+</div></li>
+</ul>
+<div class="columnf3" style="text-align:left;width:32%;">
+<img style="height:180px;" data-src="media/mgopt/adv2d/train_loss.svg"></img>
+</div>
+<div class="columnf3" style="text-align:left;width:32%;">
+<img style="height:180px;" data-src="media/mgopt/adv2d/train_epochtime.svg"></img>
+</div>
+</div>
+</section>
+<section class="slide level2">
+<h2>Body Shape Inference</h2>
+<ul>
+<li><span class="color5">Inferring body shape from velocity measurements</span></li>
+<li>Find a body fraction field $\chi(\mathbf{x})$ given that the velocity field $\mathbf{u}(\mathbf{x})$<br />
+satisfies the Navier-Stokes equations with penalization
+\[
+\begin{aligned}
+\nabla \cdot \mathbf{u} &amp;= 0 \\
+(\mathbf{u}\cdot\nabla)\mathbf{u} &amp;= -\nabla p + \frac{D}{\mathrm{Re}}\nabla^2\mathbf{u} - \lambda\chi\mathbf{u}
+\end{aligned}
+\]
+and takes known values $\mathbf{u}(\mathbf{x}_i)=\mathbf{u}_i$<br />
+in the measurement points $\mathbf{x}_i$ for $i=1,\dots,N$</li>
+<li>Transform $\chi = 1 / (1 + e^{-\hat\chi+5})$</li>
+</ul>
+</section>
+<section class="slide level2">
+<h2>Body Shape Inference</h2>
+<ul>
+<li>Penalization as mixture
+\[
+(1-\chi)\big((\mathbf{u}\cdot\nabla)\mathbf{u} +\nabla p - \nu\nabla^2\mathbf{u}\big) + \lambda\chi\mathbf{u} = 0
+\]
+with $\lambda=1$</li>
+<li>Properties:
+<ul>
+<li>exact $\mathbf{u}=0$ inside the body</li>
+<li>small $\chi&gt;0$ does not cause large force</li>
+</ul></li>
+</ul>
+</section>
+<section class="slide level2">
+<h2>Body Shape Inference <a id='123' onclick="pause_all(this, 2)" style="cursor: pointer;">⏯</a> <a id='123' onclick="stop_all(this)" style="cursor: pointer;">⏹</a></h2>
+<div class="rowf">
+<div class="columnf3" style="text-align:left;width:50%;">
+<ul>
+<li>Circle 2D, $\mathrm{Re}=60$</li>
+<li>grid $129\times 65$</li>
+<li>L-BFGS, 25000 epochs</li>
+<li>runtime 30 min (CPU)
+</div>
+<div class="columnf3" style="width:25%;">
+<img style="height:110px;margin:0px;" data-src="media/mgopt/body2db/circle/ref/chi.png"></img> <img style="height:110px;margin:0px;" data-src="media/mgopt/body2db/circle/ref/omega.png"></img> <small>reference</small>
+</div>
+<div class="columnf3" style="width:25%;">
+<video height="110px" poster=media/mgopt/body2db/circle/bfgs/chi.png>
+<source data-src="media/mgopt/body2db/circle/bfgs/chi.webm" type="video/webm">
+</video>
+<video height="110px" poster=media/mgopt/body2db/circle/bfgs/omega.png>
+<source data-src="media/mgopt/body2db/circle/bfgs/omega.webm" type="video/webm">
+</video>
+<small>190 points</small>
+</div>
+</div></li>
+</ul>
+<p><img style="height:180px;" data-src="media/mgopt/body2db/circle/train_loss.svg"></img> <img style="height:180px;" data-src="media/mgopt/body2db/circle/train_error.svg"></img> <img style="height:180px;" data-src="media/mgopt/body2db/circle/train_error_chi.svg"></img> <img style=";" data-src="media/mgopt/body2db/circle/train_leg.svg"></img></p>
+</section>
+<section class="slide level2">
+<h2>Body Shape Inference <a id='123' onclick="pause_all(this, 2)" style="cursor: pointer;">⏯</a> <a id='123' onclick="stop_all(this)" style="cursor: pointer;">⏹</a></h2>
+<div class="rowf">
+<div class="columnf3" style="text-align:left;width:50%;">
+<ul>
+<li>Half-circle 2D, $\mathrm{Re}=60$</li>
+<li>grid $129\times 65$</li>
+<li>L-BFGS, 25000 epochs</li>
+<li>runtime 30 min (CPU)
+</div>
+<div class="columnf3" style="width:25%;">
+<img style="height:110px;margin:0px;" data-src="media/mgopt/body2db/half/ref/chi.png"></img> <img style="height:110px;margin:0px;" data-src="media/mgopt/body2db/half/ref/omega.png"></img> <small>reference</small>
+</div>
+<div class="columnf3" style="width:25%;">
+<video height="110px" poster=media/mgopt/body2db/half/bfgs/chi.png>
+<source data-src="media/mgopt/body2db/half/bfgs/chi.webm" type="video/webm">
+</video>
+<video height="110px" poster=media/mgopt/body2db/half/bfgs/omega.png>
+<source data-src="media/mgopt/body2db/half/bfgs/omega.webm" type="video/webm">
+</video>
+<small>190 points</small>
+</div>
+</div></li>
+</ul>
+<p><img style="height:180px;" data-src="media/mgopt/body2db/half/train_loss.svg"></img> <img style="height:180px;" data-src="media/mgopt/body2db/half/train_error.svg"></img> <img style="height:180px;" data-src="media/mgopt/body2db/half/train_error_chi.svg"></img> <img style=";" data-src="media/mgopt/body2db/half/train_leg.svg"></img></p>
+</section>
+<section class="slide level2">
+<h2>Body Shape Inference <a id='123' onclick="pause_all(this, 2)" style="cursor: pointer;">⏯</a> <a id='123' onclick="stop_all(this)" style="cursor: pointer;">⏹</a></h2>
+<div class="rowf">
+<div class="columnf" style="text-align:left;margin-right:-5%;width:75%;">
+<ul>
+<li>Sphere 3D, $\mathrm{Re}=60$</li>
+<li>grid $129\times 65\times 65$</li>
+<li>L-BFGS, $20\,000$ epochs</li>
+<li>runtime 2 hours (GPU)
+<div>
+<img style="height:140px;" data-src="media/mgopt/body3db/circle/train_loss.svg"></img> <img style="height:140px;" data-src="media/mgopt/body3db/circle/train_error.svg"></img> <img style="height:140px;" data-src="media/mgopt/body3db/circle/train_error_chi.svg"></img> <br><img style=";" data-src="media/mgopt/body3db/circle/train_leg.svg"></img>
+</div>
+</div>
+<div class="columnf" style="text-align:center;width:30%;">
+<div class="bodyimg" style="position:absolute;right:270px;width:260px;overflow:hidden;">
+<img data-src="media/mgopt/body3db/circle/ref/omega.png"></img> <br><small>reference</small>
+</div>
+<div class="bodyimg">
+<video poster=media/mgopt/body3db/circle/bfgs_684/omega.png>
+<source data-src="media/mgopt/body3db/circle/bfgs_684/omega.webm" type="video/webm">
+</video>
+<br><small>684 points</small>
+</div>
+<div class="bodyimg">
+<video poster=media/mgopt/body3db/circle/bfgs_171/omega.png>
+<source data-src="media/mgopt/body3db/circle/bfgs_171/omega.webm" type="video/webm">
+</video>
+<br><small>171 points</small>
+</div>
+<img style="max-width:290px;margin:0;" data-src="media/mgopt/body3d/cbar.svg"></img>
+</div>
+</div></li>
+</ul>
+</section>
+<section class="slide level2">
+<h2>Body Shape Inference <a id='123' onclick="pause_all(this, 2)" style="cursor: pointer;">⏯</a> <a id='123' onclick="stop_all(this)" style="cursor: pointer;">⏹</a></h2>
+<div class="rowf">
+<div class="columnf" style="text-align:left;margin-right:-5%;width:75%;">
+<ul>
+<li>Half-sphere 3D, $\mathrm{Re}=60$</li>
+<li>grid $129\times 65\times 65$</li>
+<li>L-BFGS, $20\,000$ epochs</li>
+<li>runtime 2 hours (GPU)
+<div>
+<img style="height:140px;" data-src="media/mgopt/body3db/half/train_loss.svg"></img> <img style="height:140px;" data-src="media/mgopt/body3db/half/train_error.svg"></img> <img style="height:140px;" data-src="media/mgopt/body3db/half/train_error_chi.svg"></img> <br><img style=";" data-src="media/mgopt/body3db/half/train_leg.svg"></img>
+</div>
+</div>
+<div class="columnf" style="text-align:center;width:30%;">
+<div class="bodyimg" style="position:absolute;right:270px;width:260px;overflow:hidden;">
+<img data-src="media/mgopt/body3db/half/ref/omega.png"></img> <br><small>reference</small>
+</div>
+<div class="bodyimg">
+<video poster=media/mgopt/body3db/half/bfgs_684/omega.png>
+<source data-src="media/mgopt/body3db/half/bfgs_684/omega.webm" type="video/webm">
+</video>
+<br><small>684 points</small>
+</div>
+<div class="bodyimg">
+<video poster=media/mgopt/body3db/half/bfgs_171/omega.png>
+<source data-src="media/mgopt/body3db/half/bfgs_171/omega.webm" type="video/webm">
+</video>
+<br><small>171 points</small>
+</div>
+<img style="max-width:290px;margin:0;" data-src="media/mgopt/body3d/cbar.svg"></img>
+</div>
+</div></li>
+</ul>
+</section>
+<section class="slide level2">
+<h2>Body Shape Inference</h2>
+<div class="rowf">
+<div class="columnf" style="text-align:left;margin-right:-5%;width:75%;">
+<ul>
+<li>Sphere 3D, $\mathrm{Re}=60$</li>
+<li>grid $257\times 129\times 129$</li>
+<li>L-BFGS, $100\,000$ epochs</li>
+<li>runtime 8 hours (GPU)
+<div>
+<img style="height:140px;" data-src="media/mgopt/body3db/circle_N129b/train_loss.svg"></img> <img style="height:140px;" data-src="media/mgopt/body3db/circle_N129b/train_error.svg"></img> <img style="height:140px;" data-src="media/mgopt/body3db/circle_N129b/train_error_chi.svg"></img> <br><img style=";" data-src="media/mgopt/body3db/circle_N129b/train_leg.svg"></img>
+</div>
+</div>
+<div class="columnf" style="text-align:center;width:30%;">
+<div class="bodyimg" style="position:absolute;right:270px;width:260px;overflow:hidden;">
+<img data-src="media/mgopt/body3db/circle_N129b/ref/omega.png"></img> <br><small>reference</small>
+</div>
+<div class="bodyimg">
+<img data-src="media/mgopt/body3db/circle_N129b/bfgs_i1/omega.png"></img> <br><small>698 points</small>
+</div>
+<img style="max-width:290px;margin:0;" data-src="media/mgopt/body3d/cbar.svg"></img>
+</div>
+</div></li>
+</ul>
+</section>
+<section class="slide level2">
+<h2>Body Shape Inference</h2>
+<div class="rowf">
+<div class="columnf" style="text-align:left;margin-right:-5%;width:75%;">
+<ul>
+<li>Sphere 3D, $\mathrm{Re}=60$</li>
+<li>grid $257\times 129\times 129$</li>
+<li>L-BFGS, $40\,000$ epochs</li>
+<li>runtime 3 hours (GPU)
+<div>
+<img style="height:140px;" data-src="media/mgopt/body3db/half_N129b/train_loss.svg"></img> <img style="height:140px;" data-src="media/mgopt/body3db/half_N129b/train_error.svg"></img> <img style="height:140px;" data-src="media/mgopt/body3db/half_N129b/train_error_chi.svg"></img> <br><img style=";" data-src="media/mgopt/body3db/half_N129b/train_leg.svg"></img>
+</div>
+</div>
+<div class="columnf" style="text-align:center;width:30%;">
+<div class="bodyimg" style="position:absolute;right:270px;width:260px;overflow:hidden;">
+<img data-src="media/mgopt/body3db/half_N129b/ref/omega.png"></img> <br><small>reference</small>
+</div>
+<div class="bodyimg">
+<img data-src="media/mgopt/body3db/half_N129b/bfgs_i1/omega.png"></img> <br><small>698 points</small>
+</div>
+<img style="max-width:290px;margin:0;" data-src="media/mgopt/body3d/cbar.svg"></img>
+</div>
+</div></li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="..//dist/reveal.js"></script>
+
+  <!-- reveal.js plugins -->
+  <script src="..//plugin/notes/notes.js"></script>
+  <script src="..//plugin/math/math.js"></script>
+  <!--<script src="..//plugin/search/search.js"></script>-->
+  <script src="..//plugin/highlight/highlight.js"></script>
+
+  <script>
+    Reveal.initialize({
+      // Layout.
+      center: true,
+      width: 960,
+      height: 540,
+
+      transition: 'none',
+      transitionSpeed: 'fast',
+      backgroundTransition: 'none',
+
+      // Navigation.
+      controls: true,
+      controlsLayout: 'bottom-right',
+      controlsBackArrows: 'visible',
+      history: false,
+      hash: true,
+      mouseWheel: false,
+      controlsTutorial: false,
+      slideNumber: 'c',
+      progress: false,
+      hashOneBasedIndex: true,
+      pause: false, // No blackout on `;`.
+
+      katex: {
+        trust: true,
+      },
+      plugins: [RevealHighlight, RevealNotes, RevealMath.KaTeX]
+    });
+    Reveal.configure({ pdfSeparateFragments: false });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/contrib/copy-tex.min.js" integrity="sha384-ww/583aHhxWkz5DEVn6OKtNiIaLi2iBRNZXfJRiY1Ai7tnJ9UXpEsyvOITVpTl4A" crossorigin="anonymous"></script>
+
+    </body>
+</html>

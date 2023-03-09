@@ -1,0 +1,28 @@
+./advection2d.py --nlvl 7 --Nx 257 --plot_every 1 --frames 50
+levels [257, 129, 65, 33, 17, 9, 5]
+Running Adam optimizer
+
+epoch=00000
+u_00000.png
+T last: 
+T  all: 
+memory: 1576 MiB
+walltime: 6.848 s
+
+epoch=00010
+residual: 2.2519, 1.3252, 10.009, 10.063, 0.57904, 0.58923
+u_00001.png
+T last: eval_grad= 10.731
+T  all: eval_grad=194.196
+memory: 3821 MiB
+walltime: 225.459 s
+walltime/epoch: 22261.844 ms
+
+epoch=00020
+residual: 1.5482, 0.77999, 5.4911, 5.5296, 0.41447, 0.4183
+u_00002.png
+T last: eval_grad= 10.737
+T  all: eval_grad=312.345
+memory: 3825 MiB
+walltime: 366.373 s
+walltime/epoch: 14091.378 ms

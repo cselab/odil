@@ -1,0 +1,12 @@
+#!/bin/sh -eu
+
+run () {
+  cmd="./vis.py $@ --force"
+  echo "$cmd"
+  eval "$cmd"
+}
+
+run --name chi chi_*.xmf
+#run --name vx --cmap RdBu_r --range 0 2 vx_*.xmf
+#run --name vy --cmap RdBu_r --range -0.3 0.3 vy_*.xmf
+run --name omega --omega --cmap RdBu_r --range -10.0 10 vx_*.xmf

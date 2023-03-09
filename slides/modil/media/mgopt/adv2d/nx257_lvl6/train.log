@@ -1,0 +1,461 @@
+./advection2d.py --nlvl 6 --Nx 257 --plot_every 1 --frames 50
+levels [257, 129, 65, 33, 17, 9]
+Running Adam optimizer
+
+epoch=00000
+u_00000.png
+T last: 
+T  all: 
+memory: 1733 MiB
+walltime: 6.247 s
+
+epoch=00010
+residual: 2.7183, 1.7164, 9.0139, 9.0376, 0.73562, 0.69037
+u_00001.png
+T last: eval_grad=  0.210
+T  all: eval_grad= 66.163
+memory: 3453 MiB
+walltime: 75.773 s
+walltime/epoch: 7222.291 ms
+
+epoch=00020
+residual: 1.2783, 0.50832, 5.1563, 5.2294, 0.49675, 0.46963
+u_00002.png
+T last: eval_grad=  0.207
+T  all: eval_grad= 68.576
+memory: 3319 MiB
+walltime: 80.906 s
+walltime/epoch: 513.316 ms
+
+epoch=00030
+residual: 1.2521, 0.64068, 2.9953, 3.0376, 0.33432, 0.31948
+u_00003.png
+T last: eval_grad=  0.209
+T  all: eval_grad= 70.950
+memory: 3322 MiB
+walltime: 86.098 s
+walltime/epoch: 519.201 ms
+
+epoch=00040
+residual: 0.65428, 0.24065, 1.7901, 1.7978, 0.224, 0.2138
+u_00004.png
+T last: eval_grad=  0.216
+T  all: eval_grad= 73.283
+memory: 3327 MiB
+walltime: 91.095 s
+walltime/epoch: 499.644 ms
+
+epoch=00050
+residual: 0.52719, 0.17738, 1.0957, 1.1057, 0.14764, 0.1385
+u_00005.png
+T last: eval_grad=  0.211
+T  all: eval_grad= 75.713
+memory: 3332 MiB
+walltime: 96.375 s
+walltime/epoch: 528.045 ms
+
+epoch=00060
+residual: 0.42823, 0.1151, 0.71059, 0.70013, 0.10279, 0.091374
+u_00006.png
+T last: eval_grad=  0.207
+T  all: eval_grad= 78.097
+memory: 3333 MiB
+walltime: 101.448 s
+walltime/epoch: 507.286 ms
+
+epoch=00070
+residual: 0.36555, 0.039972, 0.58931, 0.541, 0.079646, 0.066018
+u_00007.png
+T last: eval_grad=  0.207
+T  all: eval_grad= 80.550
+memory: 3333 MiB
+walltime: 106.568 s
+walltime/epoch: 511.958 ms
+
+epoch=00080
+residual: 0.33685, 0.033227, 0.5935, 0.53224, 0.071125, 0.055597
+u_00008.png
+T last: eval_grad=  0.212
+T  all: eval_grad= 82.910
+memory: 3333 MiB
+walltime: 111.808 s
+walltime/epoch: 524.029 ms
+
+epoch=00090
+residual: 0.31318, 0.031729, 0.59472, 0.54033, 0.069227, 0.052421
+u_00009.png
+T last: eval_grad=  0.230
+T  all: eval_grad= 85.360
+memory: 3333 MiB
+walltime: 116.944 s
+walltime/epoch: 513.641 ms
+
+epoch=00100
+residual: 0.29724, 0.029048, 0.6601, 0.60791, 0.071797, 0.05444
+u_00010.png
+T last: eval_grad=  0.213
+T  all: eval_grad= 87.780
+memory: 3333 MiB
+walltime: 122.040 s
+walltime/epoch: 509.601 ms
+
+epoch=00110
+residual: 0.28408, 0.023803, 0.7371, 0.68277, 0.075666, 0.058519
+u_00011.png
+T last: eval_grad=  0.211
+T  all: eval_grad= 90.199
+memory: 3333 MiB
+walltime: 127.376 s
+walltime/epoch: 533.539 ms
+
+epoch=00120
+residual: 0.27178, 0.023327, 0.81687, 0.7609, 0.080328, 0.063623
+u_00012.png
+T last: eval_grad=  0.224
+T  all: eval_grad= 92.545
+memory: 3333 MiB
+walltime: 132.261 s
+walltime/epoch: 488.571 ms
+
+epoch=00130
+residual: 0.26202, 0.023611, 0.89154, 0.84131, 0.0849, 0.06891
+u_00013.png
+T last: eval_grad=  0.210
+T  all: eval_grad= 94.947
+memory: 3333 MiB
+walltime: 137.333 s
+walltime/epoch: 507.134 ms
+
+epoch=00140
+residual: 0.25469, 0.023342, 0.96538, 0.91559, 0.089573, 0.073959
+u_00014.png
+T last: eval_grad=  0.235
+T  all: eval_grad= 97.407
+memory: 3333 MiB
+walltime: 142.685 s
+walltime/epoch: 535.241 ms
+
+epoch=00150
+residual: 0.2454, 0.02306, 1.0378, 0.99286, 0.094057, 0.079402
+u_00015.png
+T last: eval_grad=  0.228
+T  all: eval_grad= 99.825
+memory: 3333 MiB
+walltime: 147.732 s
+walltime/epoch: 504.645 ms
+
+epoch=00160
+residual: 0.26321, 0.023019, 1.0905, 1.0602, 0.097717, 0.084203
+u_00016.png
+T last: eval_grad=  0.210
+T  all: eval_grad=102.194
+memory: 3333 MiB
+walltime: 152.867 s
+walltime/epoch: 513.564 ms
+
+epoch=00170
+residual: 0.25699, 0.023114, 1.1472, 1.114, 0.10165, 0.087809
+u_00017.png
+T last: eval_grad=  0.206
+T  all: eval_grad=104.533
+memory: 3333 MiB
+walltime: 157.977 s
+walltime/epoch: 510.987 ms
+
+epoch=00180
+residual: 0.24169, 0.023185, 1.183, 1.1647, 0.10402, 0.091573
+u_00018.png
+T last: eval_grad=  0.209
+T  all: eval_grad=106.938
+memory: 3333 MiB
+walltime: 163.351 s
+walltime/epoch: 537.396 ms
+
+epoch=00190
+residual: 0.22906, 0.023302, 1.2148, 1.2048, 0.10638, 0.094559
+u_00019.png
+T last: eval_grad=  0.219
+T  all: eval_grad=109.334
+memory: 3334 MiB
+walltime: 168.448 s
+walltime/epoch: 509.707 ms
+
+epoch=00200
+residual: 0.2233, 0.023493, 1.2468, 1.2289, 0.10851, 0.096273
+u_00020.png
+T last: eval_grad=  0.237
+T  all: eval_grad=111.786
+memory: 3334 MiB
+walltime: 173.602 s
+walltime/epoch: 515.335 ms
+
+epoch=00210
+residual: 0.21517, 0.023729, 1.2695, 1.2536, 0.11053, 0.098177
+u_00021.png
+T last: eval_grad=  0.229
+T  all: eval_grad=114.121
+memory: 3334 MiB
+walltime: 178.889 s
+walltime/epoch: 528.709 ms
+
+epoch=00220
+residual: 0.21138, 0.024048, 1.2752, 1.2792, 0.11118, 0.099793
+u_00022.png
+T last: eval_grad=  0.209
+T  all: eval_grad=116.468
+memory: 3334 MiB
+walltime: 183.844 s
+walltime/epoch: 495.523 ms
+
+epoch=00230
+residual: 0.20872, 0.02443, 1.2911, 1.2948, 0.11267, 0.10131
+u_00023.png
+T last: eval_grad=  0.211
+T  all: eval_grad=118.872
+memory: 3334 MiB
+walltime: 188.980 s
+walltime/epoch: 513.649 ms
+
+epoch=00240
+residual: 0.2146, 0.024994, 1.3159, 1.303, 0.11466, 0.10203
+u_00024.png
+T last: eval_grad=  0.213
+T  all: eval_grad=121.221
+memory: 3334 MiB
+walltime: 194.273 s
+walltime/epoch: 529.292 ms
+
+epoch=00250
+residual: 0.21318, 0.025615, 1.3309, 1.3126, 0.11552, 0.10295
+u_00025.png
+T last: eval_grad=  0.215
+T  all: eval_grad=123.605
+memory: 3334 MiB
+walltime: 199.362 s
+walltime/epoch: 508.868 ms
+
+epoch=00260
+residual: 0.21322, 0.026332, 1.3434, 1.3288, 0.11592, 0.10445
+u_00026.png
+T last: eval_grad=  0.224
+T  all: eval_grad=126.025
+memory: 3334 MiB
+walltime: 204.572 s
+walltime/epoch: 520.943 ms
+
+epoch=00270
+residual: 0.206, 0.027104, 1.3345, 1.3348, 0.11581, 0.10481
+u_00027.png
+T last: eval_grad=  0.207
+T  all: eval_grad=128.424
+memory: 3334 MiB
+walltime: 209.894 s
+walltime/epoch: 532.248 ms
+
+epoch=00280
+residual: 0.20713, 0.027878, 1.3401, 1.3432, 0.11643, 0.10546
+u_00028.png
+T last: eval_grad=  0.209
+T  all: eval_grad=130.831
+memory: 3334 MiB
+walltime: 214.976 s
+walltime/epoch: 508.179 ms
+
+epoch=00290
+residual: 0.21315, 0.028618, 1.3539, 1.3492, 0.11753, 0.10602
+u_00029.png
+T last: eval_grad=  0.211
+T  all: eval_grad=133.174
+memory: 3399 MiB
+walltime: 219.869 s
+walltime/epoch: 489.311 ms
+
+epoch=00300
+residual: 0.21057, 0.029324, 1.3644, 1.3597, 0.11826, 0.10698
+u_00030.png
+T last: eval_grad=  0.213
+T  all: eval_grad=135.556
+memory: 3399 MiB
+walltime: 224.812 s
+walltime/epoch: 494.282 ms
+
+epoch=00310
+residual: 0.20923, 0.029992, 1.3744, 1.3627, 0.11883, 0.10738
+u_00031.png
+T last: eval_grad=  0.276
+T  all: eval_grad=138.003
+memory: 3399 MiB
+walltime: 230.004 s
+walltime/epoch: 519.271 ms
+
+epoch=00320
+residual: 0.21283, 0.030604, 1.3729, 1.3655, 0.118, 0.1073
+u_00032.png
+T last: eval_grad=  0.207
+T  all: eval_grad=140.354
+memory: 3399 MiB
+walltime: 234.920 s
+walltime/epoch: 491.534 ms
+
+epoch=00330
+residual: 0.21524, 0.031141, 1.3739, 1.3726, 0.11856, 0.10821
+u_00033.png
+T last: eval_grad=  0.208
+T  all: eval_grad=142.717
+memory: 3399 MiB
+walltime: 239.903 s
+walltime/epoch: 498.270 ms
+
+epoch=00340
+residual: 0.21124, 0.031638, 1.3832, 1.3774, 0.11887, 0.10839
+u_00034.png
+T last: eval_grad=  0.218
+T  all: eval_grad=145.054
+memory: 3399 MiB
+walltime: 245.070 s
+walltime/epoch: 516.789 ms
+
+epoch=00350
+residual: 0.20961, 0.032079, 1.3855, 1.3795, 0.11926, 0.10877
+u_00035.png
+T last: eval_grad=  0.208
+T  all: eval_grad=147.427
+memory: 3334 MiB
+walltime: 250.156 s
+walltime/epoch: 508.562 ms
+
+epoch=00360
+residual: 0.21576, 0.03248, 1.3926, 1.382, 0.11976, 0.10921
+u_00036.png
+T last: eval_grad=  0.210
+T  all: eval_grad=149.785
+memory: 3399 MiB
+walltime: 255.015 s
+walltime/epoch: 485.894 ms
+
+epoch=00370
+residual: 0.21613, 0.032836, 1.3969, 1.3911, 0.11999, 0.11009
+u_00037.png
+T last: eval_grad=  0.209
+T  all: eval_grad=152.161
+memory: 3399 MiB
+walltime: 260.136 s
+walltime/epoch: 512.084 ms
+
+epoch=00380
+residual: 0.21075, 0.033145, 1.3972, 1.4054, 0.11996, 0.11144
+u_00038.png
+T last: eval_grad=  0.210
+T  all: eval_grad=154.546
+memory: 3334 MiB
+walltime: 265.276 s
+walltime/epoch: 513.980 ms
+
+epoch=00390
+residual: 0.20802, 0.03346, 1.4156, 1.4051, 0.11996, 0.11042
+u_00039.png
+T last: eval_grad=  0.252
+T  all: eval_grad=157.027
+memory: 3399 MiB
+walltime: 270.299 s
+walltime/epoch: 502.352 ms
+
+epoch=00400
+residual: 0.21031, 0.033845, 1.398, 1.3915, 0.12014, 0.1095
+u_00040.png
+T last: eval_grad=  0.211
+T  all: eval_grad=159.346
+memory: 3399 MiB
+walltime: 275.328 s
+walltime/epoch: 502.871 ms
+
+epoch=00410
+residual: 0.21816, 0.034033, 1.4181, 1.4034, 0.12178, 0.11112
+u_00041.png
+T last: eval_grad=  0.208
+T  all: eval_grad=161.672
+memory: 3473 MiB
+walltime: 280.225 s
+walltime/epoch: 489.684 ms
+
+epoch=00420
+residual: 0.21269, 0.034253, 1.4114, 1.4103, 0.12086, 0.11201
+u_00042.png
+T last: eval_grad=  0.240
+T  all: eval_grad=164.120
+memory: 3399 MiB
+walltime: 285.227 s
+walltime/epoch: 500.234 ms
+
+epoch=00430
+residual: 0.20679, 0.034504, 1.4142, 1.4212, 0.12122, 0.11296
+u_00043.png
+T last: eval_grad=  0.211
+T  all: eval_grad=166.496
+memory: 3399 MiB
+walltime: 290.099 s
+walltime/epoch: 487.212 ms
+
+epoch=00440
+residual: 0.21064, 0.034744, 1.4264, 1.4193, 0.12204, 0.11106
+u_00044.png
+T last: eval_grad=  0.230
+T  all: eval_grad=168.866
+memory: 3399 MiB
+walltime: 295.160 s
+walltime/epoch: 506.121 ms
+
+epoch=00450
+residual: 0.21745, 0.035027, 1.4233, 1.4106, 0.1217, 0.11113
+u_00045.png
+T last: eval_grad=  0.251
+T  all: eval_grad=171.265
+memory: 3334 MiB
+walltime: 300.216 s
+walltime/epoch: 505.565 ms
+
+epoch=00460
+residual: 0.21529, 0.035209, 1.4023, 1.4137, 0.12031, 0.11213
+u_00046.png
+T last: eval_grad=  0.203
+T  all: eval_grad=173.564
+memory: 3334 MiB
+walltime: 305.319 s
+walltime/epoch: 510.240 ms
+
+epoch=00470
+residual: 0.20276, 0.035332, 1.4191, 1.4336, 0.12121, 0.11436
+u_00047.png
+T last: eval_grad=  0.246
+T  all: eval_grad=175.932
+memory: 3334 MiB
+walltime: 310.670 s
+walltime/epoch: 535.149 ms
+
+epoch=00480
+residual: 0.20389, 0.035471, 1.4345, 1.4319, 0.12297, 0.11442
+u_00048.png
+T last: eval_grad=  0.208
+T  all: eval_grad=178.256
+memory: 3334 MiB
+walltime: 315.662 s
+walltime/epoch: 499.196 ms
+
+epoch=00490
+residual: 0.21048, 0.035992, 1.4478, 1.4384, 0.12412, 0.11267
+u_00049.png
+T last: eval_grad=  0.212
+T  all: eval_grad=180.621
+memory: 3334 MiB
+walltime: 320.756 s
+walltime/epoch: 509.383 ms
+
+epoch=00500
+residual: 0.21471, 0.035833, 1.4245, 1.4274, 0.12206, 0.11307
+u_00050.png
+T last: eval_grad=  0.252
+T  all: eval_grad=183.011
+memory: 3334 MiB
+walltime: 326.138 s
+walltime/epoch: 538.172 ms
+Namespace(epochs=500, evals=501)

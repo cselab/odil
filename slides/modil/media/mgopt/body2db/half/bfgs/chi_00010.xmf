@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<!DOCTYPE Xdmf SYSTEM "Xdmf.dtd" []>
+<Xdmf Version="2.0">
+ <Domain>
+   <Grid Name="mesh" GridType="Uniform">
+     <Topology TopologyType="3DCORECTMesh" Dimensions="2 66 130"/>
+     <Geometry GeometryType="ORIGIN_DXDYDZ">
+       <DataItem Name="Origin" Dimensions="3" NumberType="Float" Precision="8" Format="XML">
+         0 0 0
+       </DataItem>
+       <DataItem Name="Spacing" Dimensions="3" NumberType="Float" Precision="8" Format="XML">
+         0.015384615384615385 0.015384615384615385 0.015503875968992248
+       </DataItem>
+     </Geometry>
+     <Attribute Name="chi" AttributeType="Scalar" Center="Cell">
+       <DataItem ItemType="HyperSlab" Dimensions="1 65 129" Type="HyperSlab">
+           <DataItem Dimensions="3 3" Format="XML">
+             0 0 0
+             1 1 1
+             1 65 129
+           </DataItem>
+           <DataItem Dimensions="1 65 129" Seek="0" Precision="8" NumberType="Double" Format="Binary">
+             chi_00010.raw
+           </DataItem>
+       </DataItem>
+     </Attribute>
+   </Grid>
+ </Domain>
+</Xdmf>

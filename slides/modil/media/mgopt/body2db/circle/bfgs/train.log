@@ -1,0 +1,2521 @@
+./body3d.py --outdir out_body2d --dim 2 --double 1 --body circle --blend 1 --optimizer lbfgsb --ref_path ref_circle_blend1_lamb1/ref.pickle --infer_chi 1 --imposed ring --nimp 512
+Entering 'out_body2d'
+levels [129, 65] [65, 33] [33, 17] [17, 9] [9, 5] [5, 3]
+Loading reference solution from '../ref_circle_blend1_lamb1/ref.pickle'
+Running L-BFGS-B optimizer
+
+epoch=00000
+residual: 0.0066929, 0, 0, 4.1918, 1.0368
+walltime: 14.623 s
+vx_00000.xmf vy_00000.xmf p_00000.xmf chi_00000.xmf
+
+epoch=00050
+residual: 0.67489, 0.38102, 0.26698, 0.24201, 0.17283
+walltime: 20.418 s
+walltime/epoch: 408.311 ms
+
+epoch=00100
+residual: 0.62213, 0.26384, 0.25353, 0.20244, 0.11256
+walltime: 23.473 s
+walltime/epoch: 61.095 ms
+
+epoch=00150
+residual: 0.61725, 0.2561, 0.25291, 0.19305, 0.10471
+walltime: 26.285 s
+walltime/epoch: 56.240 ms
+
+epoch=00200
+residual: 0.61529, 0.25407, 0.25391, 0.19246, 0.10621
+walltime: 29.997 s
+walltime/epoch: 74.231 ms
+
+epoch=00250
+residual: 0.6143, 0.25405, 0.25411, 0.19255, 0.10794
+walltime: 33.007 s
+walltime/epoch: 60.200 ms
+
+epoch=00300
+residual: 0.61103, 0.2551, 0.25428, 0.1939, 0.11378
+walltime: 40.065 s
+walltime/epoch: 141.175 ms
+
+epoch=00350
+residual: 0.356, 0.17322, 0.23454, 0.15664, 0.10307
+walltime: 42.968 s
+walltime/epoch: 58.060 ms
+
+epoch=00400
+residual: 0.19138, 0.096056, 0.18323, 0.068393, 0.050085
+walltime: 45.716 s
+walltime/epoch: 54.942 ms
+
+epoch=00450
+residual: 0.12782, 0.071785, 0.14694, 0.042423, 0.032129
+walltime: 48.546 s
+walltime/epoch: 56.617 ms
+
+epoch=00500
+residual: 0.11258, 0.061567, 0.11794, 0.037465, 0.029357
+walltime: 51.268 s
+walltime/epoch: 54.433 ms
+
+epoch=00550
+residual: 0.10375, 0.056055, 0.087896, 0.038272, 0.028888
+walltime: 54.201 s
+walltime/epoch: 58.657 ms
+
+epoch=00600
+residual: 0.098647, 0.049638, 0.064589, 0.034663, 0.027043
+walltime: 56.927 s
+walltime/epoch: 54.516 ms
+
+epoch=00650
+residual: 0.089592, 0.045552, 0.044296, 0.032058, 0.025289
+walltime: 59.615 s
+walltime/epoch: 53.774 ms
+
+epoch=00700
+residual: 0.084132, 0.041509, 0.031569, 0.030553, 0.024345
+walltime: 62.350 s
+walltime/epoch: 54.687 ms
+
+epoch=00750
+residual: 0.079071, 0.03749, 0.027983, 0.027888, 0.021958
+walltime: 65.257 s
+walltime/epoch: 58.142 ms
+
+epoch=00800
+residual: 0.073074, 0.036145, 0.029504, 0.026269, 0.02075
+walltime: 68.056 s
+walltime/epoch: 55.977 ms
+
+epoch=00850
+residual: 0.06891, 0.03414, 0.030758, 0.024959, 0.02043
+walltime: 70.839 s
+walltime/epoch: 55.667 ms
+
+epoch=00900
+residual: 0.064992, 0.032865, 0.031437, 0.023409, 0.019133
+walltime: 73.556 s
+walltime/epoch: 54.333 ms
+
+epoch=00950
+residual: 0.060721, 0.030359, 0.031835, 0.021781, 0.019397
+walltime: 76.270 s
+walltime/epoch: 54.284 ms
+
+epoch=01000
+residual: 0.056324, 0.029481, 0.029602, 0.019811, 0.017634
+walltime: 79.079 s
+walltime/epoch: 56.171 ms
+
+epoch=01050
+residual: 0.052493, 0.027933, 0.027145, 0.017832, 0.016194
+walltime: 86.446 s
+walltime/epoch: 147.346 ms
+
+epoch=01100
+residual: 0.048597, 0.026135, 0.023006, 0.015435, 0.014353
+walltime: 89.224 s
+walltime/epoch: 55.572 ms
+
+epoch=01150
+residual: 0.045313, 0.023906, 0.019125, 0.01425, 0.012115
+walltime: 91.969 s
+walltime/epoch: 54.900 ms
+
+epoch=01200
+residual: 0.042029, 0.021777, 0.016307, 0.01338, 0.01078
+walltime: 94.744 s
+walltime/epoch: 55.490 ms
+
+epoch=01250
+residual: 0.038919, 0.019563, 0.013737, 0.012568, 0.010264
+walltime: 97.556 s
+walltime/epoch: 56.237 ms
+
+epoch=01300
+residual: 0.03639, 0.018112, 0.013228, 0.011852, 0.0099685
+walltime: 100.316 s
+walltime/epoch: 55.206 ms
+
+epoch=01350
+residual: 0.034375, 0.017027, 0.01307, 0.011063, 0.0091652
+walltime: 103.453 s
+walltime/epoch: 62.735 ms
+
+epoch=01400
+residual: 0.031933, 0.015783, 0.013683, 0.010606, 0.0091888
+walltime: 106.301 s
+walltime/epoch: 56.959 ms
+
+epoch=01450
+residual: 0.030198, 0.014584, 0.014057, 0.0099795, 0.0088815
+walltime: 114.209 s
+walltime/epoch: 158.166 ms
+
+epoch=01500
+residual: 0.028582, 0.013686, 0.013637, 0.0094083, 0.0086196
+walltime: 116.930 s
+walltime/epoch: 54.407 ms
+
+epoch=01550
+residual: 0.027086, 0.013356, 0.012787, 0.008815, 0.0081681
+walltime: 119.813 s
+walltime/epoch: 57.677 ms
+
+epoch=01600
+residual: 0.025739, 0.012963, 0.01166, 0.0083688, 0.0078268
+walltime: 122.642 s
+walltime/epoch: 56.568 ms
+
+epoch=01650
+residual: 0.024056, 0.011941, 0.010328, 0.0080719, 0.0077308
+walltime: 125.466 s
+walltime/epoch: 56.477 ms
+
+epoch=01700
+residual: 0.022932, 0.011581, 0.0088904, 0.0075912, 0.0073162
+walltime: 128.296 s
+walltime/epoch: 56.601 ms
+
+epoch=01750
+residual: 0.021676, 0.011224, 0.0080119, 0.0074021, 0.00693
+walltime: 132.178 s
+walltime/epoch: 77.640 ms
+
+epoch=01800
+residual: 0.020544, 0.010899, 0.0078666, 0.007122, 0.0066694
+walltime: 139.050 s
+walltime/epoch: 137.444 ms
+
+epoch=01850
+residual: 0.019738, 0.010398, 0.007859, 0.0070747, 0.0065929
+walltime: 141.986 s
+walltime/epoch: 58.728 ms
+
+epoch=01900
+residual: 0.0191, 0.0098833, 0.007989, 0.0070098, 0.0063962
+walltime: 144.877 s
+walltime/epoch: 57.819 ms
+
+epoch=01950
+residual: 0.018357, 0.0093741, 0.0081188, 0.0069279, 0.0060889
+walltime: 147.675 s
+walltime/epoch: 55.947 ms
+
+epoch=02000
+residual: 0.017883, 0.0090997, 0.0076414, 0.0069097, 0.0058641
+walltime: 150.608 s
+walltime/epoch: 58.653 ms
+
+epoch=02050
+residual: 0.017478, 0.0089155, 0.0074032, 0.0068773, 0.0055978
+walltime: 158.850 s
+walltime/epoch: 164.842 ms
+
+epoch=02100
+residual: 0.016934, 0.0087334, 0.0071851, 0.0068209, 0.0055508
+walltime: 161.785 s
+walltime/epoch: 58.713 ms
+
+epoch=02150
+residual: 0.016397, 0.008558, 0.0068818, 0.0067652, 0.0054913
+walltime: 164.658 s
+walltime/epoch: 57.446 ms
+
+epoch=02200
+residual: 0.016128, 0.0083398, 0.006511, 0.0066143, 0.0053934
+walltime: 167.630 s
+walltime/epoch: 59.452 ms
+
+epoch=02250
+residual: 0.015612, 0.0081094, 0.0064748, 0.0064535, 0.0053654
+walltime: 170.466 s
+walltime/epoch: 56.722 ms
+
+epoch=02300
+residual: 0.015087, 0.0077113, 0.0066749, 0.0062714, 0.0052515
+walltime: 173.469 s
+walltime/epoch: 60.058 ms
+
+epoch=02350
+residual: 0.014687, 0.0074705, 0.0066718, 0.0061505, 0.005077
+walltime: 176.227 s
+walltime/epoch: 55.159 ms
+
+epoch=02400
+residual: 0.014417, 0.0073266, 0.0066396, 0.0060572, 0.0049806
+walltime: 184.574 s
+walltime/epoch: 166.929 ms
+
+epoch=02450
+residual: 0.014154, 0.0072119, 0.0065069, 0.0059918, 0.0048281
+walltime: 187.426 s
+walltime/epoch: 57.051 ms
+
+epoch=02500
+residual: 0.013907, 0.007127, 0.0063047, 0.0059715, 0.0047171
+walltime: 190.143 s
+walltime/epoch: 54.328 ms
+vx_00001.xmf vy_00001.xmf p_00001.xmf chi_00001.xmf
+
+epoch=02550
+residual: 0.013597, 0.0071532, 0.0060366, 0.0059096, 0.0045886
+walltime: 193.076 s
+walltime/epoch: 58.671 ms
+
+epoch=02600
+residual: 0.013327, 0.0071772, 0.0056999, 0.0058313, 0.0045207
+walltime: 195.815 s
+walltime/epoch: 54.771 ms
+
+epoch=02650
+residual: 0.013022, 0.007119, 0.0054587, 0.0057253, 0.0044707
+walltime: 198.597 s
+walltime/epoch: 55.637 ms
+
+epoch=02700
+residual: 0.012711, 0.0070208, 0.0053138, 0.0056279, 0.004403
+walltime: 201.461 s
+walltime/epoch: 57.288 ms
+
+epoch=02750
+residual: 0.01253, 0.0069551, 0.0052352, 0.0055505, 0.0043453
+walltime: 204.186 s
+walltime/epoch: 54.495 ms
+
+epoch=02800
+residual: 0.012342, 0.0068656, 0.0052622, 0.0055247, 0.0043245
+walltime: 207.110 s
+walltime/epoch: 58.485 ms
+
+epoch=02850
+residual: 0.012132, 0.0066455, 0.0053747, 0.0054397, 0.004273
+walltime: 215.050 s
+walltime/epoch: 158.805 ms
+
+epoch=02900
+residual: 0.011867, 0.0065036, 0.005381, 0.005398, 0.0042654
+walltime: 217.936 s
+walltime/epoch: 57.711 ms
+
+epoch=02950
+residual: 0.011628, 0.0063931, 0.0053339, 0.0053472, 0.0042551
+walltime: 220.745 s
+walltime/epoch: 56.182 ms
+
+epoch=03000
+residual: 0.011374, 0.0063691, 0.0052431, 0.0052664, 0.0041882
+walltime: 223.498 s
+walltime/epoch: 55.058 ms
+
+epoch=03050
+residual: 0.011096, 0.0063462, 0.0051786, 0.0052457, 0.004084
+walltime: 231.076 s
+walltime/epoch: 151.551 ms
+
+epoch=03100
+residual: 0.010769, 0.0062402, 0.0050628, 0.0052053, 0.0040211
+walltime: 233.761 s
+walltime/epoch: 53.708 ms
+
+epoch=03150
+residual: 0.010542, 0.0061519, 0.0048538, 0.0051747, 0.0039508
+walltime: 236.534 s
+walltime/epoch: 55.463 ms
+
+epoch=03200
+residual: 0.010397, 0.0060058, 0.0047854, 0.0051455, 0.0038879
+walltime: 239.516 s
+walltime/epoch: 59.637 ms
+
+epoch=03250
+residual: 0.010242, 0.0058993, 0.0047224, 0.0051011, 0.0038217
+walltime: 242.826 s
+walltime/epoch: 66.193 ms
+
+epoch=03300
+residual: 0.010099, 0.005822, 0.0046335, 0.0050498, 0.003768
+walltime: 246.265 s
+walltime/epoch: 68.793 ms
+
+epoch=03350
+residual: 0.0099114, 0.0057294, 0.0046469, 0.0049574, 0.0037298
+walltime: 249.570 s
+walltime/epoch: 66.098 ms
+
+epoch=03400
+residual: 0.0096352, 0.0056735, 0.0046378, 0.004813, 0.0036331
+walltime: 252.614 s
+walltime/epoch: 60.875 ms
+
+epoch=03450
+residual: 0.0094386, 0.0056604, 0.0044451, 0.0046797, 0.0036105
+walltime: 256.156 s
+walltime/epoch: 70.835 ms
+
+epoch=03500
+residual: 0.0092833, 0.0056201, 0.0043275, 0.0046023, 0.003535
+walltime: 258.985 s
+walltime/epoch: 56.578 ms
+
+epoch=03550
+residual: 0.0091124, 0.0055306, 0.0042425, 0.0045547, 0.0034718
+walltime: 262.127 s
+walltime/epoch: 62.852 ms
+
+epoch=03600
+residual: 0.0089481, 0.0053792, 0.0041093, 0.0045245, 0.0034107
+walltime: 265.603 s
+walltime/epoch: 69.512 ms
+
+epoch=03650
+residual: 0.0087515, 0.005263, 0.0039957, 0.0044618, 0.0033627
+walltime: 268.377 s
+walltime/epoch: 55.479 ms
+
+epoch=03700
+residual: 0.0085503, 0.0051927, 0.003939, 0.0044172, 0.0033237
+walltime: 271.119 s
+walltime/epoch: 54.838 ms
+
+epoch=03750
+residual: 0.0083944, 0.005091, 0.0039506, 0.0043258, 0.0032948
+walltime: 274.041 s
+walltime/epoch: 58.445 ms
+
+epoch=03800
+residual: 0.0082465, 0.0050106, 0.0039211, 0.0042421, 0.0032778
+walltime: 277.213 s
+walltime/epoch: 63.431 ms
+
+epoch=03850
+residual: 0.0080781, 0.0049425, 0.0039003, 0.0041705, 0.0032525
+walltime: 280.016 s
+walltime/epoch: 56.068 ms
+
+epoch=03900
+residual: 0.0078936, 0.0048707, 0.0038751, 0.004102, 0.0032177
+walltime: 283.707 s
+walltime/epoch: 73.828 ms
+
+epoch=03950
+residual: 0.0077339, 0.0047942, 0.0037297, 0.0040305, 0.0031863
+walltime: 287.446 s
+walltime/epoch: 74.778 ms
+
+epoch=04000
+residual: 0.0075921, 0.004775, 0.0035507, 0.0039403, 0.0031569
+walltime: 290.357 s
+walltime/epoch: 58.213 ms
+
+epoch=04050
+residual: 0.0074472, 0.0047149, 0.0034877, 0.0038741, 0.0030935
+walltime: 293.153 s
+walltime/epoch: 55.929 ms
+
+epoch=04100
+residual: 0.0072806, 0.0046809, 0.0033411, 0.0038097, 0.0030369
+walltime: 301.040 s
+walltime/epoch: 157.730 ms
+
+epoch=04150
+residual: 0.0071163, 0.0046589, 0.0032575, 0.003762, 0.0029776
+walltime: 309.079 s
+walltime/epoch: 160.782 ms
+
+epoch=04200
+residual: 0.0069465, 0.0045761, 0.0032923, 0.0037137, 0.0029514
+walltime: 311.817 s
+walltime/epoch: 54.765 ms
+
+epoch=04250
+residual: 0.0067586, 0.0044928, 0.0033241, 0.0036752, 0.0029173
+walltime: 314.676 s
+walltime/epoch: 57.179 ms
+
+epoch=04300
+residual: 0.0065984, 0.0043946, 0.0033735, 0.0036281, 0.0028938
+walltime: 317.390 s
+walltime/epoch: 54.266 ms
+
+epoch=04350
+residual: 0.006432, 0.0043148, 0.0034708, 0.0035751, 0.0028523
+walltime: 320.142 s
+walltime/epoch: 55.057 ms
+
+epoch=04400
+residual: 0.0063191, 0.0042338, 0.0035137, 0.0034944, 0.0028089
+walltime: 323.090 s
+walltime/epoch: 58.944 ms
+
+epoch=04450
+residual: 0.0062207, 0.0041711, 0.0035377, 0.0034013, 0.0027573
+walltime: 325.996 s
+walltime/epoch: 58.123 ms
+
+epoch=04500
+residual: 0.0061261, 0.0041077, 0.0035176, 0.0033182, 0.0027163
+walltime: 328.756 s
+walltime/epoch: 55.195 ms
+
+epoch=04550
+residual: 0.0060276, 0.0040479, 0.0034386, 0.0032633, 0.0026878
+walltime: 331.401 s
+walltime/epoch: 52.901 ms
+
+epoch=04600
+residual: 0.0059165, 0.0039771, 0.0034084, 0.0031919, 0.0026404
+walltime: 334.106 s
+walltime/epoch: 54.111 ms
+
+epoch=04650
+residual: 0.0057987, 0.0038768, 0.0033758, 0.0031677, 0.0025987
+walltime: 336.856 s
+walltime/epoch: 54.988 ms
+
+epoch=04700
+residual: 0.0056664, 0.0037889, 0.003343, 0.0031267, 0.0025723
+walltime: 339.547 s
+walltime/epoch: 53.831 ms
+
+epoch=04750
+residual: 0.0055481, 0.0036874, 0.0033118, 0.0031076, 0.0025415
+walltime: 342.303 s
+walltime/epoch: 55.112 ms
+
+epoch=04800
+residual: 0.005442, 0.0036022, 0.0032859, 0.0030615, 0.0025048
+walltime: 345.046 s
+walltime/epoch: 54.866 ms
+
+epoch=04850
+residual: 0.0053184, 0.003529, 0.0032484, 0.00304, 0.0024987
+walltime: 348.030 s
+walltime/epoch: 59.683 ms
+
+epoch=04900
+residual: 0.0052156, 0.0034546, 0.0031847, 0.00301, 0.0025015
+walltime: 351.178 s
+walltime/epoch: 62.947 ms
+
+epoch=04950
+residual: 0.0051257, 0.0034061, 0.0031202, 0.0029461, 0.0024935
+walltime: 353.946 s
+walltime/epoch: 55.362 ms
+
+epoch=05000
+residual: 0.0050384, 0.0033677, 0.0030404, 0.0028878, 0.0024813
+walltime: 356.637 s
+walltime/epoch: 53.814 ms
+vx_00002.xmf vy_00002.xmf p_00002.xmf chi_00002.xmf
+
+epoch=05050
+residual: 0.0049746, 0.0033147, 0.0029482, 0.0028476, 0.0024772
+walltime: 364.601 s
+walltime/epoch: 159.294 ms
+
+epoch=05100
+residual: 0.0049061, 0.0032598, 0.002909, 0.0028219, 0.0024563
+walltime: 367.316 s
+walltime/epoch: 54.288 ms
+
+epoch=05150
+residual: 0.0048319, 0.0032073, 0.0028886, 0.002795, 0.0024263
+walltime: 370.963 s
+walltime/epoch: 72.943 ms
+
+epoch=05200
+residual: 0.0047584, 0.0031553, 0.0028744, 0.0027746, 0.0024116
+walltime: 374.157 s
+walltime/epoch: 63.885 ms
+
+epoch=05250
+residual: 0.0046949, 0.0031021, 0.0028746, 0.0027409, 0.0024058
+walltime: 377.835 s
+walltime/epoch: 73.553 ms
+
+epoch=05300
+residual: 0.0046166, 0.003027, 0.0028708, 0.0027094, 0.0023915
+walltime: 381.250 s
+walltime/epoch: 68.309 ms
+
+epoch=05350
+residual: 0.0045702, 0.0029757, 0.0028074, 0.0026734, 0.0023758
+walltime: 384.563 s
+walltime/epoch: 66.247 ms
+
+epoch=05400
+residual: 0.0045259, 0.002951, 0.0027201, 0.0026455, 0.0023531
+walltime: 387.529 s
+walltime/epoch: 59.329 ms
+
+epoch=05450
+residual: 0.0044896, 0.0029291, 0.0026203, 0.0026179, 0.0023301
+walltime: 390.637 s
+walltime/epoch: 62.152 ms
+
+epoch=05500
+residual: 0.0044451, 0.0028977, 0.0025378, 0.0026102, 0.002315
+walltime: 393.386 s
+walltime/epoch: 54.978 ms
+
+epoch=05550
+residual: 0.0044023, 0.0028759, 0.002451, 0.0025873, 0.0023099
+walltime: 396.056 s
+walltime/epoch: 53.397 ms
+
+epoch=05600
+residual: 0.0043625, 0.0028696, 0.0023849, 0.0025573, 0.0023003
+walltime: 398.879 s
+walltime/epoch: 56.476 ms
+
+epoch=05650
+residual: 0.0043163, 0.0028656, 0.0023455, 0.002527, 0.0023037
+walltime: 401.608 s
+walltime/epoch: 54.571 ms
+
+epoch=05700
+residual: 0.0042603, 0.0028557, 0.0023284, 0.0025114, 0.0023016
+walltime: 404.446 s
+walltime/epoch: 56.753 ms
+
+epoch=05750
+residual: 0.0042139, 0.0028414, 0.0022955, 0.0025032, 0.0023011
+walltime: 407.118 s
+walltime/epoch: 53.446 ms
+
+epoch=05800
+residual: 0.0041627, 0.002824, 0.0022686, 0.0024973, 0.0022908
+walltime: 409.964 s
+walltime/epoch: 56.925 ms
+
+epoch=05850
+residual: 0.0041224, 0.0027949, 0.0022249, 0.0024913, 0.0022804
+walltime: 412.824 s
+walltime/epoch: 57.192 ms
+
+epoch=05900
+residual: 0.0040984, 0.0027668, 0.00217, 0.0024852, 0.0022654
+walltime: 415.499 s
+walltime/epoch: 53.512 ms
+
+epoch=05950
+residual: 0.0040743, 0.0027436, 0.0021214, 0.0024754, 0.0022557
+walltime: 418.226 s
+walltime/epoch: 54.534 ms
+
+epoch=06000
+residual: 0.0040507, 0.0027255, 0.0020872, 0.0024609, 0.0022554
+walltime: 420.926 s
+walltime/epoch: 53.993 ms
+
+epoch=06050
+residual: 0.0040278, 0.0027092, 0.002064, 0.0024438, 0.0022486
+walltime: 423.619 s
+walltime/epoch: 53.856 ms
+
+epoch=06100
+residual: 0.0040077, 0.0026858, 0.0020366, 0.0024303, 0.0022492
+walltime: 426.406 s
+walltime/epoch: 55.738 ms
+
+epoch=06150
+residual: 0.0039873, 0.0026612, 0.0020178, 0.002416, 0.0022508
+walltime: 429.156 s
+walltime/epoch: 55.015 ms
+
+epoch=06200
+residual: 0.0039708, 0.002631, 0.0020001, 0.0024081, 0.0022474
+walltime: 431.858 s
+walltime/epoch: 54.035 ms
+
+epoch=06250
+residual: 0.0039612, 0.0026098, 0.0019775, 0.0023952, 0.0022389
+walltime: 434.609 s
+walltime/epoch: 55.009 ms
+
+epoch=06300
+residual: 0.0039476, 0.0025933, 0.0019574, 0.0023905, 0.0022326
+walltime: 437.446 s
+walltime/epoch: 56.745 ms
+
+epoch=06350
+residual: 0.0039346, 0.002583, 0.0019346, 0.0023838, 0.0022276
+walltime: 440.249 s
+walltime/epoch: 56.061 ms
+
+epoch=06400
+residual: 0.0039149, 0.0025715, 0.0019191, 0.0023744, 0.0022265
+walltime: 443.075 s
+walltime/epoch: 56.532 ms
+
+epoch=06450
+residual: 0.0039016, 0.0025562, 0.001899, 0.0023601, 0.0022225
+walltime: 445.896 s
+walltime/epoch: 56.413 ms
+
+epoch=06500
+residual: 0.0038843, 0.0025369, 0.0018781, 0.0023527, 0.0022198
+walltime: 448.736 s
+walltime/epoch: 56.792 ms
+
+epoch=06550
+residual: 0.0038676, 0.0025174, 0.001872, 0.0023489, 0.0022134
+walltime: 451.539 s
+walltime/epoch: 56.066 ms
+
+epoch=06600
+residual: 0.0038525, 0.0025052, 0.0018623, 0.0023415, 0.0022114
+walltime: 454.482 s
+walltime/epoch: 58.863 ms
+
+epoch=06650
+residual: 0.0038364, 0.0024946, 0.0018449, 0.0023436, 0.0022098
+walltime: 457.356 s
+walltime/epoch: 57.472 ms
+
+epoch=06700
+residual: 0.0038144, 0.0024903, 0.0018405, 0.0023461, 0.0022021
+walltime: 460.226 s
+walltime/epoch: 57.401 ms
+
+epoch=06750
+residual: 0.0037955, 0.0024974, 0.0018296, 0.0023413, 0.0021889
+walltime: 463.016 s
+walltime/epoch: 55.802 ms
+
+epoch=06800
+residual: 0.0037745, 0.0025046, 0.0018128, 0.0023407, 0.0021682
+walltime: 465.730 s
+walltime/epoch: 54.281 ms
+
+epoch=06850
+residual: 0.0037595, 0.0025028, 0.0017945, 0.0023421, 0.0021585
+walltime: 468.487 s
+walltime/epoch: 55.132 ms
+
+epoch=06900
+residual: 0.0037437, 0.002501, 0.0017795, 0.0023396, 0.0021553
+walltime: 471.179 s
+walltime/epoch: 53.846 ms
+
+epoch=06950
+residual: 0.0037302, 0.0024915, 0.0017666, 0.0023365, 0.0021577
+walltime: 474.811 s
+walltime/epoch: 72.645 ms
+
+epoch=07000
+residual: 0.0037205, 0.0024837, 0.0017625, 0.0023274, 0.002153
+walltime: 479.999 s
+walltime/epoch: 103.761 ms
+
+epoch=07050
+residual: 0.0037111, 0.002473, 0.0017628, 0.0023215, 0.0021447
+walltime: 483.651 s
+walltime/epoch: 73.042 ms
+
+epoch=07100
+residual: 0.0037057, 0.0024628, 0.0017601, 0.0023102, 0.0021362
+walltime: 487.720 s
+walltime/epoch: 81.362 ms
+
+epoch=07150
+residual: 0.0036986, 0.0024447, 0.0017679, 0.0022985, 0.0021301
+walltime: 492.357 s
+walltime/epoch: 92.752 ms
+
+epoch=07200
+residual: 0.0036925, 0.0024256, 0.0017649, 0.0022896, 0.0021306
+walltime: 497.338 s
+walltime/epoch: 99.613 ms
+
+epoch=07250
+residual: 0.0036854, 0.0024019, 0.0017668, 0.0022816, 0.0021269
+walltime: 500.346 s
+walltime/epoch: 60.162 ms
+
+epoch=07300
+residual: 0.0036797, 0.0023916, 0.0017615, 0.0022689, 0.0021209
+walltime: 503.066 s
+walltime/epoch: 54.403 ms
+
+epoch=07350
+residual: 0.003674, 0.0023865, 0.0017535, 0.0022588, 0.0021156
+walltime: 505.850 s
+walltime/epoch: 55.675 ms
+
+epoch=07400
+residual: 0.0036588, 0.0023851, 0.0017526, 0.0022532, 0.0021095
+walltime: 509.353 s
+walltime/epoch: 70.065 ms
+
+epoch=07450
+residual: 0.0036411, 0.0023805, 0.0017505, 0.0022502, 0.0021069
+walltime: 512.534 s
+walltime/epoch: 63.611 ms
+
+epoch=07500
+residual: 0.0036284, 0.002376, 0.0017401, 0.0022502, 0.0021047
+walltime: 516.144 s
+walltime/epoch: 72.215 ms
+vx_00003.xmf vy_00003.xmf p_00003.xmf chi_00003.xmf
+
+epoch=07550
+residual: 0.0036169, 0.0023656, 0.0017409, 0.0022521, 0.0021
+walltime: 520.282 s
+walltime/epoch: 82.755 ms
+
+epoch=07600
+residual: 0.0036008, 0.0023618, 0.0017358, 0.0022541, 0.0020963
+walltime: 524.876 s
+walltime/epoch: 91.876 ms
+
+epoch=07650
+residual: 0.0035846, 0.0023624, 0.0017348, 0.002252, 0.0020822
+walltime: 528.261 s
+walltime/epoch: 67.702 ms
+
+epoch=07700
+residual: 0.0035717, 0.0023684, 0.0017253, 0.0022435, 0.0020728
+walltime: 533.951 s
+walltime/epoch: 113.803 ms
+
+epoch=07750
+residual: 0.0035591, 0.002373, 0.0017229, 0.002227, 0.0020646
+walltime: 538.470 s
+walltime/epoch: 90.368 ms
+
+epoch=07800
+residual: 0.0035493, 0.0023743, 0.0017186, 0.0022135, 0.0020542
+walltime: 548.091 s
+walltime/epoch: 192.422 ms
+
+epoch=07850
+residual: 0.0035371, 0.0023777, 0.0017095, 0.0022007, 0.0020516
+walltime: 552.967 s
+walltime/epoch: 97.524 ms
+
+epoch=07900
+residual: 0.0035261, 0.0023863, 0.0017068, 0.0021799, 0.0020456
+walltime: 559.481 s
+walltime/epoch: 130.276 ms
+
+epoch=07950
+residual: 0.003519, 0.0023875, 0.0017029, 0.0021691, 0.0020332
+walltime: 563.123 s
+walltime/epoch: 72.844 ms
+
+epoch=08000
+residual: 0.0035135, 0.0023849, 0.0017032, 0.0021592, 0.0020123
+walltime: 566.934 s
+walltime/epoch: 76.208 ms
+
+epoch=08050
+residual: 0.0035049, 0.0023822, 0.0017062, 0.0021458, 0.0019941
+walltime: 570.855 s
+walltime/epoch: 78.429 ms
+
+epoch=08100
+residual: 0.0034998, 0.0023742, 0.0016981, 0.0021354, 0.0019833
+walltime: 574.773 s
+walltime/epoch: 78.352 ms
+
+epoch=08150
+residual: 0.0034946, 0.0023599, 0.0016926, 0.0021266, 0.00197
+walltime: 578.689 s
+walltime/epoch: 78.336 ms
+
+epoch=08200
+residual: 0.0034919, 0.0023408, 0.0016776, 0.0021156, 0.0019636
+walltime: 582.422 s
+walltime/epoch: 74.660 ms
+
+epoch=08250
+residual: 0.0034885, 0.0023211, 0.0016616, 0.0021123, 0.0019565
+walltime: 586.107 s
+walltime/epoch: 73.681 ms
+
+epoch=08300
+residual: 0.0034827, 0.0023012, 0.0016497, 0.0021077, 0.00194
+walltime: 589.534 s
+walltime/epoch: 68.547 ms
+
+epoch=08350
+residual: 0.0034718, 0.0022899, 0.0016413, 0.0021032, 0.001921
+walltime: 592.443 s
+walltime/epoch: 58.174 ms
+
+epoch=08400
+residual: 0.0034575, 0.0022774, 0.0016368, 0.0020997, 0.0019092
+walltime: 595.183 s
+walltime/epoch: 54.800 ms
+
+epoch=08450
+residual: 0.0034437, 0.0022668, 0.0016296, 0.0020902, 0.0019009
+walltime: 598.149 s
+walltime/epoch: 59.327 ms
+
+epoch=08500
+residual: 0.0034326, 0.0022596, 0.0016248, 0.0020773, 0.0018983
+walltime: 600.850 s
+walltime/epoch: 54.019 ms
+
+epoch=08550
+residual: 0.0034201, 0.0022584, 0.0016246, 0.0020667, 0.0018914
+walltime: 604.228 s
+walltime/epoch: 67.555 ms
+
+epoch=08600
+residual: 0.0034108, 0.0022633, 0.0016207, 0.0020494, 0.0018817
+walltime: 607.190 s
+walltime/epoch: 59.245 ms
+
+epoch=08650
+residual: 0.0033964, 0.0022686, 0.0016184, 0.0020349, 0.0018713
+walltime: 610.202 s
+walltime/epoch: 60.242 ms
+
+epoch=08700
+residual: 0.0033823, 0.0022706, 0.0016163, 0.0020243, 0.0018586
+walltime: 613.700 s
+walltime/epoch: 69.956 ms
+
+epoch=08750
+residual: 0.0033659, 0.002273, 0.0016149, 0.0020132, 0.0018451
+walltime: 618.173 s
+walltime/epoch: 89.456 ms
+
+epoch=08800
+residual: 0.0033518, 0.0022734, 0.0016068, 0.0020004, 0.0018346
+walltime: 624.162 s
+walltime/epoch: 119.783 ms
+
+epoch=08850
+residual: 0.0033379, 0.0022646, 0.0016033, 0.0019931, 0.0018251
+walltime: 627.248 s
+walltime/epoch: 61.727 ms
+
+epoch=08900
+residual: 0.0033205, 0.0022516, 0.0016034, 0.0019923, 0.0018123
+walltime: 630.918 s
+walltime/epoch: 73.390 ms
+
+epoch=08950
+residual: 0.0033046, 0.0022376, 0.0016043, 0.0019888, 0.001802
+walltime: 635.799 s
+walltime/epoch: 97.634 ms
+
+epoch=09000
+residual: 0.0032929, 0.0022222, 0.0016055, 0.001989, 0.0017899
+walltime: 638.672 s
+walltime/epoch: 57.457 ms
+
+epoch=09050
+residual: 0.0032842, 0.002202, 0.0016088, 0.0019866, 0.0017749
+walltime: 641.856 s
+walltime/epoch: 63.680 ms
+
+epoch=09100
+residual: 0.0032723, 0.002179, 0.0016142, 0.0019753, 0.0017701
+walltime: 644.897 s
+walltime/epoch: 60.812 ms
+
+epoch=09150
+residual: 0.003267, 0.0021566, 0.0016084, 0.0019574, 0.0017637
+walltime: 647.864 s
+walltime/epoch: 59.348 ms
+
+epoch=09200
+residual: 0.00326, 0.0021413, 0.0015923, 0.0019393, 0.0017664
+walltime: 651.227 s
+walltime/epoch: 67.259 ms
+
+epoch=09250
+residual: 0.0032539, 0.0021255, 0.0015916, 0.0019172, 0.0017626
+walltime: 654.209 s
+walltime/epoch: 59.625 ms
+
+epoch=09300
+residual: 0.0032495, 0.0021138, 0.0015806, 0.0019029, 0.0017531
+walltime: 657.069 s
+walltime/epoch: 57.201 ms
+
+epoch=09350
+residual: 0.0032427, 0.0021036, 0.0015785, 0.0018824, 0.0017419
+walltime: 660.117 s
+walltime/epoch: 60.965 ms
+
+epoch=09400
+residual: 0.0032346, 0.0020924, 0.0015745, 0.0018649, 0.0017281
+walltime: 666.050 s
+walltime/epoch: 118.658 ms
+
+epoch=09450
+residual: 0.003221, 0.0020781, 0.0015632, 0.0018621, 0.0017221
+walltime: 669.416 s
+walltime/epoch: 67.322 ms
+
+epoch=09500
+residual: 0.0032063, 0.0020616, 0.0015588, 0.0018579, 0.0017149
+walltime: 672.476 s
+walltime/epoch: 61.201 ms
+
+epoch=09550
+residual: 0.0031943, 0.0020449, 0.0015529, 0.0018476, 0.0017068
+walltime: 676.357 s
+walltime/epoch: 77.613 ms
+
+epoch=09600
+residual: 0.0031803, 0.0020322, 0.0015403, 0.0018401, 0.0016965
+walltime: 679.235 s
+walltime/epoch: 57.565 ms
+
+epoch=09650
+residual: 0.0031646, 0.0020279, 0.0015252, 0.0018283, 0.0016862
+walltime: 682.116 s
+walltime/epoch: 57.614 ms
+
+epoch=09700
+residual: 0.003145, 0.0020221, 0.00152, 0.001816, 0.0016833
+walltime: 685.104 s
+walltime/epoch: 59.758 ms
+
+epoch=09750
+residual: 0.0031275, 0.0020159, 0.001515, 0.0018037, 0.0016727
+walltime: 688.860 s
+walltime/epoch: 75.133 ms
+
+epoch=09800
+residual: 0.0031096, 0.0020088, 0.0015084, 0.0017885, 0.0016587
+walltime: 692.011 s
+walltime/epoch: 63.015 ms
+
+epoch=09850
+residual: 0.0030923, 0.001998, 0.0014992, 0.0017774, 0.0016471
+walltime: 694.927 s
+walltime/epoch: 58.325 ms
+
+epoch=09900
+residual: 0.0030788, 0.0019808, 0.0014916, 0.0017653, 0.0016419
+walltime: 698.007 s
+walltime/epoch: 61.602 ms
+
+epoch=09950
+residual: 0.0030726, 0.0019663, 0.0014821, 0.001748, 0.0016373
+walltime: 701.751 s
+walltime/epoch: 74.878 ms
+
+epoch=10000
+residual: 0.0030653, 0.0019523, 0.0014782, 0.0017324, 0.0016305
+walltime: 704.686 s
+walltime/epoch: 58.694 ms
+vx_00004.xmf vy_00004.xmf p_00004.xmf chi_00004.xmf
+
+epoch=10050
+residual: 0.003056, 0.0019408, 0.0014803, 0.0017116, 0.0016179
+walltime: 707.671 s
+walltime/epoch: 59.704 ms
+
+epoch=10100
+residual: 0.0030465, 0.00193, 0.0014689, 0.0016948, 0.0016103
+walltime: 710.536 s
+walltime/epoch: 57.298 ms
+
+epoch=10150
+residual: 0.0030391, 0.0019147, 0.0014576, 0.0016757, 0.0016004
+walltime: 713.647 s
+walltime/epoch: 62.208 ms
+
+epoch=10200
+residual: 0.0030322, 0.0018905, 0.0014415, 0.0016622, 0.001596
+walltime: 716.478 s
+walltime/epoch: 56.624 ms
+
+epoch=10250
+residual: 0.0030245, 0.0018685, 0.0014315, 0.0016558, 0.0015867
+walltime: 721.969 s
+walltime/epoch: 109.824 ms
+
+epoch=10300
+residual: 0.003022, 0.0018489, 0.0014208, 0.0016509, 0.0015725
+walltime: 725.816 s
+walltime/epoch: 76.938 ms
+
+epoch=10350
+residual: 0.0030152, 0.0018298, 0.0014182, 0.0016421, 0.0015595
+walltime: 730.689 s
+walltime/epoch: 97.456 ms
+
+epoch=10400
+residual: 0.0030054, 0.0018146, 0.0014057, 0.0016308, 0.0015507
+walltime: 736.080 s
+walltime/epoch: 107.828 ms
+
+epoch=10450
+residual: 0.0029945, 0.0018027, 0.0013944, 0.0016167, 0.0015456
+walltime: 739.401 s
+walltime/epoch: 66.414 ms
+
+epoch=10500
+residual: 0.0029823, 0.0017888, 0.0013858, 0.0016047, 0.0015435
+walltime: 742.229 s
+walltime/epoch: 56.561 ms
+
+epoch=10550
+residual: 0.0029726, 0.0017823, 0.0013755, 0.0015894, 0.0015397
+walltime: 745.016 s
+walltime/epoch: 55.744 ms
+
+epoch=10600
+residual: 0.0029578, 0.0017716, 0.0013727, 0.001584, 0.0015408
+walltime: 747.745 s
+walltime/epoch: 54.574 ms
+
+epoch=10650
+residual: 0.0029452, 0.0017601, 0.0013688, 0.0015764, 0.0015384
+walltime: 750.477 s
+walltime/epoch: 54.636 ms
+
+epoch=10700
+residual: 0.0029312, 0.0017457, 0.0013604, 0.0015738, 0.0015381
+walltime: 753.210 s
+walltime/epoch: 54.675 ms
+
+epoch=10750
+residual: 0.0029183, 0.0017316, 0.0013555, 0.0015717, 0.001532
+walltime: 756.996 s
+walltime/epoch: 75.703 ms
+
+epoch=10800
+residual: 0.0029089, 0.0017168, 0.0013515, 0.0015695, 0.0015243
+walltime: 760.620 s
+walltime/epoch: 72.498 ms
+
+epoch=10850
+residual: 0.002899, 0.0017045, 0.0013443, 0.0015678, 0.0015167
+walltime: 763.574 s
+walltime/epoch: 59.075 ms
+
+epoch=10900
+residual: 0.0028914, 0.001695, 0.0013343, 0.0015659, 0.0015114
+walltime: 766.352 s
+walltime/epoch: 55.548 ms
+
+epoch=10950
+residual: 0.0028841, 0.0016862, 0.0013251, 0.0015644, 0.0015035
+walltime: 772.800 s
+walltime/epoch: 128.965 ms
+
+epoch=11000
+residual: 0.0028741, 0.0016775, 0.0013143, 0.0015622, 0.0015003
+walltime: 776.288 s
+walltime/epoch: 69.768 ms
+
+epoch=11050
+residual: 0.0028626, 0.0016722, 0.0013033, 0.0015567, 0.0014976
+walltime: 780.865 s
+walltime/epoch: 91.537 ms
+
+epoch=11100
+residual: 0.0028518, 0.0016686, 0.0012899, 0.0015518, 0.0014934
+walltime: 783.594 s
+walltime/epoch: 54.581 ms
+
+epoch=11150
+residual: 0.0028429, 0.0016626, 0.0012734, 0.0015506, 0.0014885
+walltime: 787.470 s
+walltime/epoch: 77.521 ms
+
+epoch=11200
+residual: 0.0028373, 0.0016598, 0.0012616, 0.00154, 0.0014821
+walltime: 793.772 s
+walltime/epoch: 126.029 ms
+
+epoch=11250
+residual: 0.0028305, 0.0016536, 0.0012475, 0.0015335, 0.0014787
+walltime: 796.975 s
+walltime/epoch: 64.063 ms
+
+epoch=11300
+residual: 0.002823, 0.0016473, 0.001234, 0.0015284, 0.0014758
+walltime: 799.908 s
+walltime/epoch: 58.654 ms
+
+epoch=11350
+residual: 0.0028171, 0.0016391, 0.0012279, 0.0015224, 0.0014693
+walltime: 802.767 s
+walltime/epoch: 57.198 ms
+
+epoch=11400
+residual: 0.0028107, 0.0016308, 0.0012192, 0.0015157, 0.0014623
+walltime: 805.519 s
+walltime/epoch: 55.023 ms
+
+epoch=11450
+residual: 0.0028033, 0.0016252, 0.0012068, 0.0015071, 0.0014562
+walltime: 808.237 s
+walltime/epoch: 54.375 ms
+
+epoch=11500
+residual: 0.0027923, 0.0016249, 0.0011941, 0.0014993, 0.0014512
+walltime: 811.849 s
+walltime/epoch: 72.241 ms
+
+epoch=11550
+residual: 0.0027834, 0.0016212, 0.0011784, 0.0014962, 0.0014491
+walltime: 815.243 s
+walltime/epoch: 67.872 ms
+
+epoch=11600
+residual: 0.0027743, 0.0016141, 0.0011764, 0.001491, 0.0014458
+walltime: 818.496 s
+walltime/epoch: 65.059 ms
+
+epoch=11650
+residual: 0.0027655, 0.0016034, 0.0011749, 0.001485, 0.0014457
+walltime: 823.321 s
+walltime/epoch: 96.506 ms
+
+epoch=11700
+residual: 0.0027596, 0.0015935, 0.0011725, 0.0014807, 0.0014417
+walltime: 826.065 s
+walltime/epoch: 54.867 ms
+
+epoch=11750
+residual: 0.0027517, 0.0015816, 0.0011678, 0.001481, 0.0014405
+walltime: 829.197 s
+walltime/epoch: 62.656 ms
+
+epoch=11800
+residual: 0.0027477, 0.00157, 0.0011641, 0.0014783, 0.0014351
+walltime: 832.637 s
+walltime/epoch: 68.788 ms
+
+epoch=11850
+residual: 0.00274, 0.0015609, 0.0011616, 0.0014757, 0.0014311
+walltime: 835.465 s
+walltime/epoch: 56.573 ms
+
+epoch=11900
+residual: 0.0027359, 0.0015548, 0.0011523, 0.0014736, 0.0014234
+walltime: 838.371 s
+walltime/epoch: 58.107 ms
+
+epoch=11950
+residual: 0.0027296, 0.0015508, 0.0011482, 0.0014718, 0.0014177
+walltime: 841.098 s
+walltime/epoch: 54.546 ms
+
+epoch=12000
+residual: 0.0027238, 0.0015492, 0.001145, 0.0014683, 0.0014147
+walltime: 843.885 s
+walltime/epoch: 55.728 ms
+
+epoch=12050
+residual: 0.0027145, 0.0015475, 0.0011433, 0.0014637, 0.0014119
+walltime: 846.659 s
+walltime/epoch: 55.494 ms
+
+epoch=12100
+residual: 0.0027032, 0.0015462, 0.0011386, 0.0014574, 0.0014133
+walltime: 849.308 s
+walltime/epoch: 52.969 ms
+
+epoch=12150
+residual: 0.0026928, 0.0015405, 0.0011343, 0.0014529, 0.0014157
+walltime: 851.998 s
+walltime/epoch: 53.795 ms
+
+epoch=12200
+residual: 0.0026834, 0.0015312, 0.0011343, 0.001452, 0.0014138
+walltime: 855.098 s
+walltime/epoch: 62.000 ms
+
+epoch=12250
+residual: 0.0026759, 0.0015225, 0.0011331, 0.0014519, 0.0014089
+walltime: 857.947 s
+walltime/epoch: 56.986 ms
+
+epoch=12300
+residual: 0.002669, 0.0015088, 0.0011311, 0.0014526, 0.0014037
+walltime: 860.757 s
+walltime/epoch: 56.202 ms
+
+epoch=12350
+residual: 0.0026619, 0.0014966, 0.0011271, 0.0014506, 0.0014018
+walltime: 863.478 s
+walltime/epoch: 54.416 ms
+
+epoch=12400
+residual: 0.0026554, 0.0014911, 0.0011251, 0.0014465, 0.0013964
+walltime: 866.236 s
+walltime/epoch: 55.164 ms
+
+epoch=12450
+residual: 0.0026502, 0.0014886, 0.0011202, 0.0014434, 0.0013922
+walltime: 868.926 s
+walltime/epoch: 53.808 ms
+
+epoch=12500
+residual: 0.0026436, 0.0014843, 0.0011145, 0.0014392, 0.0013905
+walltime: 871.707 s
+walltime/epoch: 55.621 ms
+vx_00005.xmf vy_00005.xmf p_00005.xmf chi_00005.xmf
+
+epoch=12550
+residual: 0.0026378, 0.0014787, 0.001109, 0.0014373, 0.0013887
+walltime: 874.557 s
+walltime/epoch: 56.995 ms
+
+epoch=12600
+residual: 0.0026337, 0.0014748, 0.0011068, 0.0014337, 0.0013851
+walltime: 877.327 s
+walltime/epoch: 55.393 ms
+
+epoch=12650
+residual: 0.002628, 0.0014713, 0.0011102, 0.0014301, 0.0013784
+walltime: 880.095 s
+walltime/epoch: 55.370 ms
+
+epoch=12700
+residual: 0.002623, 0.0014656, 0.0011134, 0.0014277, 0.001372
+walltime: 882.854 s
+walltime/epoch: 55.178 ms
+
+epoch=12750
+residual: 0.0026167, 0.0014616, 0.0011107, 0.001426, 0.0013715
+walltime: 885.590 s
+walltime/epoch: 54.723 ms
+
+epoch=12800
+residual: 0.0026102, 0.0014575, 0.0011093, 0.001422, 0.0013746
+walltime: 888.429 s
+walltime/epoch: 56.774 ms
+
+epoch=12850
+residual: 0.0026036, 0.0014518, 0.0011093, 0.0014186, 0.0013757
+walltime: 891.146 s
+walltime/epoch: 54.339 ms
+
+epoch=12900
+residual: 0.0025962, 0.0014464, 0.0011096, 0.0014172, 0.0013768
+walltime: 893.833 s
+walltime/epoch: 53.739 ms
+
+epoch=12950
+residual: 0.0025929, 0.0014405, 0.0011092, 0.0014149, 0.0013733
+walltime: 896.596 s
+walltime/epoch: 55.250 ms
+
+epoch=13000
+residual: 0.002588, 0.0014349, 0.0011087, 0.0014125, 0.0013694
+walltime: 899.318 s
+walltime/epoch: 54.456 ms
+
+epoch=13050
+residual: 0.0025837, 0.0014304, 0.0011033, 0.0014109, 0.0013684
+walltime: 902.231 s
+walltime/epoch: 58.259 ms
+
+epoch=13100
+residual: 0.0025797, 0.0014274, 0.0011036, 0.0014064, 0.0013642
+walltime: 905.047 s
+walltime/epoch: 56.306 ms
+
+epoch=13150
+residual: 0.0025737, 0.0014243, 0.0011024, 0.001403, 0.0013626
+walltime: 907.766 s
+walltime/epoch: 54.394 ms
+
+epoch=13200
+residual: 0.0025664, 0.0014223, 0.001103, 0.0014022, 0.001356
+walltime: 910.482 s
+walltime/epoch: 54.319 ms
+
+epoch=13250
+residual: 0.0025582, 0.0014231, 0.001099, 0.0014007, 0.0013515
+walltime: 913.205 s
+walltime/epoch: 54.450 ms
+
+epoch=13300
+residual: 0.002551, 0.0014239, 0.0010972, 0.0014002, 0.0013453
+walltime: 916.037 s
+walltime/epoch: 56.635 ms
+
+epoch=13350
+residual: 0.0025448, 0.0014237, 0.0010972, 0.0013995, 0.00134
+walltime: 918.876 s
+walltime/epoch: 56.796 ms
+
+epoch=13400
+residual: 0.0025374, 0.0014244, 0.001098, 0.0013988, 0.0013335
+walltime: 921.567 s
+walltime/epoch: 53.809 ms
+
+epoch=13450
+residual: 0.0025319, 0.0014219, 0.0010991, 0.0013972, 0.0013283
+walltime: 924.277 s
+walltime/epoch: 54.207 ms
+
+epoch=13500
+residual: 0.0025251, 0.0014222, 0.0011003, 0.0013955, 0.0013226
+walltime: 927.056 s
+walltime/epoch: 55.581 ms
+
+epoch=13550
+residual: 0.0025179, 0.0014227, 0.0011001, 0.0013912, 0.0013185
+walltime: 929.867 s
+walltime/epoch: 56.224 ms
+
+epoch=13600
+residual: 0.0025092, 0.0014214, 0.0010999, 0.0013881, 0.0013158
+walltime: 932.577 s
+walltime/epoch: 54.195 ms
+
+epoch=13650
+residual: 0.0024993, 0.0014212, 0.0010968, 0.0013836, 0.0013162
+walltime: 935.467 s
+walltime/epoch: 57.793 ms
+
+epoch=13700
+residual: 0.0024897, 0.0014205, 0.0010972, 0.0013798, 0.0013151
+walltime: 938.186 s
+walltime/epoch: 54.377 ms
+
+epoch=13750
+residual: 0.0024824, 0.0014221, 0.0010913, 0.0013763, 0.001311
+walltime: 940.847 s
+walltime/epoch: 53.225 ms
+
+epoch=13800
+residual: 0.0024747, 0.0014216, 0.0010892, 0.0013747, 0.0013051
+walltime: 943.524 s
+walltime/epoch: 53.544 ms
+
+epoch=13850
+residual: 0.0024674, 0.0014182, 0.0010876, 0.0013737, 0.0012995
+walltime: 946.251 s
+walltime/epoch: 54.542 ms
+
+epoch=13900
+residual: 0.002461, 0.0014121, 0.001082, 0.0013754, 0.0012944
+walltime: 949.006 s
+walltime/epoch: 55.088 ms
+
+epoch=13950
+residual: 0.0024522, 0.0014081, 0.0010815, 0.0013709, 0.0012914
+walltime: 951.666 s
+walltime/epoch: 53.195 ms
+
+epoch=14000
+residual: 0.0024452, 0.0014068, 0.0010788, 0.0013646, 0.0012867
+walltime: 954.436 s
+walltime/epoch: 55.415 ms
+
+epoch=14050
+residual: 0.0024372, 0.0014066, 0.0010757, 0.0013566, 0.0012853
+walltime: 957.189 s
+walltime/epoch: 55.053 ms
+
+epoch=14100
+residual: 0.0024297, 0.0014034, 0.0010749, 0.0013487, 0.0012842
+walltime: 959.907 s
+walltime/epoch: 54.360 ms
+
+epoch=14150
+residual: 0.0024189, 0.0014019, 0.0010805, 0.0013408, 0.0012837
+walltime: 962.638 s
+walltime/epoch: 54.620 ms
+
+epoch=14200
+residual: 0.0024071, 0.0014001, 0.0010819, 0.0013371, 0.0012833
+walltime: 965.504 s
+walltime/epoch: 57.317 ms
+
+epoch=14250
+residual: 0.0023974, 0.0014009, 0.0010813, 0.0013333, 0.001278
+walltime: 968.336 s
+walltime/epoch: 56.652 ms
+
+epoch=14300
+residual: 0.0023882, 0.0014043, 0.0010763, 0.0013295, 0.0012726
+walltime: 971.068 s
+walltime/epoch: 54.639 ms
+
+epoch=14350
+residual: 0.0023799, 0.001406, 0.0010738, 0.0013275, 0.0012668
+walltime: 973.848 s
+walltime/epoch: 55.589 ms
+
+epoch=14400
+residual: 0.0023746, 0.001403, 0.0010731, 0.0013252, 0.0012605
+walltime: 976.630 s
+walltime/epoch: 55.650 ms
+
+epoch=14450
+residual: 0.002369, 0.0013982, 0.0010719, 0.0013233, 0.0012546
+walltime: 979.505 s
+walltime/epoch: 57.497 ms
+
+epoch=14500
+residual: 0.0023634, 0.001394, 0.0010696, 0.0013219, 0.0012473
+walltime: 982.236 s
+walltime/epoch: 54.619 ms
+
+epoch=14550
+residual: 0.0023567, 0.0013929, 0.0010671, 0.0013182, 0.0012426
+walltime: 984.975 s
+walltime/epoch: 54.772 ms
+
+epoch=14600
+residual: 0.0023496, 0.0013932, 0.001064, 0.0013109, 0.0012396
+walltime: 987.804 s
+walltime/epoch: 56.591 ms
+
+epoch=14650
+residual: 0.0023423, 0.0013933, 0.0010577, 0.0013039, 0.0012372
+walltime: 990.477 s
+walltime/epoch: 53.443 ms
+
+epoch=14700
+residual: 0.002339, 0.0013948, 0.0010462, 0.0012944, 0.0012341
+walltime: 993.235 s
+walltime/epoch: 55.180 ms
+
+epoch=14750
+residual: 0.0023357, 0.0013872, 0.0010447, 0.00129, 0.00123
+walltime: 995.967 s
+walltime/epoch: 54.623 ms
+
+epoch=14800
+residual: 0.0023319, 0.0013832, 0.001038, 0.0012861, 0.001227
+walltime: 998.668 s
+walltime/epoch: 54.022 ms
+
+epoch=14850
+residual: 0.0023297, 0.0013774, 0.001031, 0.0012832, 0.0012219
+walltime: 1001.387 s
+walltime/epoch: 54.374 ms
+
+epoch=14900
+residual: 0.0023248, 0.0013714, 0.0010275, 0.0012805, 0.0012168
+walltime: 1004.145 s
+walltime/epoch: 55.166 ms
+
+epoch=14950
+residual: 0.0023213, 0.0013663, 0.0010214, 0.0012769, 0.0012119
+walltime: 1006.777 s
+walltime/epoch: 52.635 ms
+
+epoch=15000
+residual: 0.0023176, 0.0013618, 0.0010139, 0.0012744, 0.0012084
+walltime: 1009.557 s
+walltime/epoch: 55.606 ms
+vx_00006.xmf vy_00006.xmf p_00006.xmf chi_00006.xmf
+
+epoch=15050
+residual: 0.0023133, 0.0013601, 0.0010079, 0.0012709, 0.0012039
+walltime: 1012.407 s
+walltime/epoch: 56.998 ms
+
+epoch=15100
+residual: 0.0023065, 0.0013597, 0.0010012, 0.0012697, 0.0012005
+walltime: 1015.115 s
+walltime/epoch: 54.170 ms
+
+epoch=15150
+residual: 0.002301, 0.001362, 0.00099656, 0.0012654, 0.0011946
+walltime: 1017.836 s
+walltime/epoch: 54.419 ms
+
+epoch=15200
+residual: 0.0022931, 0.0013621, 0.00099575, 0.0012618, 0.001191
+walltime: 1020.673 s
+walltime/epoch: 56.741 ms
+
+epoch=15250
+residual: 0.0022846, 0.0013649, 0.00099019, 0.0012579, 0.0011897
+walltime: 1023.478 s
+walltime/epoch: 56.083 ms
+
+epoch=15300
+residual: 0.002277, 0.0013653, 0.00098792, 0.0012561, 0.0011851
+walltime: 1026.227 s
+walltime/epoch: 54.986 ms
+
+epoch=15350
+residual: 0.0022672, 0.0013651, 0.00098936, 0.0012538, 0.0011826
+walltime: 1029.035 s
+walltime/epoch: 56.155 ms
+
+epoch=15400
+residual: 0.0022586, 0.0013669, 0.00098885, 0.0012503, 0.0011774
+walltime: 1031.792 s
+walltime/epoch: 55.154 ms
+
+epoch=15450
+residual: 0.0022501, 0.0013693, 0.00098723, 0.0012456, 0.0011756
+walltime: 1034.537 s
+walltime/epoch: 54.883 ms
+
+epoch=15500
+residual: 0.0022414, 0.0013727, 0.00098242, 0.0012406, 0.0011758
+walltime: 1037.197 s
+walltime/epoch: 53.214 ms
+
+epoch=15550
+residual: 0.0022363, 0.0013742, 0.0009779, 0.0012351, 0.001172
+walltime: 1040.027 s
+walltime/epoch: 56.602 ms
+
+epoch=15600
+residual: 0.0022316, 0.0013725, 0.00097332, 0.0012316, 0.001169
+walltime: 1042.748 s
+walltime/epoch: 54.406 ms
+
+epoch=15650
+residual: 0.0022265, 0.0013686, 0.00097405, 0.0012277, 0.0011655
+walltime: 1045.457 s
+walltime/epoch: 54.180 ms
+
+epoch=15700
+residual: 0.0022213, 0.0013625, 0.00097492, 0.001226, 0.0011626
+walltime: 1048.235 s
+walltime/epoch: 55.569 ms
+
+epoch=15750
+residual: 0.002217, 0.0013589, 0.00097261, 0.0012236, 0.0011593
+walltime: 1050.937 s
+walltime/epoch: 54.029 ms
+
+epoch=15800
+residual: 0.0022137, 0.0013535, 0.00097027, 0.0012206, 0.0011575
+walltime: 1053.710 s
+walltime/epoch: 55.474 ms
+
+epoch=15850
+residual: 0.0022099, 0.0013468, 0.00097046, 0.0012197, 0.0011551
+walltime: 1056.446 s
+walltime/epoch: 54.722 ms
+
+epoch=15900
+residual: 0.0022062, 0.0013407, 0.000969, 0.0012177, 0.0011515
+walltime: 1059.181 s
+walltime/epoch: 54.694 ms
+
+epoch=15950
+residual: 0.0022014, 0.0013374, 0.0009661, 0.0012147, 0.0011491
+walltime: 1061.899 s
+walltime/epoch: 54.348 ms
+
+epoch=16000
+residual: 0.0021971, 0.0013339, 0.00096168, 0.0012124, 0.0011474
+walltime: 1064.616 s
+walltime/epoch: 54.358 ms
+
+epoch=16050
+residual: 0.0021933, 0.0013302, 0.00095926, 0.0012079, 0.0011454
+walltime: 1067.476 s
+walltime/epoch: 57.190 ms
+
+epoch=16100
+residual: 0.0021882, 0.0013272, 0.00095634, 0.0012036, 0.0011432
+walltime: 1070.287 s
+walltime/epoch: 56.216 ms
+
+epoch=16150
+residual: 0.0021829, 0.0013233, 0.00095563, 0.0011985, 0.0011413
+walltime: 1073.076 s
+walltime/epoch: 55.789 ms
+
+epoch=16200
+residual: 0.0021779, 0.00132, 0.00095155, 0.0011951, 0.0011379
+walltime: 1075.839 s
+walltime/epoch: 55.249 ms
+
+epoch=16250
+residual: 0.0021737, 0.0013175, 0.00094668, 0.0011906, 0.0011359
+walltime: 1078.597 s
+walltime/epoch: 55.165 ms
+
+epoch=16300
+residual: 0.0021685, 0.001315, 0.00094357, 0.0011878, 0.0011352
+walltime: 1081.279 s
+walltime/epoch: 53.633 ms
+
+epoch=16350
+residual: 0.0021618, 0.0013105, 0.00094632, 0.0011847, 0.001132
+walltime: 1084.405 s
+walltime/epoch: 62.518 ms
+
+epoch=16400
+residual: 0.0021563, 0.0013014, 0.00094741, 0.0011848, 0.0011278
+walltime: 1087.577 s
+walltime/epoch: 63.442 ms
+
+epoch=16450
+residual: 0.002151, 0.001293, 0.00094712, 0.0011835, 0.0011247
+walltime: 1092.043 s
+walltime/epoch: 89.319 ms
+
+epoch=16500
+residual: 0.0021461, 0.0012869, 0.00094843, 0.001182, 0.0011217
+walltime: 1096.439 s
+walltime/epoch: 87.926 ms
+
+epoch=16550
+residual: 0.0021416, 0.0012809, 0.00094844, 0.0011812, 0.0011192
+walltime: 1099.271 s
+walltime/epoch: 56.638 ms
+
+epoch=16600
+residual: 0.0021375, 0.0012747, 0.00094818, 0.0011794, 0.0011188
+walltime: 1102.067 s
+walltime/epoch: 55.914 ms
+
+epoch=16650
+residual: 0.0021337, 0.0012712, 0.00094634, 0.0011768, 0.0011178
+walltime: 1104.800 s
+walltime/epoch: 54.676 ms
+
+epoch=16700
+residual: 0.0021297, 0.0012678, 0.00094314, 0.0011737, 0.0011186
+walltime: 1107.665 s
+walltime/epoch: 57.301 ms
+
+epoch=16750
+residual: 0.0021258, 0.0012636, 0.00094074, 0.001172, 0.0011178
+walltime: 1110.613 s
+walltime/epoch: 58.952 ms
+
+epoch=16800
+residual: 0.0021211, 0.0012598, 0.00093913, 0.0011705, 0.0011164
+walltime: 1113.350 s
+walltime/epoch: 54.745 ms
+
+epoch=16850
+residual: 0.0021171, 0.0012578, 0.00093586, 0.0011692, 0.0011144
+walltime: 1116.071 s
+walltime/epoch: 54.420 ms
+
+epoch=16900
+residual: 0.0021144, 0.0012576, 0.00093258, 0.0011653, 0.0011127
+walltime: 1118.810 s
+walltime/epoch: 54.767 ms
+
+epoch=16950
+residual: 0.0021103, 0.0012553, 0.00093055, 0.0011629, 0.0011129
+walltime: 1121.626 s
+walltime/epoch: 56.332 ms
+
+epoch=17000
+residual: 0.002108, 0.0012517, 0.00092694, 0.0011598, 0.0011136
+walltime: 1124.416 s
+walltime/epoch: 55.795 ms
+
+epoch=17050
+residual: 0.0021048, 0.0012478, 0.0009262, 0.0011551, 0.0011144
+walltime: 1127.154 s
+walltime/epoch: 54.757 ms
+
+epoch=17100
+residual: 0.0021012, 0.0012432, 0.00092475, 0.0011498, 0.0011132
+walltime: 1129.910 s
+walltime/epoch: 55.126 ms
+
+epoch=17150
+residual: 0.0020972, 0.0012387, 0.00092064, 0.0011467, 0.0011118
+walltime: 1132.696 s
+walltime/epoch: 55.708 ms
+
+epoch=17200
+residual: 0.0020941, 0.0012341, 0.00091785, 0.0011448, 0.0011085
+walltime: 1135.439 s
+walltime/epoch: 54.876 ms
+
+epoch=17250
+residual: 0.0020905, 0.0012307, 0.00091392, 0.0011438, 0.0011038
+walltime: 1138.147 s
+walltime/epoch: 54.147 ms
+
+epoch=17300
+residual: 0.0020858, 0.0012285, 0.00091088, 0.0011431, 0.0011001
+walltime: 1140.912 s
+walltime/epoch: 55.305 ms
+
+epoch=17350
+residual: 0.0020808, 0.0012271, 0.00090811, 0.0011406, 0.0010977
+walltime: 1143.697 s
+walltime/epoch: 55.698 ms
+
+epoch=17400
+residual: 0.002074, 0.0012271, 0.00090544, 0.0011374, 0.0010946
+walltime: 1146.458 s
+walltime/epoch: 55.214 ms
+
+epoch=17450
+residual: 0.0020693, 0.0012287, 0.00089844, 0.0011339, 0.0010901
+walltime: 1149.173 s
+walltime/epoch: 54.301 ms
+
+epoch=17500
+residual: 0.0020636, 0.0012264, 0.00089714, 0.0011289, 0.0010874
+walltime: 1151.829 s
+walltime/epoch: 53.116 ms
+vx_00007.xmf vy_00007.xmf p_00007.xmf chi_00007.xmf
+
+epoch=17550
+residual: 0.0020592, 0.001224, 0.00089514, 0.0011256, 0.001084
+walltime: 1155.169 s
+walltime/epoch: 66.807 ms
+
+epoch=17600
+residual: 0.0020556, 0.0012207, 0.00088851, 0.0011237, 0.0010823
+walltime: 1163.544 s
+walltime/epoch: 167.498 ms
+
+epoch=17650
+residual: 0.0020514, 0.0012168, 0.00088762, 0.001117, 0.0010799
+walltime: 1166.426 s
+walltime/epoch: 57.635 ms
+
+epoch=17700
+residual: 0.0020459, 0.0012126, 0.00088525, 0.0011125, 0.0010788
+walltime: 1169.185 s
+walltime/epoch: 55.195 ms
+
+epoch=17750
+residual: 0.0020396, 0.0012077, 0.00088242, 0.0011079, 0.0010774
+walltime: 1172.289 s
+walltime/epoch: 62.070 ms
+
+epoch=17800
+residual: 0.0020337, 0.001203, 0.00088254, 0.0011039, 0.0010737
+walltime: 1175.142 s
+walltime/epoch: 57.062 ms
+
+epoch=17850
+residual: 0.0020289, 0.0011968, 0.00088213, 0.0011003, 0.0010713
+walltime: 1177.984 s
+walltime/epoch: 56.848 ms
+
+epoch=17900
+residual: 0.0020241, 0.0011899, 0.00088004, 0.0010994, 0.0010689
+walltime: 1180.690 s
+walltime/epoch: 54.109 ms
+
+epoch=17950
+residual: 0.0020193, 0.0011859, 0.0008798, 0.0010957, 0.0010667
+walltime: 1183.347 s
+walltime/epoch: 53.145 ms
+
+epoch=18000
+residual: 0.0020136, 0.0011818, 0.00088221, 0.0010915, 0.0010647
+walltime: 1186.057 s
+walltime/epoch: 54.204 ms
+
+epoch=18050
+residual: 0.0020077, 0.0011768, 0.00088456, 0.0010866, 0.0010631
+walltime: 1188.816 s
+walltime/epoch: 55.163 ms
+
+epoch=18100
+residual: 0.0020006, 0.0011732, 0.00088725, 0.0010806, 0.0010627
+walltime: 1191.478 s
+walltime/epoch: 53.246 ms
+
+epoch=18150
+residual: 0.0019955, 0.0011707, 0.00088648, 0.001076, 0.0010613
+walltime: 1194.197 s
+walltime/epoch: 54.374 ms
+
+epoch=18200
+residual: 0.0019904, 0.0011673, 0.00088466, 0.0010727, 0.0010606
+walltime: 1208.454 s
+walltime/epoch: 285.139 ms
+
+epoch=18250
+residual: 0.0019855, 0.0011642, 0.0008833, 0.0010704, 0.0010568
+walltime: 1211.186 s
+walltime/epoch: 54.657 ms
+
+epoch=18300
+residual: 0.0019792, 0.0011609, 0.000882, 0.0010701, 0.0010554
+walltime: 1213.856 s
+walltime/epoch: 53.397 ms
+
+epoch=18350
+residual: 0.0019741, 0.0011578, 0.00088122, 0.0010679, 0.0010522
+walltime: 1216.621 s
+walltime/epoch: 55.288 ms
+
+epoch=18400
+residual: 0.0019686, 0.0011528, 0.00088051, 0.0010648, 0.0010518
+walltime: 1219.358 s
+walltime/epoch: 54.741 ms
+
+epoch=18450
+residual: 0.0019639, 0.0011466, 0.00088005, 0.0010632, 0.0010514
+walltime: 1222.101 s
+walltime/epoch: 54.854 ms
+
+epoch=18500
+residual: 0.0019602, 0.0011393, 0.00088209, 0.0010594, 0.0010483
+walltime: 1224.815 s
+walltime/epoch: 54.292 ms
+
+epoch=18550
+residual: 0.001956, 0.001132, 0.00088362, 0.0010552, 0.001047
+walltime: 1228.037 s
+walltime/epoch: 64.443 ms
+
+epoch=18600
+residual: 0.0019502, 0.0011269, 0.00088315, 0.0010521, 0.0010464
+walltime: 1230.826 s
+walltime/epoch: 55.782 ms
+
+epoch=18650
+residual: 0.0019455, 0.0011228, 0.0008808, 0.0010489, 0.0010456
+walltime: 1233.945 s
+walltime/epoch: 62.365 ms
+
+epoch=18700
+residual: 0.0019397, 0.0011186, 0.0008804, 0.0010433, 0.0010459
+walltime: 1237.199 s
+walltime/epoch: 65.093 ms
+
+epoch=18750
+residual: 0.001935, 0.0011143, 0.00087698, 0.0010397, 0.0010448
+walltime: 1239.896 s
+walltime/epoch: 53.923 ms
+
+epoch=18800
+residual: 0.0019294, 0.0011098, 0.00087633, 0.0010368, 0.0010434
+walltime: 1243.129 s
+walltime/epoch: 64.671 ms
+
+epoch=18850
+residual: 0.0019244, 0.001106, 0.00087124, 0.0010352, 0.0010418
+walltime: 1246.003 s
+walltime/epoch: 57.487 ms
+
+epoch=18900
+residual: 0.0019196, 0.0011015, 0.00087062, 0.0010348, 0.0010387
+walltime: 1249.844 s
+walltime/epoch: 76.814 ms
+
+epoch=18950
+residual: 0.0019155, 0.0010945, 0.00087134, 0.0010336, 0.0010339
+walltime: 1253.007 s
+walltime/epoch: 63.259 ms
+
+epoch=19000
+residual: 0.0019122, 0.0010911, 0.00086839, 0.0010304, 0.0010298
+walltime: 1256.252 s
+walltime/epoch: 64.903 ms
+
+epoch=19050
+residual: 0.0019077, 0.0010885, 0.00086458, 0.0010271, 0.0010281
+walltime: 1259.629 s
+walltime/epoch: 67.539 ms
+
+epoch=19100
+residual: 0.0019043, 0.0010863, 0.0008601, 0.0010225, 0.0010264
+walltime: 1263.027 s
+walltime/epoch: 67.946 ms
+
+epoch=19150
+residual: 0.0019006, 0.0010844, 0.00085607, 0.0010168, 0.0010255
+walltime: 1266.368 s
+walltime/epoch: 66.835 ms
+
+epoch=19200
+residual: 0.0018979, 0.0010825, 0.00085307, 0.0010101, 0.0010246
+walltime: 1269.744 s
+walltime/epoch: 67.514 ms
+
+epoch=19250
+residual: 0.0018954, 0.0010773, 0.00085183, 0.001006, 0.0010232
+walltime: 1273.135 s
+walltime/epoch: 67.825 ms
+
+epoch=19300
+residual: 0.001892, 0.0010696, 0.00085133, 0.0010041, 0.0010213
+walltime: 1276.675 s
+walltime/epoch: 70.796 ms
+
+epoch=19350
+residual: 0.0018889, 0.0010613, 0.00084997, 0.001003, 0.0010179
+walltime: 1279.846 s
+walltime/epoch: 63.416 ms
+
+epoch=19400
+residual: 0.0018857, 0.0010535, 0.00084727, 0.0010016, 0.0010171
+walltime: 1283.036 s
+walltime/epoch: 63.799 ms
+
+epoch=19450
+residual: 0.0018828, 0.0010479, 0.00084386, 0.00099771, 0.0010159
+walltime: 1286.286 s
+walltime/epoch: 65.006 ms
+
+epoch=19500
+residual: 0.0018798, 0.0010439, 0.00083977, 0.00099503, 0.0010146
+walltime: 1289.612 s
+walltime/epoch: 66.522 ms
+
+epoch=19550
+residual: 0.0018762, 0.0010404, 0.00083394, 0.00099114, 0.0010159
+walltime: 1292.897 s
+walltime/epoch: 65.695 ms
+
+epoch=19600
+residual: 0.0018727, 0.0010365, 0.00082771, 0.0009877, 0.0010174
+walltime: 1296.283 s
+walltime/epoch: 67.709 ms
+
+epoch=19650
+residual: 0.0018683, 0.0010324, 0.00082245, 0.00098453, 0.0010173
+walltime: 1300.436 s
+walltime/epoch: 83.061 ms
+
+epoch=19700
+residual: 0.0018635, 0.0010289, 0.00081863, 0.00098208, 0.0010152
+walltime: 1303.246 s
+walltime/epoch: 56.204 ms
+
+epoch=19750
+residual: 0.0018589, 0.0010239, 0.00081927, 0.00098064, 0.0010092
+walltime: 1305.915 s
+walltime/epoch: 53.387 ms
+
+epoch=19800
+residual: 0.0018538, 0.0010189, 0.00081693, 0.00098104, 0.0010048
+walltime: 1311.126 s
+walltime/epoch: 104.210 ms
+
+epoch=19850
+residual: 0.0018489, 0.0010158, 0.00081341, 0.00097933, 0.0010024
+walltime: 1315.677 s
+walltime/epoch: 91.024 ms
+
+epoch=19900
+residual: 0.0018445, 0.0010136, 0.00080902, 0.00097581, 0.0010007
+walltime: 1319.279 s
+walltime/epoch: 72.049 ms
+
+epoch=19950
+residual: 0.0018391, 0.0010121, 0.00080671, 0.00097238, 0.0009987
+walltime: 1322.066 s
+walltime/epoch: 55.728 ms
+
+epoch=20000
+residual: 0.0018333, 0.0010111, 0.00080648, 0.0009674, 0.00099801
+walltime: 1325.391 s
+walltime/epoch: 66.513 ms
+vx_00008.xmf vy_00008.xmf p_00008.xmf chi_00008.xmf
+
+epoch=20050
+residual: 0.001826, 0.0010109, 0.00080706, 0.00096092, 0.00099733
+walltime: 1329.498 s
+walltime/epoch: 82.134 ms
+
+epoch=20100
+residual: 0.0018199, 0.0010125, 0.00080391, 0.00095568, 0.00099634
+walltime: 1335.565 s
+walltime/epoch: 121.341 ms
+
+epoch=20150
+residual: 0.0018147, 0.0010132, 0.00080037, 0.00095205, 0.00099246
+walltime: 1338.710 s
+walltime/epoch: 62.894 ms
+
+epoch=20200
+residual: 0.0018098, 0.0010122, 0.00079868, 0.00094904, 0.00099002
+walltime: 1341.839 s
+walltime/epoch: 62.575 ms
+
+epoch=20250
+residual: 0.0018057, 0.0010089, 0.00079905, 0.0009467, 0.00098625
+walltime: 1344.869 s
+walltime/epoch: 60.597 ms
+
+epoch=20300
+residual: 0.0018022, 0.0010046, 0.00079897, 0.00094437, 0.00098201
+walltime: 1347.782 s
+walltime/epoch: 58.266 ms
+
+epoch=20350
+residual: 0.0017982, 0.0010005, 0.0007977, 0.00094415, 0.00097703
+walltime: 1350.836 s
+walltime/epoch: 61.070 ms
+
+epoch=20400
+residual: 0.0017928, 0.00099665, 0.00079478, 0.00094292, 0.00097457
+walltime: 1353.931 s
+walltime/epoch: 61.902 ms
+
+epoch=20450
+residual: 0.0017872, 0.00099573, 0.00079454, 0.00093863, 0.00096969
+walltime: 1357.487 s
+walltime/epoch: 71.117 ms
+
+epoch=20500
+residual: 0.0017827, 0.00099674, 0.0007894, 0.00093415, 0.00096765
+walltime: 1361.364 s
+walltime/epoch: 77.554 ms
+
+epoch=20550
+residual: 0.001778, 0.00099816, 0.00078489, 0.00092971, 0.00096699
+walltime: 1366.017 s
+walltime/epoch: 93.050 ms
+
+epoch=20600
+residual: 0.0017731, 0.00099463, 0.00078468, 0.00092507, 0.00096718
+walltime: 1368.946 s
+walltime/epoch: 58.579 ms
+
+epoch=20650
+residual: 0.0017705, 0.00099153, 0.00078284, 0.00091792, 0.00096539
+walltime: 1371.794 s
+walltime/epoch: 56.964 ms
+
+epoch=20700
+residual: 0.0017673, 0.00098716, 0.00078125, 0.00091287, 0.00096494
+walltime: 1374.860 s
+walltime/epoch: 61.312 ms
+
+epoch=20750
+residual: 0.0017642, 0.00098403, 0.00078036, 0.00090978, 0.00096371
+walltime: 1378.534 s
+walltime/epoch: 73.492 ms
+
+epoch=20800
+residual: 0.001761, 0.00098115, 0.00078083, 0.00090796, 0.00096066
+walltime: 1383.554 s
+walltime/epoch: 100.399 ms
+
+epoch=20850
+residual: 0.0017581, 0.00097882, 0.00078097, 0.00090626, 0.00095662
+walltime: 1388.182 s
+walltime/epoch: 92.553 ms
+
+epoch=20900
+residual: 0.0017545, 0.00097681, 0.00078167, 0.00090543, 0.00095225
+walltime: 1394.897 s
+walltime/epoch: 134.303 ms
+
+epoch=20950
+residual: 0.0017494, 0.00097635, 0.00078029, 0.00090458, 0.00094955
+walltime: 1398.307 s
+walltime/epoch: 68.202 ms
+
+epoch=21000
+residual: 0.0017432, 0.00097609, 0.0007775, 0.00090459, 0.00094627
+walltime: 1401.266 s
+walltime/epoch: 59.176 ms
+
+epoch=21050
+residual: 0.0017375, 0.00097691, 0.00077601, 0.00090132, 0.00094347
+walltime: 1404.796 s
+walltime/epoch: 70.610 ms
+
+epoch=21100
+residual: 0.0017321, 0.00097934, 0.00077335, 0.00089824, 0.00094017
+walltime: 1407.910 s
+walltime/epoch: 62.273 ms
+
+epoch=21150
+residual: 0.0017289, 0.00097813, 0.00077023, 0.00089685, 0.00093641
+walltime: 1410.676 s
+walltime/epoch: 55.311 ms
+
+epoch=21200
+residual: 0.0017259, 0.0009756, 0.00077086, 0.00089409, 0.00093344
+walltime: 1413.761 s
+walltime/epoch: 61.706 ms
+
+epoch=21250
+residual: 0.0017228, 0.00097184, 0.00076978, 0.00089206, 0.00093294
+walltime: 1417.079 s
+walltime/epoch: 66.367 ms
+
+epoch=21300
+residual: 0.0017202, 0.00096763, 0.00076691, 0.00089056, 0.00093191
+walltime: 1420.283 s
+walltime/epoch: 64.065 ms
+
+epoch=21350
+residual: 0.0017176, 0.00096138, 0.00076465, 0.00088839, 0.00093183
+walltime: 1423.557 s
+walltime/epoch: 65.480 ms
+
+epoch=21400
+residual: 0.0017143, 0.00095668, 0.00076254, 0.00088564, 0.0009307
+walltime: 1426.995 s
+walltime/epoch: 68.776 ms
+
+epoch=21450
+residual: 0.0017116, 0.00095277, 0.00075991, 0.00088183, 0.00093062
+walltime: 1429.943 s
+walltime/epoch: 58.955 ms
+
+epoch=21500
+residual: 0.0017068, 0.00095016, 0.00075752, 0.00088125, 0.0009302
+walltime: 1433.275 s
+walltime/epoch: 66.631 ms
+
+epoch=21550
+residual: 0.0017034, 0.00094915, 0.00075433, 0.00087936, 0.00092909
+walltime: 1440.919 s
+walltime/epoch: 152.889 ms
+
+epoch=21600
+residual: 0.0016996, 0.00095095, 0.00075296, 0.00087622, 0.00092636
+walltime: 1443.686 s
+walltime/epoch: 55.329 ms
+
+epoch=21650
+residual: 0.0016949, 0.00095202, 0.00075189, 0.0008728, 0.00092301
+walltime: 1446.505 s
+walltime/epoch: 56.394 ms
+
+epoch=21700
+residual: 0.0016903, 0.00095323, 0.000748, 0.00086955, 0.00092172
+walltime: 1449.227 s
+walltime/epoch: 54.429 ms
+
+epoch=21750
+residual: 0.0016865, 0.00095502, 0.00074215, 0.00086656, 0.00091975
+walltime: 1451.894 s
+walltime/epoch: 53.340 ms
+
+epoch=21800
+residual: 0.0016832, 0.00095556, 0.00073798, 0.00086416, 0.00091768
+walltime: 1454.556 s
+walltime/epoch: 53.239 ms
+
+epoch=21850
+residual: 0.001681, 0.00095702, 0.0007337, 0.00086108, 0.00091566
+walltime: 1457.585 s
+walltime/epoch: 60.591 ms
+
+epoch=21900
+residual: 0.0016789, 0.00095614, 0.00073173, 0.00085721, 0.00091508
+walltime: 1460.236 s
+walltime/epoch: 53.007 ms
+
+epoch=21950
+residual: 0.0016762, 0.00095216, 0.00073161, 0.00085505, 0.00091425
+walltime: 1462.937 s
+walltime/epoch: 54.024 ms
+
+epoch=22000
+residual: 0.001674, 0.00094718, 0.00073216, 0.00085344, 0.00091152
+walltime: 1465.790 s
+walltime/epoch: 57.054 ms
+
+epoch=22050
+residual: 0.0016727, 0.00094274, 0.00073115, 0.00085046, 0.00090926
+walltime: 1468.566 s
+walltime/epoch: 55.518 ms
+
+epoch=22100
+residual: 0.0016711, 0.00094007, 0.00072975, 0.0008492, 0.00090668
+walltime: 1471.231 s
+walltime/epoch: 53.309 ms
+
+epoch=22150
+residual: 0.0016695, 0.00093822, 0.00072735, 0.00084731, 0.00090545
+walltime: 1473.925 s
+walltime/epoch: 53.888 ms
+
+epoch=22200
+residual: 0.0016672, 0.00093689, 0.00072609, 0.00084511, 0.000904
+walltime: 1476.645 s
+walltime/epoch: 54.399 ms
+
+epoch=22250
+residual: 0.0016648, 0.00093554, 0.0007219, 0.00084266, 0.00090357
+walltime: 1479.759 s
+walltime/epoch: 62.270 ms
+
+epoch=22300
+residual: 0.0016622, 0.00093388, 0.00071953, 0.00084002, 0.0009022
+walltime: 1483.910 s
+walltime/epoch: 83.021 ms
+
+epoch=22350
+residual: 0.0016599, 0.00093229, 0.0007173, 0.00083813, 0.00090123
+walltime: 1487.662 s
+walltime/epoch: 75.037 ms
+
+epoch=22400
+residual: 0.0016571, 0.00092937, 0.00071861, 0.00083741, 0.0008987
+walltime: 1491.039 s
+walltime/epoch: 67.536 ms
+
+epoch=22450
+residual: 0.0016548, 0.00092608, 0.00071784, 0.0008383, 0.00089602
+walltime: 1494.187 s
+walltime/epoch: 62.960 ms
+
+epoch=22500
+residual: 0.0016527, 0.00092338, 0.00071622, 0.00083833, 0.00089406
+walltime: 1498.370 s
+walltime/epoch: 83.659 ms
+vx_00009.xmf vy_00009.xmf p_00009.xmf chi_00009.xmf
+
+epoch=22550
+residual: 0.0016517, 0.00092138, 0.00071507, 0.00083709, 0.00089025
+walltime: 1502.475 s
+walltime/epoch: 82.104 ms
+
+epoch=22600
+residual: 0.001651, 0.00092007, 0.00071357, 0.00083556, 0.00088742
+walltime: 1506.337 s
+walltime/epoch: 77.240 ms
+
+epoch=22650
+residual: 0.0016499, 0.00091928, 0.00071153, 0.00083353, 0.00088571
+walltime: 1510.927 s
+walltime/epoch: 91.798 ms
+
+epoch=22700
+residual: 0.0016488, 0.00091886, 0.00070851, 0.00082989, 0.00088458
+walltime: 1513.928 s
+walltime/epoch: 60.018 ms
+
+epoch=22750
+residual: 0.0016461, 0.00091743, 0.00070754, 0.0008269, 0.00088362
+walltime: 1517.574 s
+walltime/epoch: 72.921 ms
+
+epoch=22800
+residual: 0.0016434, 0.00091814, 0.00070569, 0.0008246, 0.00087989
+walltime: 1520.808 s
+walltime/epoch: 64.686 ms
+
+epoch=22850
+residual: 0.00164, 0.00091912, 0.00070379, 0.0008234, 0.00087751
+walltime: 1524.028 s
+walltime/epoch: 64.393 ms
+
+epoch=22900
+residual: 0.0016363, 0.00091855, 0.0007034, 0.0008236, 0.00087532
+walltime: 1526.780 s
+walltime/epoch: 55.055 ms
+
+epoch=22950
+residual: 0.0016332, 0.00091709, 0.00070195, 0.0008246, 0.00087328
+walltime: 1529.751 s
+walltime/epoch: 59.408 ms
+
+epoch=23000
+residual: 0.0016296, 0.00091637, 0.00070078, 0.00082576, 0.00087123
+walltime: 1532.428 s
+walltime/epoch: 53.540 ms
+
+epoch=23050
+residual: 0.0016267, 0.00091539, 0.00069952, 0.0008251, 0.00087048
+walltime: 1535.206 s
+walltime/epoch: 55.567 ms
+
+epoch=23100
+residual: 0.0016247, 0.00091509, 0.00069702, 0.00082493, 0.00086885
+walltime: 1537.956 s
+walltime/epoch: 54.998 ms
+
+epoch=23150
+residual: 0.0016228, 0.00091412, 0.00069733, 0.00082319, 0.00086733
+walltime: 1540.641 s
+walltime/epoch: 53.685 ms
+
+epoch=23200
+residual: 0.0016212, 0.00091218, 0.00069523, 0.00082138, 0.00086663
+walltime: 1543.537 s
+walltime/epoch: 57.936 ms
+
+epoch=23250
+residual: 0.0016187, 0.00091033, 0.0006941, 0.00082006, 0.00086618
+walltime: 1546.307 s
+walltime/epoch: 55.397 ms
+
+epoch=23300
+residual: 0.0016156, 0.00090829, 0.00069531, 0.00081827, 0.00086488
+walltime: 1549.489 s
+walltime/epoch: 63.641 ms
+
+epoch=23350
+residual: 0.001613, 0.00090605, 0.00069549, 0.0008155, 0.00086389
+walltime: 1552.500 s
+walltime/epoch: 60.209 ms
+
+epoch=23400
+residual: 0.0016111, 0.00090445, 0.00069541, 0.00081323, 0.00086235
+walltime: 1556.186 s
+walltime/epoch: 73.729 ms
+
+epoch=23450
+residual: 0.0016093, 0.00090319, 0.00069286, 0.00081147, 0.00086262
+walltime: 1561.377 s
+walltime/epoch: 103.824 ms
+
+epoch=23500
+residual: 0.0016073, 0.00090309, 0.00069076, 0.00081046, 0.00086153
+walltime: 1564.280 s
+walltime/epoch: 58.055 ms
+
+epoch=23550
+residual: 0.0016044, 0.0009028, 0.00069121, 0.00080943, 0.00086024
+walltime: 1567.026 s
+walltime/epoch: 54.923 ms
+
+epoch=23600
+residual: 0.0016022, 0.00090151, 0.00069012, 0.000809, 0.00085815
+walltime: 1570.307 s
+walltime/epoch: 65.612 ms
+
+epoch=23650
+residual: 0.001599, 0.0008994, 0.00069092, 0.0008094, 0.00085697
+walltime: 1573.696 s
+walltime/epoch: 67.772 ms
+
+epoch=23700
+residual: 0.0015966, 0.00089773, 0.00069209, 0.00080835, 0.00085557
+walltime: 1577.417 s
+walltime/epoch: 74.431 ms
+
+epoch=23750
+residual: 0.0015934, 0.0008958, 0.00069243, 0.00080839, 0.00085592
+walltime: 1580.587 s
+walltime/epoch: 63.392 ms
+
+epoch=23800
+residual: 0.00159, 0.00089298, 0.00069568, 0.00080678, 0.00085551
+walltime: 1583.539 s
+walltime/epoch: 59.047 ms
+
+epoch=23850
+residual: 0.0015854, 0.0008909, 0.00069724, 0.00080541, 0.00085587
+walltime: 1588.323 s
+walltime/epoch: 95.685 ms
+
+epoch=23900
+residual: 0.0015815, 0.00088941, 0.00069864, 0.00080392, 0.00085488
+walltime: 1596.240 s
+walltime/epoch: 158.341 ms
+
+epoch=23950
+residual: 0.0015787, 0.00088741, 0.00070002, 0.00080242, 0.0008526
+walltime: 1599.897 s
+walltime/epoch: 73.134 ms
+
+epoch=24000
+residual: 0.0015755, 0.00088592, 0.00070044, 0.00080078, 0.00085188
+walltime: 1604.956 s
+walltime/epoch: 101.176 ms
+
+epoch=24050
+residual: 0.0015734, 0.00088513, 0.00069825, 0.00079961, 0.00085063
+walltime: 1608.765 s
+walltime/epoch: 76.186 ms
+
+epoch=24100
+residual: 0.0015711, 0.00088477, 0.00069934, 0.00079616, 0.00084856
+walltime: 1614.669 s
+walltime/epoch: 118.070 ms
+
+epoch=24150
+residual: 0.0015694, 0.00088195, 0.00070119, 0.00079432, 0.00084488
+walltime: 1621.985 s
+walltime/epoch: 146.321 ms
+
+epoch=24200
+residual: 0.0015662, 0.00087805, 0.00070404, 0.00079325, 0.00084304
+walltime: 1629.221 s
+walltime/epoch: 144.720 ms
+
+epoch=24250
+residual: 0.0015636, 0.0008759, 0.00070355, 0.00079245, 0.00084135
+walltime: 1634.568 s
+walltime/epoch: 106.939 ms
+
+epoch=24300
+residual: 0.0015601, 0.000873, 0.00070559, 0.00079175, 0.00084008
+walltime: 1638.047 s
+walltime/epoch: 69.593 ms
+
+epoch=24350
+residual: 0.0015568, 0.00087081, 0.00070641, 0.0007906, 0.00083834
+walltime: 1641.428 s
+walltime/epoch: 67.605 ms
+
+epoch=24400
+residual: 0.0015533, 0.00086864, 0.00070761, 0.0007891, 0.00083696
+walltime: 1644.848 s
+walltime/epoch: 68.412 ms
+
+epoch=24450
+residual: 0.0015502, 0.00086697, 0.00070642, 0.0007876, 0.00083571
+walltime: 1652.621 s
+walltime/epoch: 155.447 ms
+
+epoch=24500
+residual: 0.001546, 0.00086556, 0.00070668, 0.00078565, 0.00083458
+walltime: 1659.629 s
+walltime/epoch: 140.172 ms
+
+epoch=24550
+residual: 0.0015412, 0.00086534, 0.00070753, 0.00078255, 0.00083286
+walltime: 1663.898 s
+walltime/epoch: 85.373 ms
+
+epoch=24600
+residual: 0.0015372, 0.00086488, 0.00070706, 0.00077977, 0.00083155
+walltime: 1666.668 s
+walltime/epoch: 55.393 ms
+
+epoch=24650
+residual: 0.0015329, 0.00086463, 0.00070689, 0.00077776, 0.00082898
+walltime: 1669.387 s
+walltime/epoch: 54.392 ms
+
+epoch=24700
+residual: 0.0015291, 0.00086481, 0.00070443, 0.00077713, 0.00082635
+walltime: 1672.144 s
+walltime/epoch: 55.136 ms
+
+epoch=24750
+residual: 0.0015257, 0.00086407, 0.00070341, 0.00077528, 0.00082451
+walltime: 1675.298 s
+walltime/epoch: 63.072 ms
+
+epoch=24800
+residual: 0.0015224, 0.00086263, 0.00070119, 0.00077336, 0.00082331
+walltime: 1678.247 s
+walltime/epoch: 58.993 ms
+
+epoch=24850
+residual: 0.0015196, 0.00086205, 0.0006957, 0.0007712, 0.00082234
+walltime: 1681.419 s
+walltime/epoch: 63.428 ms
+
+epoch=24900
+residual: 0.001516, 0.00086323, 0.00069133, 0.00076768, 0.00082026
+walltime: 1684.614 s
+walltime/epoch: 63.904 ms
+
+epoch=24950
+residual: 0.0015117, 0.00086457, 0.00068972, 0.00076381, 0.00081771
+walltime: 1687.526 s
+walltime/epoch: 58.239 ms
+
+epoch=25000
+residual: 0.0015083, 0.00086693, 0.00068384, 0.00076105, 0.00081597
+walltime: 1690.184 s
+walltime/epoch: 53.163 ms
+vx_00010.xmf vy_00010.xmf p_00010.xmf chi_00010.xmf
+Namespace(epochs=25001, evals=26077, task='STOP: TOTAL NO. of ITERATIONS REACHED LIMIT')

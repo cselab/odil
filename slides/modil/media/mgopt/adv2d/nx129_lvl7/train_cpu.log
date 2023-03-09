@@ -1,0 +1,118 @@
+./advection2d.py --nlvl 7 --Nx 129 --plot_every 1 --frames 50
+levels [129, 65, 33, 17, 9, 5, 3]
+Running Adam optimizer
+
+epoch=00000
+u_00000.png
+T last: 
+T  all: 
+memory: 664 MiB
+walltime: 4.431 s
+
+epoch=00010
+residual: 1.6036, 1.025, 2.6107, 2.5989, 0.38892, 0.38301
+u_00001.png
+T last: eval_grad=  0.716
+T  all: eval_grad= 39.630
+memory: 2188 MiB
+walltime: 47.906 s
+walltime/epoch: 4518.548 ms
+
+epoch=00020
+residual: 1.0539, 0.52163, 1.3167, 1.3255, 0.2858, 0.28229
+u_00002.png
+T last: eval_grad=  0.748
+T  all: eval_grad= 47.627
+memory: 2446 MiB
+walltime: 59.104 s
+walltime/epoch: 1119.768 ms
+
+epoch=00030
+residual: 0.81965, 0.39159, 0.74588, 0.75419, 0.20024, 0.18925
+u_00003.png
+T last: eval_grad=  0.724
+T  all: eval_grad= 55.669
+memory: 2253 MiB
+walltime: 70.247 s
+walltime/epoch: 1114.275 ms
+
+epoch=00040
+residual: 0.45228, 0.16402, 0.48238, 0.4692, 0.1603, 0.14086
+u_00004.png
+T last: eval_grad=  0.727
+T  all: eval_grad= 63.508
+memory: 2428 MiB
+walltime: 81.469 s
+walltime/epoch: 1122.271 ms
+
+epoch=00050
+residual: 0.36206, 0.12565, 0.30363, 0.30192, 0.11889, 0.094145
+u_00005.png
+T last: eval_grad=  0.714
+T  all: eval_grad= 71.355
+memory: 2405 MiB
+walltime: 92.545 s
+walltime/epoch: 1107.526 ms
+
+epoch=00060
+residual: 0.26496, 0.06682, 0.20209, 0.1907, 0.087468, 0.062804
+u_00006.png
+T last: eval_grad=  0.710
+T  all: eval_grad= 79.234
+memory: 2490 MiB
+walltime: 103.684 s
+walltime/epoch: 1113.924 ms
+
+epoch=00070
+residual: 0.22332, 0.040131, 0.16135, 0.14549, 0.0723, 0.04472
+u_00007.png
+T last: eval_grad=  0.701
+T  all: eval_grad= 86.912
+memory: 2549 MiB
+walltime: 114.427 s
+walltime/epoch: 1074.292 ms
+
+epoch=00080
+residual: 0.1908, 0.042444, 0.15518, 0.14039, 0.069182, 0.036934
+u_00008.png
+T last: eval_grad=  0.695
+T  all: eval_grad= 94.524
+memory: 2465 MiB
+walltime: 125.243 s
+walltime/epoch: 1081.583 ms
+
+epoch=00090
+residual: 0.17364, 0.045132, 0.15721, 0.14451, 0.066385, 0.031574
+u_00009.png
+T last: eval_grad=  0.721
+T  all: eval_grad=102.404
+memory: 2466 MiB
+walltime: 136.352 s
+walltime/epoch: 1110.911 ms
+
+epoch=00100
+residual: 0.16284, 0.043424, 0.16747, 0.15348, 0.065545, 0.030629
+u_00010.png
+T last: eval_grad=  0.683
+T  all: eval_grad=110.174
+memory: 2550 MiB
+walltime: 147.260 s
+walltime/epoch: 1090.822 ms
+
+epoch=00110
+residual: 0.15503, 0.043455, 0.18337, 0.16846, 0.065235, 0.032058
+u_00011.png
+T last: eval_grad=  0.706
+T  all: eval_grad=117.913
+memory: 2635 MiB
+walltime: 158.345 s
+walltime/epoch: 1108.488 ms
+
+epoch=00120
+residual: 0.14863, 0.044432, 0.19975, 0.19148, 0.065788, 0.034905
+u_00012.png
+T last: eval_grad=  0.705
+T  all: eval_grad=125.558
+memory: 2550 MiB
+walltime: 169.180 s
+walltime/epoch: 1083.564 ms
