@@ -137,7 +137,7 @@ function stop_all(elem, nparent=2) {
     \end{align*}
   $$
 
-* Grid of $65\times 65\times 65$ points
+* Grid of $N\times N\times N$ points
 
 ## Optical Flow <a id='123' onclick="pause_all(this, 2, 0.25)" style="cursor: pointer;">&#x23ef;</a> <a id='123' onclick="stop_all(this)" style="cursor: pointer;">&#x23f9;</a>
 
