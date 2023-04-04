@@ -10,5 +10,4 @@ tmp/**
 node_modules/
 .sass-cache
 
-/*.pdf
 __pycache__
