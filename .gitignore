@@ -1,0 +1,7 @@
+__pycache__
+*.pyc
+*.swp
+/data
+/pages
+/Makefile
+/revision_dev
