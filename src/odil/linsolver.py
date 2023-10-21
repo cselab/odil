@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def solve(matr, rhs, args, dhistory=None, linsolver="direct"):
+def solve(matr, rhs, args, status=None, linsolver="direct"):
     import scipy.sparse
     import scipy.sparse.linalg
 
@@ -45,10 +45,10 @@ def solve(matr, rhs, args, dhistory=None, linsolver="direct"):
             atol=args.linsolver_tol,
             btol=args.linsolver_tol,
             iter_lim=args.linsolver_maxiter)[:8]
-        dhistory['linsolver_residual'] = arnorm
-        dhistory['linsolver_anorm'] = anorm
-        dhistory['linsolver_acond'] = acond
-        dhistory['linsolver_niter'] = itn
+        status['residual'] = arnorm
+        status['anorm'] = anorm
+        status['acond'] = acond
+        status['niter'] = itn
     elif linsolver == "lsqr_cu":
         if cupy is None:
             raise ModuleNotFoundError(
@@ -68,8 +68,8 @@ def solve(matr, rhs, args, dhistory=None, linsolver="direct"):
                        residuals=residuals,
                        accel='cg',
                        maxiter=args.linsolver_maxiter)
-        dhistory['linsolver_residual'] = residuals[-1]
-        dhistory['linsolver_niter'] = len(residuals)
+        status['residual'] = residuals[-1]
+        status['niter'] = len(residuals)
     elif linsolver == "bicgstab":
         residuals = []
 
@@ -82,8 +82,8 @@ def solve(matr, rhs, args, dhistory=None, linsolver="direct"):
                                               atol=args.linsolver_tol,
                                               callback=callback,
                                               maxiter=args.linsolver_maxiter)
-        dhistory['linsolver_residual'] = residuals[-1]
-        dhistory['linsolver_niter'] = len(residuals)
+        status['residual'] = residuals[-1]
+        status['niter'] = len(residuals)
     else:
         raise ValueError("Unknown linsolver=" + linsolver)
 
@@ -124,6 +124,10 @@ def add_arguments(parser):
                         type=int,
                         default=0,
                         help="Verbosity level for linsolver messages")
+    parser.add_argument('--linsolver_history',
+                        type=int,
+                        default=0,
+                        help="Dump history from linsolver status")
     parser.add_argument('--lr', type=float, default=1e-3, help="Learning rate")
     parser.add_argument('--nlvl',
                         type=int,

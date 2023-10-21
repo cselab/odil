@@ -7,7 +7,7 @@ import odil
 from odil import printlog
 
 
-def operator(mod, ctx):
+def operator(ctx):
     extra = ctx.extra
 
     res = []

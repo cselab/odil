@@ -137,6 +137,7 @@ def write_raw_with_xmf(u,
     precision = 4 if u.dtype == np.float32 else 8
     if rawpath is None:
         rawpath = os.path.splitext(xmfpath)[0] + ".raw"
-    write_raw_xmf(xmfpath, rawpath, u.shape, spacing, name, precision, cell)
+    rawrelpath = os.path.relpath(rawpath, start=os.path.dirname(xmfpath))
+    write_raw_xmf(xmfpath, rawrelpath, u.shape, spacing, name, precision, cell)
     u.tofile(rawpath)
     return xmfpath

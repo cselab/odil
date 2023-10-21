@@ -5,37 +5,18 @@ import argparse
 import psutil
 import time
 import numpy as np
-from collections import defaultdict
-from functools import partial
 
 from .optimizer import make_optimizer, Optimizer
 from .history import History
-from .backend import ModNumpy
 
 g_log_file = sys.stderr  # File used by printlog()
 g_log_echo = False  # True if printlog() should print to stderr.
-
-cupy = None
-cupyx = None
 
 
 def assert_equal(first, second, msg=None):
     if not (first == second):
         raise ValueError("Expected equal '{:}' and '{:}'{}".format(
             first, second, msg))
-
-
-def import_cupy(args):
-    global cupy, cupyx
-    import cupy
-    import cupyx
-    import cupyx.scipy.sparse
-    import cupyx.scipy.sparse.linalg
-    from .backend import ModCupy
-    printlog("Using CuPy with memory limit {:.3f} GiB".format(
-        cupy.get_default_memory_pool().get_limit() / (1 << 30)))
-    mod = ModCupy(cupy, cupyx.scipy.sparse)
-    return mod
 
 
 def set_log_file(f, echo=False):
@@ -108,7 +89,7 @@ def add_arguments(parser):
                         help="Epochs between entries of training history")
     parser.add_argument('--checkpoint_every',
                         type=int,
-                        default=5,
+                        default=0,
                         help="Epochs between checkpoints")
     parser.add_argument('--frames',
                         type=int,
@@ -123,6 +104,7 @@ def add_arguments(parser):
                         default='adamn',
                         help="Optimizer")
     parser.add_argument('--seed',
+                        default=1000,
                         type=int,
                         help="Seed for numpy.random and tensorflow.random")
     parser.add_argument('--plot_title',
@@ -220,40 +202,44 @@ def add_arguments(parser):
 
 
 def optimize_newton(args, problem, state, callback=None, **kwargs):
+    domain = problem.domain
+    mod = domain.mod
+
+    def eval_pinfo(state):
+        loss, _, terms, names, norms = problem.eval_loss_grad(state)
+        pinfo = {'terms': terms, 'names': names, 'norms': norms, 'loss': loss}
+        return pinfo
+
     from .linsolver import solve
     opt = Optimizer(name='newton', displayname='Newton')
     printlog("Running {} optimizer".format(opt.displayname))
-    packed = problem.pack_state(state)
-    dhistory = defaultdict(lambda: [])
-    for epoch in range(args.epoch_start, args.epochs + 1):
-        s = problem.unpack_state(packed)
-        problem.domain.assign_active_state(state, s)
-        const, m = problem.linearize(state, epoch=epoch)
 
-        # Compute loss and residuals with initial state, to be used by callback.
-        opt.pinfo = [np.mean(c**2)**0.5 for c in const]
-        if callback:
-            callback(packed, epoch, opt)
-        if epoch == args.epochs:
-            break
+    # Compute loss and residuals with initial state, to be used by callback.
+    arrays = domain.arrays_from_state(state)
+    pinfo = eval_pinfo(state)
+    if callback:
+        callback(state, args.epoch_start, pinfo)
 
+    for epoch in range(args.epoch_start, args.epochs):
+        vector, matrix = problem.linearize(state)
         opt.evals += 1
-        const = np.hstack([eq.flatten() for eq in const])
-        problem.timer_total.push('tt_linsolver')
-        timer = Timer()
-        timer.push('linsolver')
-        dpacked = solve(m, -const, args, dhistory, args.linsolver)
-        timer.pop()
-        problem.timer_total.append(timer)
-        problem.timer_last.append(timer)
-        packed += dpacked
+        linstatus = dict()
+        delta = solve(matrix, -vector, args, linstatus, args.linsolver)
+        if args.linsolver_verbose:
+            printlog(linstatus)
+        packed = domain.pack_state(state)
+        domain.unpack_state(packed + delta, state)
+        if callback:
+            pinfo = eval_pinfo(state)
+            pinfo['linsolver'] = linstatus
+            callback(state, epoch + 1, pinfo)
 
 
 def optimize_grad(args, optname, problem, state, callback=None, **kwargs):
     domain = problem.domain
     mod = domain.mod
 
-    def loss_grad(arrays, epoch):
+    def loss_grad(arrays):
         domain.arrays_to_state(arrays, state)
         loss, grads, terms, names, norms = problem.eval_loss_grad(state)
         pinfo = {'terms': terms, 'names': names, 'norms': norms, 'loss': loss}
@@ -278,7 +264,7 @@ def optimize_grad(args, optname, problem, state, callback=None, **kwargs):
 
     # Compute loss and residuals with initial state, to be used by callback.
     arrays = domain.arrays_from_state(state)
-    loss, _, pinfo = loss_grad(arrays, args.epoch_start)
+    _, _, pinfo = loss_grad(arrays)
     if callback:
         callback(state, args.epoch_start, pinfo)
 
@@ -304,257 +290,6 @@ def get_memory_usage_kb():
     '''
     process = psutil.Process()
     return process.memory_info().rss // 1024
-
-
-def optimize_multigrid_base(opt,
-                            args,
-                            problem,
-                            state,
-                            callback=None,
-                            mod=None,
-                            datalevels=None):
-
-    verbose = args.linsolver_verbose
-
-    def printv(*m):
-        if verbose:
-            printlog(*m)
-
-    printv("Running {} optimizer".format(opt.displayname))
-    packed = problem.pack_state(state)
-    dhistory = defaultdict(lambda: [])
-    printv("Constructing Multigrid...")
-    from .multigrid import Multigrid
-    mg = Multigrid(problem.domain.cshape,
-                   restriction=args.restriction,
-                   nvar=len(state.fields),
-                   mod=mod,
-                   dtype=problem.domain.dtype,
-                   nlevels=args.nlvl)
-    printv('levels: {}'.format(', '.join(map(str, mg.nnw))))
-    for epoch in range(args.epoch_start, args.epochs + 1):
-        s = problem.unpack_state(packed)
-        problem.domain.assign_active_state(state, s)
-        if callback:
-            callback(packed, epoch, opt)
-        if epoch == args.epochs:
-            break
-
-        timer = Timer()
-        timer.push('linsolver')
-        if datalevels is not None:
-            AA = [None] * mg.nlevels
-            for level in range(mg.nlevels):
-                printv("level=", level)
-                lproblem = datalevels[level].problem
-                lstate = datalevels[level].state
-
-                def coarsen(u):
-                    R = mg.RRsingle[level - 1]
-                    u = mod.reshape(u, [-1])
-                    return mod.reshape(R @ u, lproblem.domain.cshape)
-
-                if level > 0:
-                    for k in problem.domain.fieldnames:
-                        lstate.fields[k].assign(
-                            coarsen(datalevels[level - 1].state.fields[k]))
-
-                const, m = lproblem.linearize(lstate,
-                                              epoch=epoch,
-                                              mod=mod.mod,
-                                              modsp=mod.modsp)
-                opt.last_residual = [np.mean(c**2)**0.5 for c in const]
-                const = mod.stack([c for c in const]).flatten()
-                if level == 0:
-                    rhs = -m.T @ const
-                AA[level] = m.T @ m
-                if level == 0:
-                    matr = AA[0]
-            opt.evals += 1
-            mg.update_A(AA)
-        else:
-            printv("Evaluating gradients...")
-            const, m = problem.linearize(state,
-                                         epoch=epoch,
-                                         mod=mod.mod,
-                                         modsp=mod.modsp)
-            opt.last_residual = [mod.numpy(mod.norm(c)) for c in const]
-            opt.evals += 1
-            const = mod.stack([c for c in const]).flatten()
-            printv("Computing rhs...")
-            rhs = -m.T @ const
-            printv("Computing matr...")
-            matr = m.T @ m
-
-            printv("Calling update_A()...")
-            mg.update_A(matr)
-
-        sol = np.zeros_like(rhs)
-        for it in range(args.linsolver_maxiter):
-            sol = mg.step(sol,
-                          rhs,
-                          ndirect=args.ndirect,
-                          pre=args.smooth_pre,
-                          post=args.smooth_post,
-                          smoother=partial(mg.smoother_jacobi,
-                                           omega=args.omega,
-                                           full=False))
-            if verbose > 1:
-                printv('it={:d} r={:.5g}'.format(
-                    it,
-                    np.mean((rhs - matr @ sol)**2)**0.5))
-        dpacked = mod.numpy(sol)
-        timer.pop()
-        problem.timer_total.append(timer)
-        problem.timer_last = timer
-        packed += dpacked
-
-
-def optimize_multigrid(args, problem, state, callback, datalevels=None):
-    import scipy.sparse
-    mod = ModNumpy(np, scipy.sparse)
-    opt = Optimizer(name='multigrid', displayname='Multigrid')
-    return optimize_multigrid_base(opt,
-                                   args,
-                                   problem,
-                                   state,
-                                   callback,
-                                   mod=mod,
-                                   datalevels=datalevels)
-
-
-def optimize_multigridcp(args, problem, state, callback):
-    mod = import_cupy(args)
-    opt = Optimizer(name='multigridcp', displayname='MultigridCupy')
-    return optimize_multigrid_base(opt,
-                                   args,
-                                   problem,
-                                   state,
-                                   callback,
-                                   mod=mod)
-
-
-def optimize_multigridop_base(opt,
-                              args,
-                              problem,
-                              state,
-                              callback=None,
-                              mod=None):
-    mod = problem.mod
-    verbose = args.linsolver_verbose
-    domain = problem.domain
-
-    def printv(m):
-        if verbose:
-            printlog(m)
-
-    printv("Running {} optimizer".format(opt.displayname))
-    packed = problem.pack_state(state)
-    dhistory = defaultdict(lambda: [])
-    printv("Constructing MultigridOp...")
-    nvar = len(state.fields)
-    from .multigrid import MultigridOp, SparseOperator
-    mg = MultigridOp(domain.cshape,
-                     nvar=nvar,
-                     restriction=args.restriction,
-                     mod=mod,
-                     dtype=domain.dtype,
-                     nlevels=args.nlvl)
-    printv('levels: {}'.format(', '.join(map(str, mg.nnw))))
-    for epoch in range(args.epochs + 1):
-        s = problem.unpack_state(packed)
-        domain.assign_active_state(state, s)
-        if callback:
-            callback(packed, epoch, opt)
-        if epoch == args.epochs:
-            break
-
-        printv("Evaluating gradients...")
-        epoch = mod.constant(epoch, dtype=domain.dtype)
-        const, grads, field_desc, wgrads = problem._eval_grad(
-            state.fields, state.weights, epoch)
-        opt.last_residual = [np.mean(c**2)**0.5 for c in const]
-
-        neqn = len(const)  # Number of equations.
-
-        nw = domain.cshape
-        stf = [[dict() for _ in range(nvar)] for _ in range(neqn)]
-        for i in range(neqn):  # Loop over equations.
-            for j in range(len(field_desc)):  # Loop over grid field variables.
-                varindex, dw = field_desc[j]
-                g = grads[i][j]
-                if g is None:
-                    continue
-                if mod.sum(g**2) == 0:
-                    continue
-                stf[i][varindex][tuple(np.array(dw))] = mod.native(g.numpy())
-        const = [mod.native(c.numpy()) for c in const]
-        printv("Constructing SparseOperator...")
-        mm = [[
-            SparseOperator(s, nw, mod=mod, dtype=domain.dtype) for s in row
-        ] for row in stf]
-        del stf
-
-        opt.evals += 1
-        timer = Timer()
-        timer.push('linsolver')
-        printv("Computing rhs...")
-        rhs = [
-            -sum([mm[i][j].mul_transpose_field(const[i]) for i in range(neqn)])
-            for j in range(nvar)
-        ]
-        printv("Computing matr...")
-        matr = [[None for _ in range(nvar)] for _ in range(nvar)]
-        for i in range(nvar):
-            for j in range(nvar):
-                matr[i][j] = mm[0][i].mul_transpose_op(mm[0][j])
-                for e in range(1, neqn):
-                    matr[i][j] = matr[i][j].add_elementwise(
-                        mm[e][i].mul_transpose_op(mm[e][j]))
-        del mm
-        printv("Calling update_A()...")
-        mg.update_A(matr)
-        sol = [np.zeros_like(rhs[i]) for i in range(nvar)]
-        for it in range(args.linsolver_maxiter):
-            sol = mg.step(sol,
-                          rhs,
-                          pre=args.smooth_pre,
-                          post=args.smooth_post,
-                          ndirect=args.ndirect,
-                          smoother=partial(mg.smoother_jacobi,
-                                           omega=args.omega))
-            if verbose > 1:
-                printv('it={:d} r={}'.format(
-                    it, ', '.join('{:.5g}'.format(np.mean(r**2)**0.5)
-                                  for r in mg.residual(matr, sol, rhs))))
-        dpacked = mod.numpy(mod.reshape(mod.stack(sol), [-1]))
-        timer.pop()
-        problem.timer_total.append(timer)
-        problem.timer_last = timer
-        packed += dpacked
-
-
-def optimize_multigridop(args, problem, state, callback):
-    import scipy.sparse
-    mod = ModNumpy(np, scipy.sparse)
-    opt = Optimizer(name='multigridop', displayname='MultigridOp')
-    return optimize_multigridop_base(opt,
-                                     args,
-                                     problem,
-                                     state,
-                                     callback,
-                                     mod=mod)
-
-
-def optimize_multigridopcp(args, problem, state, callback):
-    mod = import_cupy(args)
-    opt = Optimizer(name='multigridopcp', displayname='MultigridOpCupy')
-    return optimize_multigridop_base(opt,
-                                     args,
-                                     problem,
-                                     state,
-                                     callback,
-                                     mod=mod)
 
 
 def get_env_config():
@@ -589,7 +324,7 @@ def setup_outdir(args, relpath_args=None):
     if relpath_args is None:
         relpath_args = []
     for k in relpath_args:
-        if getattr(args, k) is not None:
+        if getattr(args, k):
             setattr(args, k, os.path.relpath(getattr(args, k), start=outdir))
 
     # Update arguments.
@@ -608,14 +343,16 @@ def setup_outdir(args, relpath_args=None):
 
 def make_callback(problem,
                   args=None,
-                  calc_func=None,
+                  epoch_func=None,
                   report_func=None,
                   history_func=None,
+                  checkpoint_func=None,
                   plot_func=None):
+    # Persistent state of the callback.
     cbinfo = argparse.Namespace()
-    cbinfo.walltime = 0
-    cbinfo.epoch = 0
-    cbinfo.time_callback = 0
+    cbinfo.walltime = 0  # Walltime of the last call with task_report=True.
+    cbinfo.epoch = 0  # Epoch of the last call with task_report=True.
+    cbinfo.time_callback = 0  # Total time spent in callback.
     cbinfo.time_start = time.time()
     cbinfo.problem = problem
     cbinfo.args = args
@@ -638,14 +375,16 @@ def make_callback(problem,
                         and (epoch % args.history_every == 0
                              or epoch < args.history_full))
         task_plot = (epoch % args.plot_every == 0 and (epoch or args.frames))
+        task_checkpoint = (args.checkpoint_every
+                           and epoch % args.checkpoint_every == 0)
 
-        if task_report or task_history or task_plot:
-            memusage = get_memory_usage_kb()
-            if calc_func is not None:
-                calc_func(problem=problem,
-                          state=state,
-                          epoch=epoch,
-                          cbinfo=cbinfo)
+        cbinfo.task_report = task_report
+        cbinfo.task_history = task_history
+        cbinfo.task_plot = task_plot
+        cbinfo.task_checkpoint = task_checkpoint
+
+        if epoch_func is not None:
+            epoch_func(problem, state, epoch, cbinfo)
 
         # Subtract first part of callback time.
         curtime = time.time()
@@ -654,22 +393,19 @@ def make_callback(problem,
         walltime = curtime - cbinfo.time_start - cbinfo.time_callback
 
         if task_report:
+            memusage = get_memory_usage_kb()
             printlog("\nepoch={:05d}".format(epoch))
             if pinfo and 'norms' in pinfo:
                 norms, names = pinfo['norms'], pinfo['names']
                 printlog('residual: ' + ', '.join(
                     '{}:{:.5g}'.format(name or str(i), np.array(norm))
                     for i, (norm, name) in enumerate(zip(norms, names))))
+            if report_func is not None:
+                report_func(problem, state, epoch, cbinfo)
             printlog("memory: {:} MiB".format(memusage // 1024))
             printlog("walltime: {:.3f} s".format(walltime))
             printlog("walltime+callback: {:.3f} s".format(  #
                 walltime + cbinfo.time_callback))
-
-            if report_func is not None:
-                report_func(problem=problem,
-                            state=state,
-                            epoch=epoch,
-                            cbinfo=cbinfo)
             if epoch > cbinfo.epoch:
                 wte = (walltime - cbinfo.walltime) / (epoch - cbinfo.epoch)
                 printlog("walltime/epoch: {:.3f} ms".format(wte * 1000))
@@ -679,6 +415,7 @@ def make_callback(problem,
                 cbinfo.epoch = epoch
 
         if task_history:
+            memusage = get_memory_usage_kb()
             history.append('epoch', epoch)
             history.append('frame', cbinfo.frame)
             if pinfo and 'norms' in pinfo:
@@ -688,24 +425,29 @@ def make_callback(problem,
                                    np.array(norm))
             if pinfo and 'loss' in pinfo:
                 history.append('loss', pinfo['loss'])
+            if args.linsolver_history and 'linsolver' in pinfo:
+                for key, val in pinfo['linsolver'].items():
+                    if isinstance(val, (int, float, str, np.floating)):
+                        history.append('lin_' + key, val)
             history.append('walltime', walltime)
             history.append('memory', memusage / 1024)
             if history_func is not None:
-                history_func(problem=problem,
-                             state=state,
-                             epoch=epoch,
-                             history=history,
-                             cbinfo=cbinfo)
+                history_func(problem, state, epoch, history, cbinfo)
             history.write()
 
         if task_plot:
             if plot_func is not None:
-                plot_func(problem=problem,
-                          state=state,
-                          epoch=epoch,
-                          frame=cbinfo.frame,
-                          cbinfo=cbinfo)
+                plot_func(problem, state, epoch, cbinfo.frame, cbinfo)
             cbinfo.frame += 1
+
+        if task_checkpoint:
+            if checkpoint_func is not None:
+                checkpoint_func(problem, state, epoch, cbinfo)
+            else:
+                from .core import checkpoint_save
+                path = "checkpoint_{:06d}.pickle".format(epoch)
+                printlog(path)
+                checkpoint_save(domain, state, path)
 
         # Subtract second part of callback time.
         curtime = time.time()

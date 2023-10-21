@@ -123,6 +123,14 @@ class Domain:
         else:
             raise ValueError("Unknown loc=" + loc)
 
+    def points_1d(self, *dims, loc=None):
+        loc = loc or 'c' * self.ndim
+        idims = self._names_to_indices(dims, self.dimnames)
+        res = [self._points_1d(idim, c) for idim, c in zip(idims, loc)]
+        if len(dims) == 1:
+            return res[0]
+        return res
+
     def points(self, *dims, loc=None):
         loc = loc or 'c' * self.ndim
         assert_equal(len(loc), self.ndim, f"with loc={loc}")
@@ -222,7 +230,7 @@ class Domain:
         return res
 
     def random_inner(self, size):
-        res = latin_hypercube(self.ndim, size).T
+        res = latin_hypercube(self.ndim, size, dtype=self.dtype).T
         for i in range(self.ndim):
             res[i] = self.lower[i] + (self.upper[i] - self.lower[i]) * res[i]
         res = [p for p in res]
@@ -240,8 +248,9 @@ class Domain:
         '''
         assert normal < self.ndim
         assert side == 0 or side == 1
-        res = latin_hypercube(self.ndim - 1, size).T
-        const = np.ones(size) * side
+        dtype = self.dtype
+        res = latin_hypercube(self.ndim - 1, size, dtype=dtype).T
+        const = np.ones(size, dtype=dtype) * side
         res = np.vstack((res[:normal], const, res[normal:]))
         for i in range(self.ndim):
             res[i] = self.lower[i] + (self.upper[i] - self.lower[i]) * res[i]
@@ -477,8 +486,6 @@ class Domain:
     def unpack_field(self, packed, field):
         '''
         Unpacks a flat array `packed` into `field`.
-        Uses the `assign()` attribute of `field.array` if available.
-
         Returns the number of elements in `packed` consumed.
         '''
         mod = self.mod
@@ -538,6 +545,14 @@ class Domain:
                     type(net).__name__, key))
         res = lambda *inputs: eval_neural_net(net, inputs, self.mod)
         return res
+
+    def get_context(self, state, extra=None):
+        ctx = Context(self.domain,
+                      state,
+                      watch_func=lambda _: None,
+                      extra=extra,
+                      distinct_shift=False)
+        return ctx
 
 
 class Field:
@@ -620,28 +635,6 @@ class NeuralNet:
         self.func_in = func_in
         self.func_out = func_out
         self.activation = activation or 'tanh'
-
-    '''
-    # TODO
-    def derivatives(self, *orders):
-        f = eval_neural_net(self.weights,
-                            *self.inputs,
-                            func_in=self.func_in,
-                            func_out=self.func_out,
-                            mod=self.mod)
-        assert len(orders) == 0 or len(orders) == len(self.inputs)
-
-        def grad(f):
-            for i in range(len(orders)):
-                for _ in range(orders[i]):
-                    f = tf.gradients(f, self.inputs[i])[0]
-            return f
-
-        if not isinstance(f, list):
-            f = [f]
-        res = [grad(f[i]) for i in range(len(f))]
-        return res
-    '''
 
 
 class Array:
@@ -978,7 +971,7 @@ class Context:
         # Storage for field arguments. Mapping from (key, shift, loc) to array.
         self.desc_to_array = dict()
         # Storage for field arguments to request full Jacobian.
-        self.key_to_array_full = dict()
+        self.key_to_array_jac = dict()
         # Aliases for Domain methods.
         self.step = domain.step
         self.size = domain.size
@@ -989,7 +982,7 @@ class Context:
         dtype = dtype or self.dtype
         return self.mod.cast(value, dtype)
 
-    def field(self, key, *shift, loc=None):
+    def field(self, key, *shift, loc=None, frozen=False):
         domain = self.domain
         mod = domain.mod
         field = self.state.fields[key]
@@ -1001,8 +994,11 @@ class Context:
             if len(shift):
                 raise RuntimeError('Array requires an empty shift')
             self.watch_func(field.array)
-            self.key_to_array_full[(key, None, None)] = field.array
-            return field.array
+            self.key_to_array_jac[(key, None, None)] = field.array
+            array = field.array
+            if frozen:
+                array = mod.stop_gradient(array)
+            return array
         shift_src = (0, ) * domain.ndim
         shift = shift or shift_src
         loc = loc or field.loc
@@ -1029,6 +1025,8 @@ class Context:
                 array_src = domain.get_regular_array(field)
                 self.desc_to_array[desc_src] = array_src
             if self.distinct_shift and desc != desc_src:
+                # If shifts are treated separately,
+                # avoid differentiation through the source field.
                 array_src = mod.stop_gradient(array_src)
             array = array_src
             # True if needs padding in that direction.
@@ -1053,16 +1051,21 @@ class Context:
             if self.distinct_shift and isinstance(field, Field):
                 self.watch_func(array)
             self.desc_to_array[desc] = array
+        if frozen:
+            array = mod.stop_gradient(array)
         return array
 
     def neural_net(self, key):
+        domain = self.domain
         net = self.state.fields[key]
         if not isinstance(net, NeuralNet):
             raise TypeError(
                 "Expected NeuralNet, got type {} for key='{}'".format(
                     type(net).__name__, key))
-        self.watch_func(net.weights)
-        self.watch_func(net.biases)
+        arrays = domain.arrays_from_field(net)
+        self.watch_func(arrays)
+        if self.distinct_shift:
+            self.key_to_array_jac[(key, None, None)] = arrays
         res = lambda *inputs: eval_neural_net(net, inputs, self.mod)
         return res
 
@@ -1098,38 +1101,9 @@ class Problem:
         elif mod.jax is not None:
             self._eval_loss_grad = self._eval_loss_grad_jax
             self._eval_operator = self._eval_operator_jax
-            #self._eval_operator_grad = self._eval_operator_grad_jax
+            self._eval_operator_grad = self._eval_operator_grad_jax
         else:
             raise NotImplementedError('Unsupported mod={:}'.format(mod))
-
-    '''
-    def _eval_operator_grad_tf(self, state_fields):
-        domain = self.domain
-        field_args = []  # Field arguments for which gradients are computed.
-        field_desc = []  # Field descriptors: (i, shift) for `fieldnames[i]`.
-        with tf.GradientTape(persistent=True,
-                             watch_accessed_variables=True) as tape:
-            tape.watch(wargs)
-            ctx = Context(domain,
-                          field_args,
-                          field_desc,
-                          state_fields,
-                          extra=self.extra)
-            ff = self.operator(tf, ctx)
-            if not isinstance(ff, (tuple, list)):
-                ff = (ff, )
-        grads = [tape.gradient(f, field_args) for f in ff]
-        # Having experimental_use_pfor=True leads to excessive memory usage,
-        # sufficient to store a dense matrix of size `prod(domain.shape)**2`.
-        if len(wargs):
-            wgrads = [
-                tape.jacobian(ff[i], wargs, experimental_use_pfor=False)
-                for i in range(len(ff))
-            ]
-        else:
-            wgrads = [[] for _ in range(len(ff))]
-        return ff, grads, field_desc, wgrads
-    '''
 
     def _eval_loss_grad_tf(self, state):
         domain = self.domain
@@ -1148,11 +1122,9 @@ class Problem:
                               cache['state'],
                               watch_func=tape.watch,
                               extra=self.extra)
-                ff = self.operator(mod, ctx)
-                assert ff is not None
-                if not isinstance(ff, (tuple, list)):
-                    ff = (ff, )
-                assert len(ff), "Operator returns empty list"
+                ff = self.operator(ctx)
+                assert isinstance(ff, (tuple, list)) and len(ff), \
+                    'Operator must return a non-empty list'
                 names = [f[0] if isinstance(f, tuple) else '' for f in ff]
                 values = [f[1] if isinstance(f, tuple) else f for f in ff]
                 terms = [
@@ -1192,11 +1164,9 @@ class Problem:
                 cache['state'] = domain.init_state(state)
             domain.arrays_to_state(arrays, cache['state'])
             ctx = Context(domain, cache['state'], extra=self.extra)
-            ff = self.operator(mod, ctx)
-            assert ff is not None
-            if not isinstance(ff, (tuple, list)):
-                ff = (ff, )
-            assert len(ff), "Operator returns empty list"
+            ff = self.operator(ctx)
+            assert isinstance(ff, (tuple, list)) and len(ff), \
+                'Operator must return a non-empty list'
             names = [f[0] if isinstance(f, tuple) else '' for f in ff]
             values = [f[1] if isinstance(f, tuple) else f for f in ff]
             terms = [
@@ -1245,15 +1215,18 @@ class Problem:
 
         # Mapping from field key to offset in flattened state.
         key_to_offset = dict()
+        # Mapping from field key to size of flattened data.
         key_to_size = dict()
         offset = 0
+        # Iterate over unknown fields.
         for key, field in state.fields.items():
             arrays = domain.arrays_from_field(field)
             size = sum(np.prod(array.shape) for array in arrays)
             key_to_offset[key] = offset
             key_to_size[key] = size
             offset += size
-        size_all = offset
+        size_all = offset  # Size of the vector of unknowns.
+        del offset
 
         def field_to_matrix(key, shift, loc, field, garray):
             offset = key_to_offset[key]
@@ -1280,35 +1253,44 @@ class Problem:
                 cols = cols[trim_slice]
             # Indices of rows, i.e. components of operator value.
             rows = mod.arange(np.prod(value.shape))
-            # Indices of columns, i.e. components of operator value.
+            # Indices of columns, i.e. components of unknown field.
             cols = mod.flatten(cols)
             garray = mod.flatten(garray)
             matr = modsp.csr_array((garray, (rows, cols)),
                                    dtype=domain.dtype,
-                                   shape=mshape)
+                                   shape=(np.prod(value.shape), size_all))
             return matr
 
         shift_src = (0, ) * domain.ndim
         matrices = []
         vectors = []
-        for value, grad in zip(values, grads):
+        for name, value, grad in zip(names, values, grads):
+            # Shape of the resulting matrix.
             mshape = (np.prod(value.shape), size_all)
             # Rows of the resulting matrix corresponding to one operator value.
             matrix = modsp.csr_array(mshape, dtype=domain.dtype)
             for desc, garray in grad.items():
                 key, shift, loc = desc
-                if garray is None:  # Empty gradient.
+                if garray is None:
+                    # Skip empty gradient.
+                    continue
+                if isinstance(garray, list) and all(a is None for a in garray):
+                    # Skip array of empty gradients.
                     continue
                 field = state.fields[key]
                 if shift is None:  # Full Jacobian.
-                    offset = key_to_offset[key]
-                    matr = modsp.csr_array(garray)
-                    zeros = modsp.csr_array(
-                        ([], ([], [])),
-                        dtype=domain.dtype,
-                        shape=(np.prod(field.array.shape), offset),
-                    )
-                    matrix = modsp.hstack([zeros, matr])
+                    if isinstance(garray, list):
+                        garray = [
+                            mod.reshape(a, [mshape[0], -1]) for a in garray
+                        ]
+                        garray = mod.concatenate(garray, axis=1)
+                    # Dense array to sparse.
+                    m = modsp.csr_array(garray)
+                    # Shift the columns to the field's offset.
+                    m = modsp.csr_array(
+                        (m.data, m.indices + key_to_offset[key], m.indptr),
+                        shape=mshape)
+                    matrix += m
                 else:  # Element-wise gradient.
                     if not isinstance(field, Field):
                         raise TypeError(
@@ -1317,37 +1299,6 @@ class Problem:
                     matrix += field_to_matrix(key, shift, loc, field, garray)
             matrices.append(matrix)
             vectors.append(mod.flatten(value))
-        '''
-        Nw = domain.aweights_size()  # Size of weights of neural networks.
-        mmw = []  # Matrices with gradients for each equation.
-        for i in range(len(const)):  # Loop over equations.
-            # Shape of equation.
-            # Equals domain.shape for fields and arbitrary for neural networks.
-            eqshape = tuple(const[i].shape)
-            Nei = np.prod(eqshape, dtype=int)  # Number of scalar equations.
-            ww = wgrads[i]
-            wshapes = [
-                s for name in domain.aweights
-                for s in domain.weight_shapes[name]
-            ]
-            assert len(ww) == len(wshapes)
-            # Replace None with zeros.
-            ww = [
-                w or mod.zeros(eqshape + s, dtype=domain.dtype)
-                for w, s in zip(ww, wshapes)
-            ]
-            ww = [mod.reshape(w, eqshape + (-1, )) for w in ww]
-            if Nw:
-                mw = mod.concatenate(ww, axis=len(eqshape))
-                mw = mod.reshape(mw, (Nei, -1))
-                # Dense matrix with gradients.
-                mw = modsp.csr_matrix(mw, shape=(Nei, Nw))
-            else:
-                # Empty matrix.
-                mw = modsp.csr_matrix((Nei, Nw), dtype=domain.dtype)
-            mmw.append(mw)
-        mmw = modsp.vstack(mmw)
-        '''
         # Append gradients from weights to gradients from fields.
         matrix = modsp.vstack(matrices)
         vector = mod.concatenate(vectors, axis=0)
@@ -1391,11 +1342,9 @@ class Problem:
         def func(arrays):
             domain.arrays_to_state(arrays, cache['state'])
             ctx = Context(domain, cache['state'], extra=self.extra)
-            ff = self.operator(mod, ctx)
-            assert ff is not None
-            if not isinstance(ff, (tuple, list)):
-                ff = (ff, )
-            assert len(ff), "Operator returns empty list"
+            ff = self.operator(ctx)
+            assert isinstance(ff, (tuple, list)) and len(ff), \
+                'Operator must return a non-empty list'
             names = [f[0] if isinstance(f, tuple) else '' for f in ff]
             values = [f[1] if isinstance(f, tuple) else f for f in ff]
             if 'names' not in cache:
@@ -1421,11 +1370,9 @@ class Problem:
                 cache['state'] = domain.init_state(state)
             domain.arrays_to_state(arrays, cache['state'])
             ctx = Context(domain, cache['state'], extra=self.extra)
-            ff = self.operator(mod, ctx)
-            assert ff is not None
-            if not isinstance(ff, (tuple, list)):
-                ff = (ff, )
-            assert len(ff), "Operator returns empty list"
+            ff = self.operator(ctx)
+            assert isinstance(ff, (tuple, list)) and len(ff), \
+                'Operator must return a non-empty list'
             names = [f[0] if isinstance(f, tuple) else '' for f in ff]
             values = [f[1] if isinstance(f, tuple) else f for f in ff]
             if self._cache_names is None:
@@ -1474,11 +1421,9 @@ class Problem:
                               watch_func=tape.watch,
                               extra=self.extra,
                               distinct_shift=True)
-                ff = self.operator(mod, ctx)
-                assert ff is not None
-                if not isinstance(ff, (tuple, list)):
-                    ff = (ff, )
-                assert len(ff), "Operator returns empty list"
+                ff = self.operator(ctx)
+                assert isinstance(ff, (tuple, list)) and len(ff), \
+                    'Operator must return a non-empty list'
                 names = [f[0] if isinstance(f, tuple) else '' for f in ff]
                 values = [f[1] if isinstance(f, tuple) else f for f in ff]
                 sums = [tf.reduce_sum(v) for v in values]
@@ -1488,10 +1433,11 @@ class Problem:
             grads = []
             for v, s in zip(values, sums):
                 g = tape.gradient(s, ctx.desc_to_array)
-                jac = tape.jacobian(v,
-                                    ctx.key_to_array_full,
-                                    experimental_use_pfor=False)
-                g.update(jac)
+                if ctx.key_to_array_jac:
+                    jac = tape.jacobian(v,
+                                        ctx.key_to_array_jac,
+                                        experimental_use_pfor=False)
+                    g.update(jac)
                 grads.append(g)
             if 'names' not in cache:
                 cache['names'] = names
@@ -1504,6 +1450,9 @@ class Problem:
         arrays = domain.arrays_from_state(state)
         values, grads = cache['func'](arrays)
         return values, grads, cache['names']
+
+    def _eval_operator_grad_jax(self, state):
+        raise NotImplementedError()
 
     def eval_operator_grad(self, state):
         '''
@@ -1525,29 +1474,55 @@ class Problem:
         values, grads, names = self._eval_operator_grad(state)
         return values, grads, names
 
+    def get_context(self, state):
+        return self.domain.get_context(extra=self.extra)
 
-def checkpoint_save(state, path):
-    s = dict()
+
+def checkpoint_save(domain, state, path):
+    '''
+    Saves state to a checkpoint file.
+    The checkpoint file will contain a mapping with one entry `fields`
+    which is itself a mapping from field keys to lists of arrays
+    returned by `domain.arrays_from_field()`.
+
+    path: `str`
+        Path to the new checkpoint `.pickle` file.
+    '''
+    res = dict()
     fields = dict()
-    for k in state.fields:
-        fields[k] = np.array(state.fields[k])
-    s['fields'] = fields
+    for key in state.fields:
+        arrays = domain.arrays_from_field(state.fields[key])
+        fields[key] = list(map(np.array, arrays))
+    res['fields'] = fields
 
     with open(path, 'wb') as f:
-        pickle.dump(s, f)
+        pickle.dump(res, f)
 
 
-def checkpoint_load(state, path, fields_to_load=None, skip_missing=True):
+def checkpoint_load(domain, state, path, skip_missing=True):
+    '''
+    Loads fields from a checkpoint file to state.
+    The checkpoint file must contain a mapping with one entry `fields`
+    which is itself a mapping from field keys to lists of arrays
+    returned by `domain.arrays_from_field()`.
+
+    state: `State`
+        A state with defined fields to load.
+    skip_missing: `bool`
+        If True, ignore fields from `field_to_load` missing in the checkpoint.
+    '''
     with open(path, 'rb') as f:
         s = pickle.load(f)
-    fields = s.get('fields', None)
-    if fields is not None:
-        if fields_to_load is None:
-            fields_to_load = fields.keys()
-        for k in fields_to_load:
-            if not skip_missing and k not in fields:
-                raise RuntimeError("Missing field {}".format(k))
-            state.fields[k] = fields[k]
+    data = s.get('fields', dict())
+    for key in state.fields:
+        if key not in data:
+            if not skip_missing:
+                raise RuntimeError(f"Field {key} not found in {path}")
+            continue
+        arrays = data[key]
+        if not isinstance(arrays, list):
+            arrays = [arrays]
+        domain.arrays_to_field(arrays, state.fields[key])
 
 
 def extrap_quadh(u0, u1, u1p):
@@ -1571,16 +1546,16 @@ def extrap_linear(u0, u1):
     return u2
 
 
-def latin_hypercube(ndim, size):
+def latin_hypercube(ndim, size, dtype):
     '''
     Returns `size` points from the unit cube.
     '''
     # XXX Copied from pyDOE.
-    cut = np.linspace(0, 1, size + 1)
-    u = np.random.rand(size, ndim)
+    cut = np.linspace(0, 1, size + 1, dtype=dtype)
+    u = np.random.rand(size, ndim).astype(dtype)
     a = cut[:size]
     b = cut[1:size + 1]
-    rdpoints = np.zeros_like(u)
+    rdpoints = np.zeros_like(u, dtype=dtype)
     for j in range(ndim):
         rdpoints[:, j] = u[:, j] * (b - a) + a
     H = np.zeros_like(rdpoints)
@@ -1588,3 +1563,88 @@ def latin_hypercube(ndim, size):
         order = np.random.permutation(range(size))
         H[:, j] = rdpoints[order, j]
     return H
+
+
+class Approx():
+
+    def __init__(self, domain):
+        self.domain = domain
+        self.mod = domain.mod
+
+    def stencil(self, q):
+        'Returns: q, qxm, qxp, qym, qyp.'
+        mod = self.mod
+        st = [None] * 5
+        st[0] = q
+        st[1] = mod.roll(st[0], shift=1, axis=0)
+        st[2] = mod.roll(st[0], shift=-1, axis=0)
+        st[3] = mod.roll(st[0], shift=1, axis=1)
+        st[4] = mod.roll(st[0], shift=-1, axis=1)
+        return st
+
+    def stencil5(self, st):
+        'Returns: qxmm, qxpp, qymm, qypp.'
+        mod = self.mod
+        st5 = [None] * 4
+        st5[0] = mod.roll(st[1], shift=1, axis=0)
+        st5[1] = mod.roll(st[2], shift=-1, axis=0)
+        st5[2] = mod.roll(st[3], shift=1, axis=1)
+        st5[3] = mod.roll(st[4], shift=-1, axis=1)
+        return st5
+
+    def central(self, st):
+        hx, hy = self.domain.step()
+        q, qxm, qxp, qym, qyp = st
+        q_x = (qxp - qxm) / (2 * hx)
+        q_y = (qyp - qym) / (2 * hy)
+        return q_x, q_y
+
+    def apply_bc_extrap_linear(self, st):
+        'Linear extrapolation from inner cells to halo cells.'
+        domain = self.domain
+        nx, ny = domain.size()
+        ix, iy = domain.indices()
+        mod = domain.mod
+        extrap = extrap_quad
+        st[1] = mod.where(ix == 0, extrap(st[2], st[0]), st[1])
+        st[2] = mod.where(ix == nx - 1, extrap(st[1], st[0]), st[2])
+        st[3] = mod.where(iy == 0, extrap(st[4], st[0]), st[3])
+        st[4] = mod.where(iy == ny - 1, extrap(st[3], st[0]), st[4])
+        return st
+
+    def apply_bc_extrap_quad(self, st, st5):
+        'Linear extrapolation from inner cells to halo cells.'
+        domain = self.domain
+        nx, ny = domain.size()
+        ix, iy = domain.indices()
+        mod = domain.mod
+        extrap = extrap_quad
+        st[1] = mod.where(ix == 0, extrap(st5[1], st[2], st[0]), st[1])
+        st[2] = mod.where(ix == nx - 1, extrap(st5[0], st[1], st[0]), st[2])
+        st[3] = mod.where(iy == 0, extrap(st5[3], st[4], st[0]), st[3])
+        st[4] = mod.where(iy == ny - 1, extrap(st5[2], st[3], st[0]), st[4])
+        return st
+
+    def vorticity(self, u, v):
+        u_st = self.stencil(u)
+        v_st = self.stencil(v)
+        self.apply_bc_extrap_quad(u_st, self.stencil5(u_st))
+        self.apply_bc_extrap_quad(v_st, self.stencil5(v_st))
+        _, u_y = self.central(u_st)
+        v_x, _ = self.central(v_st)
+        omega = v_x - u_y
+        return omega
+
+
+def struct_to_numpy(mod, d):
+    if mod.is_tensor(d):
+        return np.array(d)
+    if isinstance(d, dict):
+        for key in d:
+            d[key] = struct_to_numpy(mod, d[key])
+        return d
+    if isinstance(d, list):
+        return [struct_to_numpy(mod, a) for a in d]
+    if isinstance(d, tuple):
+        return tuple(struct_to_numpy(mod, a) for a in d)
+    return d

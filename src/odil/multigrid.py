@@ -2,6 +2,7 @@ import numpy as np
 from collections import defaultdict
 import scipy.sparse as sp
 import sys
+from functools import partial
 
 from .backend import ModNumpy
 from .util import assert_equal
@@ -1522,3 +1523,271 @@ class MultigridDecomp:
             res = term + MultigridDecomp.interp_field(
                 res, mod=mod, method=method, cell=cell, use_axes=use_axes)
         return res
+
+
+cupy = None
+cupyx = None
+
+
+def import_cupy(args):
+    global cupy, cupyx
+    import cupy
+    import cupyx
+    import cupyx.scipy.sparse
+    import cupyx.scipy.sparse.linalg
+    from .backend import ModCupy
+    printlog("Using CuPy with memory limit {:.3f} GiB".format(
+        cupy.get_default_memory_pool().get_limit() / (1 << 30)))
+    mod = ModCupy(cupy, cupyx.scipy.sparse)
+    return mod
+
+
+def optimize_multigrid_base(opt,
+                            args,
+                            problem,
+                            state,
+                            callback=None,
+                            mod=None,
+                            datalevels=None):
+
+    verbose = args.linsolver_verbose
+
+    def printv(*m):
+        if verbose:
+            printlog(*m)
+
+    printv("Running {} optimizer".format(opt.displayname))
+    packed = problem.pack_state(state)
+    dhistory = defaultdict(lambda: [])
+    printv("Constructing Multigrid...")
+    from .multigrid import Multigrid
+    mg = Multigrid(problem.domain.cshape,
+                   restriction=args.restriction,
+                   nvar=len(state.fields),
+                   mod=mod,
+                   dtype=problem.domain.dtype,
+                   nlevels=args.nlvl)
+    printv('levels: {}'.format(', '.join(map(str, mg.nnw))))
+    for epoch in range(args.epoch_start, args.epochs + 1):
+        s = problem.unpack_state(packed)
+        problem.domain.assign_active_state(state, s)
+        if callback:
+            callback(packed, epoch, opt)
+        if epoch == args.epochs:
+            break
+
+        timer = Timer()
+        timer.push('linsolver')
+        if datalevels is not None:
+            AA = [None] * mg.nlevels
+            for level in range(mg.nlevels):
+                printv("level=", level)
+                lproblem = datalevels[level].problem
+                lstate = datalevels[level].state
+
+                def coarsen(u):
+                    R = mg.RRsingle[level - 1]
+                    u = mod.reshape(u, [-1])
+                    return mod.reshape(R @ u, lproblem.domain.cshape)
+
+                if level > 0:
+                    for k in problem.domain.fieldnames:
+                        lstate.fields[k].assign(
+                            coarsen(datalevels[level - 1].state.fields[k]))
+
+                const, m = lproblem.linearize(lstate,
+                                              epoch=epoch,
+                                              mod=mod.mod,
+                                              modsp=mod.modsp)
+                opt.last_residual = [np.mean(c**2)**0.5 for c in const]
+                const = mod.stack([c for c in const]).flatten()
+                if level == 0:
+                    rhs = -m.T @ const
+                AA[level] = m.T @ m
+                if level == 0:
+                    matr = AA[0]
+            opt.evals += 1
+            mg.update_A(AA)
+        else:
+            printv("Evaluating gradients...")
+            const, m = problem.linearize(state,
+                                         epoch=epoch,
+                                         mod=mod.mod,
+                                         modsp=mod.modsp)
+            opt.last_residual = [mod.numpy(mod.norm(c)) for c in const]
+            opt.evals += 1
+            const = mod.stack([c for c in const]).flatten()
+            printv("Computing rhs...")
+            rhs = -m.T @ const
+            printv("Computing matr...")
+            matr = m.T @ m
+
+            printv("Calling update_A()...")
+            mg.update_A(matr)
+
+        sol = np.zeros_like(rhs)
+        for it in range(args.linsolver_maxiter):
+            sol = mg.step(sol,
+                          rhs,
+                          ndirect=args.ndirect,
+                          pre=args.smooth_pre,
+                          post=args.smooth_post,
+                          smoother=partial(mg.smoother_jacobi,
+                                           omega=args.omega,
+                                           full=False))
+            if verbose > 1:
+                printv('it={:d} r={:.5g}'.format(
+                    it,
+                    np.mean((rhs - matr @ sol)**2)**0.5))
+        dpacked = mod.numpy(sol)
+        timer.pop()
+        problem.timer_total.append(timer)
+        problem.timer_last = timer
+        packed += dpacked
+
+
+def optimize_multigrid(args, problem, state, callback, datalevels=None):
+    import scipy.sparse
+    mod = ModNumpy(np, scipy.sparse)
+    opt = Optimizer(name='multigrid', displayname='Multigrid')
+    return optimize_multigrid_base(opt,
+                                   args,
+                                   problem,
+                                   state,
+                                   callback,
+                                   mod=mod,
+                                   datalevels=datalevels)
+
+
+def optimize_multigridcp(args, problem, state, callback):
+    mod = import_cupy(args)
+    opt = Optimizer(name='multigridcp', displayname='MultigridCupy')
+    return optimize_multigrid_base(opt,
+                                   args,
+                                   problem,
+                                   state,
+                                   callback,
+                                   mod=mod)
+
+
+def optimize_multigridop_base(opt,
+                              args,
+                              problem,
+                              state,
+                              callback=None,
+                              mod=None):
+    mod = problem.mod
+    verbose = args.linsolver_verbose
+    domain = problem.domain
+
+    def printv(m):
+        if verbose:
+            printlog(m)
+
+    printv("Running {} optimizer".format(opt.displayname))
+    packed = problem.pack_state(state)
+    dhistory = defaultdict(lambda: [])
+    printv("Constructing MultigridOp...")
+    nvar = len(state.fields)
+    from .multigrid import MultigridOp, SparseOperator
+    mg = MultigridOp(domain.cshape,
+                     nvar=nvar,
+                     restriction=args.restriction,
+                     mod=mod,
+                     dtype=domain.dtype,
+                     nlevels=args.nlvl)
+    printv('levels: {}'.format(', '.join(map(str, mg.nnw))))
+    for epoch in range(args.epochs + 1):
+        s = problem.unpack_state(packed)
+        domain.assign_active_state(state, s)
+        if callback:
+            callback(packed, epoch, opt)
+        if epoch == args.epochs:
+            break
+
+        printv("Evaluating gradients...")
+        epoch = mod.constant(epoch)
+        const, grads, field_desc, wgrads = problem._eval_grad(
+            state.fields, state.weights, epoch)
+        opt.last_residual = [np.mean(c**2)**0.5 for c in const]
+
+        neqn = len(const)  # Number of equations.
+
+        nw = domain.cshape
+        stf = [[dict() for _ in range(nvar)] for _ in range(neqn)]
+        for i in range(neqn):  # Loop over equations.
+            for j in range(len(field_desc)):  # Loop over grid field variables.
+                varindex, dw = field_desc[j]
+                g = grads[i][j]
+                if g is None:
+                    continue
+                if mod.sum(g**2) == 0:
+                    continue
+                stf[i][varindex][tuple(np.array(dw))] = mod.native(g.numpy())
+        const = [mod.native(c.numpy()) for c in const]
+        printv("Constructing SparseOperator...")
+        mm = [[
+            SparseOperator(s, nw, mod=mod, dtype=domain.dtype) for s in row
+        ] for row in stf]
+        del stf
+
+        opt.evals += 1
+        timer = Timer()
+        timer.push('linsolver')
+        printv("Computing rhs...")
+        rhs = [
+            -sum([mm[i][j].mul_transpose_field(const[i]) for i in range(neqn)])
+            for j in range(nvar)
+        ]
+        printv("Computing matr...")
+        matr = [[None for _ in range(nvar)] for _ in range(nvar)]
+        for i in range(nvar):
+            for j in range(nvar):
+                matr[i][j] = mm[0][i].mul_transpose_op(mm[0][j])
+                for e in range(1, neqn):
+                    matr[i][j] = matr[i][j].add_elementwise(
+                        mm[e][i].mul_transpose_op(mm[e][j]))
+        del mm
+        printv("Calling update_A()...")
+        mg.update_A(matr)
+        sol = [np.zeros_like(rhs[i]) for i in range(nvar)]
+        for it in range(args.linsolver_maxiter):
+            sol = mg.step(sol,
+                          rhs,
+                          pre=args.smooth_pre,
+                          post=args.smooth_post,
+                          ndirect=args.ndirect,
+                          smoother=partial(mg.smoother_jacobi,
+                                           omega=args.omega))
+            if verbose > 1:
+                printv('it={:d} r={}'.format(
+                    it, ', '.join('{:.5g}'.format(np.mean(r**2)**0.5)
+                                  for r in mg.residual(matr, sol, rhs))))
+        dpacked = mod.numpy(mod.reshape(mod.stack(sol), [-1]))
+        timer.pop()
+        problem.timer_total.append(timer)
+        problem.timer_last = timer
+        packed += dpacked
+
+
+def optimize_multigridop(args, problem, state, callback):
+    import scipy.sparse
+    mod = ModNumpy(np, scipy.sparse)
+    opt = Optimizer(name='multigridop', displayname='MultigridOp')
+    return optimize_multigridop_base(opt,
+                                     args,
+                                     problem,
+                                     state,
+                                     callback,
+                                     mod=mod)
+
+
+def optimize_multigridopcp(args, problem, state, callback):
+    mod = import_cupy(args)
+    opt = Optimizer(name='multigridopcp', displayname='MultigridOpCupy')
+    return optimize_multigridop_base(opt,
+                                     args,
+                                     problem,
+                                     state,
+                                     callback,
+                                     mod=mod)

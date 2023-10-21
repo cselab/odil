@@ -6,7 +6,7 @@ ARGS =
 
 default: all
 
-all: test_domain test_interp test_restrict test_optimize test_optimize_32
+all: test_domain test_interp test_restrict test_optimize test_optimize_32 test_newton
 
 test_domain:
 test_interp:
@@ -16,6 +16,7 @@ test_optimize_32:
 	@$(MAKE) test_optimize DTYPE=float32
 test_optimize_lbfgs:
 	@$(MAKE) test_optimize ARGS='--optimizers lbfgs'
+test_newton:
 
 test_%: test_%.py
 	ODIL_BACKEND=$(BACKEND) ODIL_DTYPE=$(DTYPE) $(PYTHON) $< $(ARGS)

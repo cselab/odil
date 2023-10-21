@@ -92,7 +92,7 @@ class LbfgsbOptimizer(Optimizer):
         def func_wrap(x):
             self.evals += 1
             arrays = flat_to_arrays(x)
-            loss, grads, pinfo = loss_grad(arrays, self.epoch)
+            loss, grads, pinfo = loss_grad(arrays)
             loss = np.array(loss, dtype=np.float64)
             grad = arrays_to_flat(grads)
             self.pinfo = pinfo
@@ -186,7 +186,7 @@ class LbfgsOptimizer(Optimizer):
             self.last_x = x
             self.evals += 1
             arrays = flat_to_arrays(x)
-            loss, grads, pinfo = loss_grad(arrays, self.epoch)
+            loss, grads, pinfo = loss_grad(arrays)
             loss = mod.constant(loss)
             grad = arrays_to_flat(grads)
             self.pinfo = pinfo
@@ -220,10 +220,10 @@ class LbfgsOptimizer(Optimizer):
         return arrays, optinfo
 
 
-class AdamOptimizer(Optimizer):
+class AdamTfOptimizer(Optimizer):
 
     def __init__(self, dtype=None, mod=None, **kwargs):
-        super().__init__(name="adam", displayname="Adam", dtype=dtype)
+        super().__init__(name="adam_tf", displayname="AdamTf", dtype=dtype)
         self.mod = mod
 
     def run(self,
@@ -248,7 +248,7 @@ class AdamOptimizer(Optimizer):
 
             def __call__(self):
                 self.evals += 1
-                return loss_grad(self.x, self.epoch)
+                return loss_grad(self.x)
 
             def train_step(self, _):
                 loss, grads, pinfo = self()
@@ -298,7 +298,7 @@ class GdOptimizer(Optimizer):
         x = [mod.copy(e) for e in x0]
         for epoch in range(epoch_start + 1, epoch_start + epochs + 1):
             self.evals += 1
-            loss, grads, pinfo = loss_grad(x, epoch)
+            loss, grads, pinfo = loss_grad(x)
             for i in range(len(x)):
                 x[i] -= grads[i] * lr
             if epoch > 0 and callback is not None:
@@ -339,8 +339,8 @@ class AdamNativeOptimizer(Optimizer):
         beta_1 = mod.cast(beta_1, dtype)
         beta_2 = mod.cast(beta_2, dtype)
 
-        def _step(x, m, v, grads, epoch):
-            local_epoch = mod.cast(epoch - epoch_start, dtype)
+        def _step(x, m, v, grads, local_epoch):
+            local_epoch = mod.cast(local_epoch, dtype)
             beta_1_power = beta_1**local_epoch
             beta_2_power = beta_2**local_epoch
             alpha = lr * mod.sqrt(1 - beta_2_power) / (1 - beta_1_power)
@@ -367,8 +367,8 @@ class AdamNativeOptimizer(Optimizer):
         v = [mod.zeros_like(e) for e in x0]
         for epoch in range(epoch_start + 1, epoch_start + epochs + 1):
             self.evals += 1
-            loss, grads, pinfo = loss_grad(x, epoch)
-            x, m, v = step(x, m, v, grads, mod.constant(epoch))
+            loss, grads, pinfo = loss_grad(x)
+            x, m, v = step(x, m, v, grads, mod.constant(epoch - epoch_start))
             if epoch > 0 and callback is not None:
                 callback(x, epoch, pinfo)
 
@@ -383,9 +383,9 @@ def make_optimizer(name, dtype=None, mod=None, **kwargs):
         optimizer = LbfgsbOptimizer(dtype=dtype, mod=mod, **kwargs)
     elif name == "lbfgs":
         optimizer = LbfgsOptimizer(dtype=dtype, mod=mod, **kwargs)
-    elif name == "adam":
-        optimizer = AdamOptimizer(dtype=dtype, mod=mod, **kwargs)
-    elif name == "adamn":
+    elif name == "adam_tf":
+        optimizer = AdamTfOptimizer(dtype=dtype, mod=mod, **kwargs)
+    elif name == "adam" or name == "adamn":
         optimizer = AdamNativeOptimizer(dtype=dtype, mod=mod, **kwargs)
     elif name == "gd":
         optimizer = GdOptimizer(dtype=dtype, mod=mod, **kwargs)

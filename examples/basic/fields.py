@@ -7,7 +7,7 @@ import odil
 from odil import printlog
 
 
-def operator(mod, ctx):
+def operator(ctx):
     res = []
 
     def func(x, y):
@@ -62,22 +62,22 @@ def plot(problem, state, epoch, frame, cbinfo=None):
 
     # Cells.
     xc, yc = domain.points(loc='cc')
-    uc = domain.regular_array(state.fields['uc'])
+    uc = domain.field(state, 'uc')
     ax.scatter(xc, yc, s=10, c=uc, edgecolor='C0', label='uc', **kw)
 
     # Nodes.
     xn, yn = domain.points(loc='nn')
-    un = domain.regular_array(state.fields['un'])
+    un = domain.field(state, 'un')
     ax.scatter(xn, yn, s=10, c=un, edgecolor='C1', label='un', **kw)
 
     # Faces in x.
     xfx, yfx = domain.points(loc='nc')
-    ufx = domain.regular_array(state.fields['ufx'])
+    ufx = domain.field(state, 'ufx')
     ax.scatter(xfx, yfx, s=10, c=ufx, edgecolor='C2', label='ufx', **kw)
 
     # Faces in y.
     xfy, yfy = domain.points(loc='cn')
-    ufy = domain.regular_array(state.fields['ufy'])
+    ufy = domain.field(state, 'ufy')
     ax.scatter(xfy, yfy, s=10, c=ufy, edgecolor='C3', label='ufy', **kw)
 
     ax.legend(loc='lower left',
@@ -109,8 +109,6 @@ def make_problem(args):
                          mg_interp=args.mg_interp,
                          mg_axes=[True, True],
                          mg_nlvl=args.nlvl)
-    mod = domain.mod
-
     xx, yy = domain.points('x', 'y', loc='cn')
     ixx, iyy = domain.indices('x', 'y', loc='cc')
 

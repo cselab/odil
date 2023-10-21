@@ -22,6 +22,7 @@ class ModBase:
                 'roll',
                 'reshape',
                 'stack',
+                'abs',
                 'cos',
                 'sin',
                 'exp',
@@ -42,8 +43,9 @@ class ModBase:
 class ModNumpy(ModBase):
 
     def __init__(self, mod=None, modsp=None, jax=None):
+        mod = mod or np
         super().__init__(mod)
-        self.cast = lambda x, t: mod.array(x, dtype=t)
+        self.cast = lambda x, dtype: mod.array(x, dtype=dtype)
         self.numpy = mod.array
         self.native = mod.array
         self.spnative = lambda x: x
@@ -54,6 +56,7 @@ class ModNumpy(ModBase):
         self.max = mod.max
         self.log = mod.log
         self.tanh = mod.tanh
+        self.sigmoid = lambda x: 1 / (1 + mod.exp(-x))
         self.arange = mod.arange
         self.norm = mod.linalg.norm
         self.solve = mod.linalg.solve
@@ -125,6 +128,8 @@ class ModNumpy(ModBase):
                                           maxval=maxval,
                                           dtype=dtype)
         else:
+            def set_seed(seed):
+                self.random.set_seed(seed)
             def uniform(shape, minval, maxval, dtype):
                 return mod.random.uniform(low=minval, hight=maxval,
                                           size=shape).astype(dtype)
@@ -174,6 +179,7 @@ class ModTensorflow(ModBase):
         self.min = mod.reduce_min
         self.log = mod.math.log
         self.tanh = mod.math.tanh
+        self.sigmoid = mod.math.sigmoid
         self.full = mod.fill
         self.arange = mod.range
         self.norm = lambda x: mod.reduce_sum(x**2)**0.5
@@ -253,7 +259,7 @@ class ModCupy(ModBase):
 
     def __init__(self, mod=None, modsp=None):
         super().__init__(mod)
-        self.cast = lambda x, t: mod.array(x, dtype=t)
+        self.cast = lambda x, dtype: mod.array(x, dtype=dtype)
         self.numpy = lambda x: x.get() if isinstance(x, mod.ndarray) else x
         self.full = mod.full
         self.sum = mod.sum

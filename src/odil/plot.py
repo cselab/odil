@@ -13,31 +13,34 @@ geodata_qualitative = [
 g_colorscheme = geodata_qualitative[:7]
 
 
-def plot_1d(domain,
-            exact_u,
-            pred_u,
-            path,
-            cellsel=None,
-            title=None,
-            umin=None,
-            umax=None,
-            slice_lim=0.1,
-            transpose=False,
-            nslices=6,
-            dpi=300,
-            x_imp=None,
-            y_imp=None,
-            marker_size=1,
-            marker_color='k',
-            transparent=True,
-            figsize=(3, 2.5),
-            cmap=None):
+def plot_1d(
+    domain,
+    u_ref,
+    u_state,
+    path=None,
+    title=None,
+    umin=None,
+    umax=None,
+    slice_lim=0.1,
+    transpose=False,
+    invertx=False,
+    nslices=6,
+    dpi=300,
+    transparent=True,
+    figsize=(3, 2.5),
+    aspect='auto',
+    callback=None,
+    interpolation='nearest',
+    cmap=None,
+    cref='C2',
+    cstate='C0',
+):
     if transpose:
-        # Index zero drawn as vertical.
+        # Index zero drawn as vertical, rotate by 90 degrees counterclockwise.
         ix = 1
         iy = 0
-        exact_u = exact_u.T
-        pred_u = pred_u.T
+        u_ref = u_ref.T
+        u_state = u_state.T
     else:
         # Index zero drawn as horizontal.
         ix = 0
@@ -45,21 +48,17 @@ def plot_1d(domain,
     extent = [
         domain.lower[ix], domain.upper[ix], domain.lower[iy], domain.upper[iy]
     ]
-    cred = g_colorscheme[0]
-    cblue = g_colorscheme[2]
     fig = plt.figure(figsize=figsize)
     fig.subplots_adjust(hspace=0, wspace=0)
     spec = fig.add_gridspec(2 * nslices, 3)
-    xx = domain._points_1d(ix, 'c')
-    yy = domain._points_1d(iy, 'c')
-    xx = np.array(xx)
-    yy = np.array(yy)
-    dx, dy = domain.step(ix, iy)
+    xx, yy = domain.points_1d(ix, iy)
+    xx, yy = np.array(xx), np.array(yy)
     xlim = (domain.lower[ix], domain.upper[ix])
+    ylim = (domain.lower[iy], domain.upper[iy])
     if umin is None:
-        umin = exact_u.min()
+        umin = u_ref.min()
     if umax is None:
-        umax = exact_u.max()
+        umax = u_ref.max()
     if cmap is None:
         cmap = 'viridis'
     ulim = (umin, umax)
@@ -68,66 +67,45 @@ def plot_1d(domain,
     if title is not None:
         fig.suptitle(title, fontsize=8)
     axes = [None, None]
-    for data, i in (pred_u, 0), (exact_u, 1):
+    for data, i in (u_state, 0), (u_ref, 1):
         axes[i] = fig.add_subplot(spec[1:-1, i])
         ax = axes[i]
         ax.spines[['left', 'right', 'bottom', 'top']].set_visible(True)
         ax.spines[['left', 'right', 'bottom', 'top']].set_linewidth(0.25)
         ax.imshow(data.T,
-                  interpolation='nearest',
+                  interpolation=interpolation,
                   cmap=cmap,
                   vmin=ulim[0],
                   vmax=ulim[1],
                   extent=extent,
                   origin='lower',
-                  aspect='auto')
+                  aspect=aspect)
+        if callback is not None:
+            callback(i, fig, ax, data, extent)
         ax.set_xticks([])
         ax.set_yticks([])
-    if cellsel is not None:
-        ax = axes[1]
-        ax.add_patch(
-            matplotlib.patches.Rectangle(
-                (yy[cellsel.y0] - 0.5 * dy, xx[cellsel.x0] - 0.5 * dx),
-                yy[cellsel.y1 - 1] - yy[cellsel.y0] + dy,
-                xx[cellsel.x1 - 1] - xx[cellsel.x0] + dy,
-                fc='none',
-                color='black',
-                linewidth=1,
-                linestyle="solid"))
+        ax.set_xlim(xlim)
+        ax.set_ylim(ylim)
+        if invertx:
+            ax.invert_xaxis()
 
-    if x_imp is not None:
-        if type(x_imp) != list:
-            x_imp = [x_imp]
-            y_imp = [y_imp]
-            marker_color = [marker_color]
-        ax = axes[1]
-        for xi, yi, mc in zip(x_imp, y_imp, marker_color):
-            ax.scatter(xi,
-                       yi,
-                       s=marker_size,
-                       alpha=1,
-                       edgecolor='none',
-                       facecolor=mc,
-                       zorder=100)
-
-    Ny = pred_u.shape[iy]
     shift = 0.22
     spec = fig.add_gridspec(2 * nslices, 3, left=shift)
     for i in range(nslices):
-        yslice = i * (Ny - 1) // max(1, nslices - 1)
+        yslice = i * (domain.cshape[iy] - 1) // max(1, nslices - 1)
         ns = nslices - 1 - i
         ax = fig.add_subplot(spec[2 * ns:2 * ns + 2, 2])
         ax.spines[['left', 'right', 'bottom', 'top']].set_visible(True)
         ax.spines[['left', 'right', 'bottom', 'top']].set_linewidth(0.25)
         l0, = ax.plot(xx,
-                      exact_u[:, yslice],
-                      c=cblue,
+                      u_ref[:, yslice],
+                      c=cref,
                       ls='-',
                       label="reference",
                       linewidth=0.9)
         l1, = ax.plot(xx,
-                      pred_u[:, yslice],
-                      c=cred,
+                      u_state[:, yslice],
+                      c=cstate,
                       ls='-',
                       label="inferred",
                       linewidth=0.6)
@@ -136,6 +114,8 @@ def plot_1d(domain,
         ax.set_ylim(slim)
         ax.set_xticks([])
         ax.set_yticks([])
+        if invertx:
+            ax.invert_xaxis()
         ax.arrow(-0.025,
                  0.5,
                  -0.05,
@@ -147,25 +127,23 @@ def plot_1d(domain,
                  transform=ax.transAxes,
                  facecolor='black',
                  clip_on=False)
-    leg0 = plt.legend(handles=[l0],
-                      loc=(-1.0 - shift, 0.5),
-                      frameon=False,
-                      handletextpad=0.5,
-                      fontsize=7)
-    leg1 = plt.legend(handles=[l1],
-                      loc=(-2.15 - shift, 0.5),
-                      frameon=False,
-                      handletextpad=0.5,
-                      fontsize=7)
-    ax.add_artist(leg0)
-    ax.add_artist(leg1)
+    ax.legend(handles=[l1, l0],
+              loc=(-2.15 - shift, 0.5),
+              columnspacing=2.2,
+              ncol=2,
+              frameon=False,
+              handletextpad=0.5,
+              fontsize=7)
 
-    fig.savefig(path,
-                dpi=dpi,
-                bbox_inches='tight',
-                pad_inches=0.01,
-                transparent=transparent)
-    plt.close(fig)
+    if path is not None:
+        fig.savefig(path,
+                    dpi=dpi,
+                    bbox_inches='tight',
+                    pad_inches=0.01,
+                    transparent=transparent)
+        plt.close(fig)
+    else:
+        return fig
 
 
 def plot_2d(
@@ -186,6 +164,7 @@ def plot_2d(
     ylabel_exact='reference',
     ylabel_pred='inferred',
     transparent=False,
+    interpolation='nearest',
 ):
     '''
     exact_uu: `array`
@@ -219,7 +198,7 @@ def plot_2d(
             ax.set_xlim(extent[:2])
             ax.set_ylim(extent[2:4])
             ax.imshow(data.T,
-                      interpolation='nearest',
+                      interpolation=interpolation,
                       cmap=cmap,
                       vmin=umin,
                       vmax=umax,

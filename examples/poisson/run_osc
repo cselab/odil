@@ -1,0 +1,20 @@
+#!/bin/sh -eu
+
+export OMP_NUM_THREADS=1
+export ODIL_JIT=1
+
+run () {
+  k=$1
+  outdir=k${k}
+  if [ -d "$outdir" ] ; then
+    echo "skip existing '$outdir'"
+    return
+  fi
+  ./poisson.py --N 64 --outdir $outdir \
+    --ndim 2 --ref osc --rhs exact --osc_k $k --optimizer adam \
+    --epochs 2000 --plot_every 2000 --frames 0 --history_every 10
+}
+
+run 2
+run 4
+

@@ -1,0 +1,10 @@
+*.png
+*.jpg
+train.csv
+train.log
+data_*.pickle
+*.mp4
+*.pdf
+done
+args.json
+out_*

@@ -9,8 +9,10 @@ import odil
 from odil import printlog
 
 
-def operator(mod, ctx):
+def operator(ctx):
+    mod = ctx.mod
     extra = ctx.extra
+    args = extra.args
 
     res = []
 
@@ -36,6 +38,10 @@ def operator(mod, ctx):
     a = ctx.field('a')
     res += [a - extra.ref['a']]
 
+    # Neural network.
+    net_out = ctx.neural_net('net')(*extra.ref['net_in'])
+    for i in range(args.Nnet):
+        res += [(f'net{i}', net_out[i] - extra.ref['net_out'][i])]
     return res
 
 
@@ -44,10 +50,16 @@ def parse_args():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--Nx', type=int, default=3, help="Grid size in x")
     parser.add_argument('--Ny', type=int, default=2, help="Grid size in y")
+    parser.add_argument('--Na', type=int, default=5, help="Size of array a")
+    parser.add_argument('--Nnet',
+                        type=int,
+                        default=5,
+                        help="Number of inputs and output in neural net")
     odil.util.add_arguments(parser)
     odil.linsolver.add_arguments(parser)
     parser.set_defaults(outdir='out_newton')
     parser.set_defaults(multigrid=0)
+    parser.set_defaults(seed=1000)
     return parser.parse_args()
 
 
@@ -61,15 +73,19 @@ def make_problem(args):
                          mg_interp=args.mg_interp,
                          mg_axes=[True, True],
                          mg_nlvl=args.nlvl)
-    mod = domain.mod
+    dtype = domain.dtype
 
     from odil import Field, Array
     state = odil.State(
         fields={
-            'uc': Field(np.ones(domain.size(loc='cc')), loc='cc'),
-            'ufx': Field(np.ones(domain.size(loc='nc')), loc='nc'),
-            'a': Array(np.zeros(5)),
-            #'net': domain.make_neural_net([1, 7, 1]),
+            'uc':
+            Field(np.ones(domain.size(loc='cc')), loc='cc'),
+            'ufx':
+            Field(np.ones(domain.size(loc='nc')), loc='nc'),
+            'a':
+            Array(np.zeros(args.Na, dtype=dtype)),
+            'net':
+            domain.make_neural_net([args.Nnet, args.Nnet], activation='none'),
         })
     state = domain.init_state(state)
 
@@ -88,9 +104,14 @@ def make_problem(args):
         'uc': func(xc, yc),
         'ufx': func(xfx, yfx),
         'dudx': func_x(xc, yc),
-        'a': np.arange(state.fields['a'].array.shape[0]),
-        #'net_a': np.arange(state.fields['a'].array.shape[0]),
+        'a': np.linspace(0, 1, state.fields['a'].array.shape[0], dtype=dtype),
     }
+    # A linear neural net will transform one random matrix into another.
+    # The number of degrees of freedom is `Nnet * Nnet + 1`
+    # which includes the weights and biases.
+    extra.ref['net_in'] = np.random.rand(args.Nnet, args.Nnet + 1)
+    extra.ref['net_out'] = np.random.rand(args.Nnet, args.Nnet + 1)
+    extra.args = args
 
     problem = odil.Problem(operator, domain, extra)
     return problem, state
@@ -102,7 +123,6 @@ def main():
     problem, state = make_problem(args)
     domain = problem.domain
     extra = problem.extra
-
     '''
     values, grads, names = problem.eval_operator_grad(state)
     for i in range(len(grads)):
@@ -122,8 +142,12 @@ def main():
     domain.unpack_state(packed + delta, state)
 
     failed = 0
-    for key in ['ufx', 'uc', 'a']:
-        error = domain.field(state, key) - extra.ref[key]
+    for key in ['ufx', 'uc', 'a', 'net_out']:
+        if key == 'net_out':
+            value = domain.neural_net(state, 'net')(*extra.ref['net_in'])
+        else:
+            value = domain.field(state, key)
+        error = value - extra.ref[key]
         error = np.sqrt(np.mean(np.square(error)))
         if error < 1e-6:
             status = 'PASS'
