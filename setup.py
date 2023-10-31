@@ -1,8 +1,7 @@
-from setuptools import setup, find_packages
-
+from setuptools import setup
 setup(
     name="odil",
     version="0.1",
-    packages=find_packages(),
-    package_dir={'': 'src'},
+    packages=[""],
+    package_dir={"": "src"},
 )
