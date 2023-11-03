@@ -1,3 +1,8 @@
 [project]
 name = "odil"
 version = "0.1"
+dependencies = [
+	     "numpy",
+	     "psutil",
+	     "scipy",
+]

@@ -15,7 +15,12 @@ Key features:
 ## Installation
 
 ```
-pip install --editable .
+pip install .
+```
+
+or
+```
+pip install git+https://github.com/cselab/odil.git
 ```
 
 ## Using GPU
