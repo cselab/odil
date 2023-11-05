@@ -37,7 +37,6 @@ sphinx_gallery_conf = {
 }
 html_theme = 'theme'
 html_theme_path = ['.']
-html_static_path = ['_static']
 pygments_style = 'sphinx'
 EXAMPLE_HEADER = """
 .. DO NOT EDIT.
@@ -70,7 +69,7 @@ CODE_DOWNLOAD = """
 .. raw:: html
 
    <a href="https://colab.research.google.com/github/cselab/odil/blob/gh-pages/doc/_downloads/{3}">
-    <img src="../../_static/colab-badge.svg" alt="Open In Colab">
+       <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab">
    </a>
 """
 
