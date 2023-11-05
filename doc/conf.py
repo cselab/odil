@@ -8,3 +8,6 @@ sphinx_gallery_conf = {
     'gallery_dirs': 'auto_examples',
     'show_signature': False,
 }
+html_theme = 'theme'
+html_theme_path = ['.']
+pygments_style = 'sphinx'
