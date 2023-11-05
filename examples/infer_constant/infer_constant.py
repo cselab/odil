@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+infer_constant_adv
+==================
+"""
 
 import argparse
 import numpy as np

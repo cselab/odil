@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+poisson
+=======
+"""
 
 import argparse
 import numpy as np
