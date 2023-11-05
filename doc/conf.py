@@ -69,7 +69,7 @@ CODE_DOWNLOAD = """
 
 .. raw:: html
 
-   <a href="https://colab.research.google.com/github/cselab/odil/blob/gh-pages/doc/{3}">
+   <a href="https://colab.research.google.com/github/cselab/odil/blob/gh-pages/doc/_downloads/{3}">
     <img src="../../_static/colab-badge.svg" alt="Open In Colab">
    </a>
 """
