@@ -175,6 +175,6 @@ field
 
 .. raw:: html
 
-   <a href="https://colab.research.google.com/github/cselab/odil/blob/gh-pages/doc/24eaf8dd253be2821d2f6eb64c3d9de4/fields.ipynb">
+   <a href="https://colab.research.google.com/github/cselab/odil/blob/gh-pages/doc/_downloads/24eaf8dd253be2821d2f6eb64c3d9de4/fields.ipynb">
     <img src="../../_static/colab-badge.svg" alt="Open In Colab">
    </a>
