@@ -35,7 +35,7 @@ sphinx_gallery_conf = {
     'gallery_dirs': 'auto_examples',
     'show_signature': False,
     'first_notebook_cell': r"""
-%%%pip install -q git+https://github.com/cselab/odil"""
+%pip install -q git+https://github.com/cselab/odil"""
 }
 html_theme = 'theme'
 html_theme_path = ['.']
