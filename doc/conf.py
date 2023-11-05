@@ -11,30 +11,12 @@ def save_rst_example(example_rst, example_file, time_elapsed, memory_used,
                      gallery_conf):
     example_fname = os.path.relpath(example_file, gallery_conf["src_dir"])
     ref_fname = example_fname.replace(os.path.sep, "_")
-    binder_conf = gallery_conf["binder"]
-    is_binder_enabled = len(binder_conf) > 0
-    jupyterlite_conf = gallery_conf["jupyterlite"]
-    is_jupyterlite_enabled = jupyterlite_conf is not None
-    interactive_example_text = ""
-    if is_binder_enabled or is_jupyterlite_enabled:
-        interactive_example_text += " or to run this example in your browser via "
-    if is_binder_enabled and is_jupyterlite_enabled:
-        interactive_example_text += "JupyterLite or Binder"
-    elif is_binder_enabled:
-        interactive_example_text += "Binder"
-    elif is_jupyterlite_enabled:
-        interactive_example_text += "JupyterLite"
     example_rst = (EXAMPLE_HEADER.format(
-        example_fname, ref_fname, interactive_example_text) + example_rst)
+        example_fname, ref_fname) + example_rst)
     fname = os.path.basename(example_file)
-    binder_badge_rst = ""
-    jupyterlite_rst = ""
-    if is_jupyterlite_enabled:
-        jupyterlite_rst = gen_jupyterlite_rst(example_file, gallery_conf)
-        jupyterlite_rst = indent(jupyterlite_rst, "  ")  # need an extra two
     example_rst += CODE_DOWNLOAD.format(
-        fname, sphinx_gallery.utils.replace_py_ipynb(fname), binder_badge_rst,
-        ref_fname, jupyterlite_rst)
+        fname, sphinx_gallery.utils.replace_py_ipynb(fname),
+        ref_fname)
     write_file_new = re.sub(r"\.py$", ".rst.new", example_file)
     with codecs.open(write_file_new, "w", encoding="utf-8") as f:
         f.write(example_rst)
@@ -50,6 +32,7 @@ extensions = [
 sphinx_gallery_conf = {
     'examples_dirs': '../examples',
     'gallery_dirs': 'auto_examples',
+    'show_signature': False,    
 }
 html_theme = 'theme'
 html_theme_path = ['.']
@@ -68,15 +51,12 @@ EXAMPLE_HEADER = """
 """
 
 CODE_DOWNLOAD = """
-.. _sphx_glr_download_{3}:
+.. _sphx_glr_download_{2}:
 
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
-{2}
-
-{4}
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: {0} <{0}>`
