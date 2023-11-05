@@ -25,3 +25,27 @@ sphinx_gallery.gen_rst.EXAMPLE_HEADER = """
 .. _sphx_glr_{1}:
 
 """
+
+sphinx_gallery.gen_rst.CODE_DOWNLOAD = """
+.. _sphx_glr_download_{3}:
+
+.. only:: html
+
+  .. container:: sphx-glr-footer sphx-glr-footer-example
+
+{2}
+
+{4}
+    .. container:: sphx-glr-download sphx-glr-download-python
+
+      :download:`Download Python source code: {0} <{0}>`
+
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
+
+      :download:`Download Jupyter notebook: {1} <{1}>`
+
+    .. container:: sphx-glr-download sphx-glr-download-colab
+
+      :download:`Open in google colab: {1} <{1}>`
+
+"""
