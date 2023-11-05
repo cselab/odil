@@ -158,7 +158,3 @@ th > :last-child,
 td > :last-child {
     margin-bottom: 0px;
 }
-
-.sphx-glr-download-link-note.admonition.note {
-    display: none;
-}
