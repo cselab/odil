@@ -218,5 +218,5 @@ infer_constant_adv
 .. raw:: html
 
    <a href="https://colab.research.google.com/github/cselab/odil/blob/gh-pages/doc/_downloads/319ebb28fc2a00a84a4950112fc7bbca/infer_constant_adv.ipynb">
-    <img src="../../_static/colab-badge.svg" alt="Open In Colab">
+       <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab">
    </a>
