@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta name="description" content="ODIL documentation." />
+    <meta http-equiv="content-language" content="en-us" />
+    <title>ODIL documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+  </head>
+  <body>
+    
+  <section class="sphx-glr-example-title" id="field">
+<span id="sphx-glr-auto-examples-basic-fields-py"></span><h1><span class="section-number">1.1. </span>field<a class="headerlink" href="#field" title="Permalink to this heading">¶</a></h1>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">odil</span>
+<span class="kn">from</span> <span class="nn">odil</span> <span class="kn">import</span> <span class="n">printlog</span>
+
+
+<span class="k">def</span> <span class="nf">operator</span><span class="p">(</span><span class="n">ctx</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="mf">0.25</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="mf">0.5</span>
+
+    <span class="c1"># Cells.</span>
+    <span class="n">xc</span><span class="p">,</span> <span class="n">yc</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">points</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;cc&#39;</span><span class="p">)</span>
+    <span class="n">uc</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s1">&#39;uc&#39;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">+=</span> <span class="p">[(</span><span class="s1">&#39;uc&#39;</span><span class="p">,</span> <span class="n">uc</span> <span class="o">-</span> <span class="n">func</span><span class="p">(</span><span class="n">xc</span><span class="p">,</span> <span class="n">yc</span><span class="p">))]</span>
+
+    <span class="c1"># Nodes.</span>
+    <span class="n">xn</span><span class="p">,</span> <span class="n">yn</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">points</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;nn&#39;</span><span class="p">)</span>
+    <span class="n">un</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s1">&#39;un&#39;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">+=</span> <span class="p">[(</span><span class="s1">&#39;un&#39;</span><span class="p">,</span> <span class="n">un</span> <span class="o">-</span> <span class="n">func</span><span class="p">(</span><span class="n">xn</span><span class="p">,</span> <span class="n">yn</span><span class="p">))]</span>
+
+    <span class="c1"># Faces in x.</span>
+    <span class="n">xfx</span><span class="p">,</span> <span class="n">yfx</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">points</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;nc&#39;</span><span class="p">)</span>
+    <span class="n">ufx</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s1">&#39;ufx&#39;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">+=</span> <span class="p">[(</span><span class="s1">&#39;ufx&#39;</span><span class="p">,</span> <span class="n">ufx</span> <span class="o">-</span> <span class="n">func</span><span class="p">(</span><span class="n">xfx</span><span class="p">,</span> <span class="n">yfx</span><span class="p">))]</span>
+
+    <span class="c1"># Faces in y.</span>
+    <span class="n">xfy</span><span class="p">,</span> <span class="n">yfy</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">points</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;cn&#39;</span><span class="p">)</span>
+    <span class="n">ufy</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s1">&#39;ufy&#39;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">+=</span> <span class="p">[(</span><span class="s1">&#39;ufy&#39;</span><span class="p">,</span> <span class="n">ufy</span> <span class="o">-</span> <span class="n">func</span><span class="p">(</span><span class="n">xfy</span><span class="p">,</span> <span class="n">yfy</span><span class="p">))]</span>
+    <span class="k">return</span> <span class="n">res</span>
+
+
+<span class="k">def</span> <span class="nf">parse_args</span><span class="p">():</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentDefaultsHelpFormatter</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--Nx&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Grid size in x&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--Ny&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Grid size in y&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--plot&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Plot fields&quot;</span><span class="p">)</span>
+    <span class="n">odil</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">add_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
+    <span class="n">odil</span><span class="o">.</span><span class="n">linsolver</span><span class="o">.</span><span class="n">add_arguments</span><span class="p">(</span><span class="n">parser</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">outdir</span><span class="o">=</span><span class="s1">&#39;out_fields&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">multigrid</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;adamn&#39;</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">frames</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="n">plot_every</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                        <span class="n">report_every</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                        <span class="n">history_every</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="n">problem</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="n">cbinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">odil</span> <span class="kn">import</span> <span class="n">plotutil</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+    <span class="n">domain</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">domain</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greys&#39;</span><span class="p">,</span> <span class="n">clip_on</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+    <span class="c1"># Cells.</span>
+    <span class="n">xc</span><span class="p">,</span> <span class="n">yc</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">points</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;cc&#39;</span><span class="p">)</span>
+    <span class="n">uc</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="s1">&#39;uc&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xc</span><span class="p">,</span> <span class="n">yc</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">uc</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;uc&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+    <span class="c1"># Nodes.</span>
+    <span class="n">xn</span><span class="p">,</span> <span class="n">yn</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">points</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;nn&#39;</span><span class="p">)</span>
+    <span class="n">un</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="s1">&#39;un&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xn</span><span class="p">,</span> <span class="n">yn</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">un</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;un&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+    <span class="c1"># Faces in x.</span>
+    <span class="n">xfx</span><span class="p">,</span> <span class="n">yfx</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">points</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;nc&#39;</span><span class="p">)</span>
+    <span class="n">ufx</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="s1">&#39;ufx&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xfx</span><span class="p">,</span> <span class="n">yfx</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">ufx</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ufx&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+    <span class="c1"># Faces in y.</span>
+    <span class="n">xfy</span><span class="p">,</span> <span class="n">yfy</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">points</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;cn&#39;</span><span class="p">)</span>
+    <span class="n">ufy</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="s1">&#39;ufy&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xfy</span><span class="p">,</span> <span class="n">yfy</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">ufy</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;C3&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ufy&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower left&#39;</span><span class="p">,</span>
+              <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+              <span class="n">ncol</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+              <span class="n">handletextpad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">xn</span><span class="p">,</span>
+                  <span class="n">yn</span><span class="p">,</span>
+                  <span class="n">uc</span><span class="p">,</span>
+                  <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+                  <span class="n">shading</span><span class="o">=</span><span class="s1">&#39;flat&#39;</span><span class="p">,</span>
+                  <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                  <span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="n">kw</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">))</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+    <span class="n">plotutil</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;grid_</span><span class="si">{</span><span class="n">frame</span><span class="si">:</span><span class="s1">05d</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">printf</span><span class="o">=</span><span class="n">printlog</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">make_problem</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">double</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span>
+    <span class="n">domain</span> <span class="o">=</span> <span class="n">odil</span><span class="o">.</span><span class="n">Domain</span><span class="p">(</span><span class="n">cshape</span><span class="o">=</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">Nx</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">Ny</span><span class="p">),</span>
+                         <span class="n">dimnames</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">],</span>
+                         <span class="n">lower</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                         <span class="n">upper</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                         <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+                         <span class="n">multigrid</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">multigrid</span><span class="p">,</span>
+                         <span class="n">mg_interp</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">mg_interp</span><span class="p">,</span>
+                         <span class="n">mg_axes</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">],</span>
+                         <span class="n">mg_nlvl</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">nlvl</span><span class="p">)</span>
+    <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">points</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;cn&#39;</span><span class="p">)</span>
+    <span class="n">ixx</span><span class="p">,</span> <span class="n">iyy</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">indices</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;cc&#39;</span><span class="p">)</span>
+
+    <span class="kn">from</span> <span class="nn">odil</span> <span class="kn">import</span> <span class="n">Field</span>
+
+    <span class="n">state</span> <span class="o">=</span> <span class="n">odil</span><span class="o">.</span><span class="n">State</span><span class="p">(</span>
+        <span class="n">fields</span><span class="o">=</span><span class="p">{</span>
+            <span class="s1">&#39;uc&#39;</span><span class="p">:</span> <span class="n">Field</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;cc&#39;</span><span class="p">)),</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;cc&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;un&#39;</span><span class="p">:</span> <span class="n">Field</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;nn&#39;</span><span class="p">)),</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;nn&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;ufx&#39;</span><span class="p">:</span> <span class="n">Field</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;nc&#39;</span><span class="p">)),</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;nc&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;ufy&#39;</span><span class="p">:</span> <span class="n">Field</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;cn&#39;</span><span class="p">)),</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;cn&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;net&#39;</span><span class="p">:</span> <span class="n">domain</span><span class="o">.</span><span class="n">make_neural_net</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span>
+        <span class="p">})</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">init_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">problem</span> <span class="o">=</span> <span class="n">odil</span><span class="o">.</span><span class="n">Problem</span><span class="p">(</span><span class="n">operator</span><span class="p">,</span> <span class="n">domain</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">problem</span><span class="p">,</span> <span class="n">state</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parse_args</span><span class="p">()</span>
+    <span class="n">odil</span><span class="o">.</span><span class="n">setup_outdir</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">problem</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">make_problem</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">callback</span> <span class="o">=</span> <span class="n">odil</span><span class="o">.</span><span class="n">make_callback</span><span class="p">(</span><span class="n">problem</span><span class="p">,</span>
+                                  <span class="n">args</span><span class="p">,</span>
+                                  <span class="n">plot_func</span><span class="o">=</span><span class="n">plot</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">plot</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">odil</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">optimize_grad</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">problem</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">callback</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-fields-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/a059939c07979526d721d26d4ede54b1/fields.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">fields.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/24eaf8dd253be2821d2f6eb64c3d9de4/fields.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">fields.ipynb</span></code></a></p>
+</div>
+</div>
+<a href="https://colab.research.google.com/github/cselab/odil/blob/gh-pages/doc/auto_examples/basic/fields.ipynb">
+ <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab">
+</a></section>
+
+
+  </body>
+</html>
