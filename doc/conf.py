@@ -5,19 +5,22 @@ import os
 import re
 import codecs
 import stat
+import hashlib
 
 
 def save_rst_example(example_rst, example_file, time_elapsed, memory_used,
                      gallery_conf):
     example_fname = os.path.relpath(example_file, gallery_conf["src_dir"])
-    ipynb_fname = re.sub("\.py$", "", example_fname) + ".ipynb"
     ref_fname = example_fname.replace(os.path.sep, "_")
     example_rst = (EXAMPLE_HEADER.format(example_fname, ref_fname) +
                    example_rst)
+    notebook_path = re.sub("\.py$", "", example_fname) + ".ipynb"
+    digest = hashlib.md5(notebook_path.encode()).hexdigest()
     fname = os.path.basename(example_file)
+    colab_path = digest + "/" + os.path.basename(notebook_path)
     example_rst += CODE_DOWNLOAD.format(
         fname, sphinx_gallery.utils.replace_py_ipynb(fname), ref_fname,
-        ipynb_fname)
+        colab_path)
     write_file_new = re.sub(r"\.py$", ".rst.new", example_file)
     with codecs.open(write_file_new, "w", encoding="utf-8") as f:
         f.write(example_rst)
@@ -34,6 +37,7 @@ sphinx_gallery_conf = {
 }
 html_theme = 'theme'
 html_theme_path = ['.']
+html_static_path = ['_static']
 pygments_style = 'sphinx'
 EXAMPLE_HEADER = """
 .. DO NOT EDIT.
@@ -66,7 +70,7 @@ CODE_DOWNLOAD = """
 .. raw:: html
 
    <a href="https://colab.research.google.com/github/cselab/odil/blob/gh-pages/doc/{3}">
-    <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab">
+    <img src="../../_static/colab-badge.svg" alt="Open In Colab">
    </a>
 """
 
