@@ -66,11 +66,10 @@ CODE_DOWNLOAD = """
 
       :download:`Download Jupyter notebook: {1} <{1}>`
 
-.. raw:: html
-
-   <a href="https://colab.research.google.com/github/cselab/odil/blob/gh-pages/doc/_downloads/{3}">
+    .. raw:: html
+      <a href="https://colab.research.google.com/github/cselab/odil/blob/gh-pages/doc/_downloads/{3}">
        <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab">
-   </a>
+      </a>
 """
 
 sphinx_gallery.gen_rst.save_rst_example = save_rst_example
