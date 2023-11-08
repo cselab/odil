@@ -42,7 +42,6 @@ odil.util.add_arguments(parser)
 odil.linsolver.add_arguments(parser)
 parser.set_defaults(multigrid=1)
 parser.set_defaults(optimizer='lbfgsb')
-parser.set_defaults(outdir='.')
 args = parser.parse_args()
 odil.setup_outdir(args)
 domain = odil.Domain(cshape=[N],
