@@ -37,6 +37,7 @@ sphinx_gallery_conf = {
     'first_notebook_cell': r"""
 %pip install -q git+https://github.com/cselab/odil"""
 }
+html_use_index = False
 html_theme = 'theme'
 html_theme_path = ['.']
 pygments_style = 'sphinx'
