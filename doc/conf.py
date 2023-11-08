@@ -1,12 +1,9 @@
-import sphinx_gallery
-import sphinx_gallery.gen_rst
-import sphinx_gallery.utils
+import codecs
+import hashlib
 import os
 import re
-import codecs
-import stat
-import hashlib
-
+import sphinx.builders.html
+import sphinx_gallery.gen_rst
 
 def save_rst_example(example_rst, example_file, time_elapsed, memory_used,
                      gallery_conf):
@@ -77,3 +74,4 @@ CODE_DOWNLOAD = """
 """
 
 sphinx_gallery.gen_rst.save_rst_example = save_rst_example
+sphinx.builders.html.StandaloneHTMLBuilder.search = False
