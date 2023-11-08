@@ -121,8 +121,6 @@ def plot_func(problem, state, epoch, frame, cbinfo):
     plotutil.savefig(fig, "rhs{}".format(suff))
     plt.close(fig)
 
-    printlog(' '.join(paths))
-
 
 def get_error(domain, extra, state, key):
     mod = domain.mod
