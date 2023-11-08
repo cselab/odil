@@ -9,19 +9,10 @@ import numpy as np
 import odil
 import matplotlib.pyplot as plt
 
-def split_wm_wp(st):
-    return st[0], [st[1]], [st[2]]
-
 def apply_bc_u_mod(st, iw, nw, mod):
-    q, qwm, qwp = split_wm_wp(st)
-    zero = mod.cast(0, q.dtype)
     extrap = odil.core.extrap_quadh
-    qm = mod.where(iw[0] == 0, extrap(qwp[0], q, zero), qwm[0])
-    qp = mod.where(iw[0] == nw[0] - 1, extrap(qwm[0], q, zero), qwp[0])
-    qwm[0], qwp[0] = qm, qp
-    st[1] = qwm[0]
-    st[2] = qwp[0]
-
+    st[1] = mod.where(iw[0] == 0, extrap(st[2], st[0], 0), st[1])
+    st[2] = mod.where(iw[0] == nw[0] - 1, extrap(st[1], st[0], 0), st[2])
 
 def operator(ctx):
     extra = ctx.extra
@@ -31,8 +22,8 @@ def operator(ctx):
     nw = ctx.size()
     u_st = [ctx.field("u"), ctx.field("u", -1), ctx.field("u", 1)]
     apply_bc_u_mod(u_st, iw, nw, mod=mod)
-    u, uwm, uwp = split_wm_wp(u_st)
-    u_ww = [(uwp[0] - 2 * u + uwm[0]) / dw[0]**2]
+    u, uwm, uwp = u_st
+    u_ww = [(uwp - 2 * u + uwm) / dw[0]**2]
     return [sum(u_ww) - extra.rhs]
 
 N = 32
