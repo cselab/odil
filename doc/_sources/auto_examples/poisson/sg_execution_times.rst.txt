@@ -1,0 +1,15 @@
+
+:orphan:
+
+.. _sphx_glr_auto_examples_poisson_sg_execution_times:
+
+
+Computation times
+=================
+**00:03.583** total execution time for **auto_examples_poisson** files:
+
++-------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_auto_examples_poisson_plot_1d.py` (``plot_1d.py``) | 00:03.583 | 0.0 MB |
++-------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_auto_examples_poisson_poisson.py` (``poisson.py``) | 00:00.000 | 0.0 MB |
++-------------------------------------------------------------------+-----------+--------+

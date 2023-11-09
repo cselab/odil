@@ -12,6 +12,23 @@
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="1D Poisson">
+
+.. only:: html
+
+  .. image:: /auto_examples/poisson/images/thumb/sphx_glr_plot_1d_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_poisson_plot_1d.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">1D Poisson</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="poisson">
 
 .. only:: html
@@ -35,5 +52,6 @@
 .. toctree::
    :hidden:
 
+   /auto_examples/poisson/plot_1d
    /auto_examples/poisson/poisson
 
