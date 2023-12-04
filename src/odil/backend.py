@@ -5,6 +5,7 @@ The interface tends to follow NumPy's conventions.
 
 import numpy as np
 from argparse import Namespace
+from functools import partial
 
 
 class ModBase:
@@ -52,10 +53,15 @@ class ModNumpy(ModBase):
         self.full = mod.full
         self.sum = mod.sum
         self.mean = mod.mean
+        self.cumsum = mod.cumsum
+        self.std = mod.std
+        self.median = mod.median
         self.min = mod.min
         self.max = mod.max
         self.log = mod.log
         self.tanh = mod.tanh
+        self.relu = lambda x: mod.maximum(x, 0)
+        self.arctan2 = mod.arctan2
         self.sigmoid = lambda x: 1 / (1 + mod.exp(-x))
         self.arange = mod.arange
         self.norm = mod.linalg.norm
@@ -81,17 +87,24 @@ class ModNumpy(ModBase):
         self.matmul = mod.matmul
         self.variable = mod.array
         if jax:
+
             def split_by_sizes(array, sizes, axis=0):
                 cumsum = np.cumsum(sizes)[:-1]
                 return jax.numpy.split(array, cumsum, axis=axis)
         else:
+
             def split_by_sizes(array, sizes, axis=0):
                 cumsum = np.cumsum(sizes)[:-1]
                 return mod.split(array, cumsum, axis=axis)
+
         self.split_by_sizes = split_by_sizes
 
         if jax:
             self.stop_gradient = jax.lax.stop_gradient
+            self.broadcast_to = jax.numpy.broadcast_to
+            self.jit_wrap = lambda **kwargs: partial(jax.jit, **kwargs)
+        else:
+            self.broadcast_to = mod.broadcast_to
 
         def convolution(input, filters, strides, padding):
             '''
@@ -116,8 +129,10 @@ class ModNumpy(ModBase):
         self.random = Namespace()
         if jax:
             self.random.key = None
+
             def set_seed(seed):
                 self.random.key = jax.random.PRNGKey(seed)
+
             def uniform(shape, minval, maxval, dtype):
                 if self.random.key is None:
                     set_seed(np.random.default_rng().integers(1 << 16))
@@ -127,14 +142,31 @@ class ModNumpy(ModBase):
                                           minval=minval,
                                           maxval=maxval,
                                           dtype=dtype)
+
+            def normal(shape, mean=0, stddev=1, dtype=None):
+                if self.random.key is None:
+                    set_seed(np.random.default_rng().integers(1 << 16))
+                self.random.key, subkey = jax.random.split(self.random.key)
+                mean = self.cast(mean, dtype)
+                stddev = self.cast(stddev, dtype)
+                return mean + stddev * jax.random.normal(
+                    subkey, shape=shape, dtype=dtype)
         else:
+
             def set_seed(seed):
                 self.random.set_seed(seed)
+
             def uniform(shape, minval, maxval, dtype):
-                return mod.random.uniform(low=minval, hight=maxval,
+                return mod.random.uniform(low=minval, high=maxval,
                                           size=shape).astype(dtype)
+
+            def normal(shape, mean, stddev, dtype):
+                return mod.random.normal(loc=mean, scale=stddev,
+                                         size=shape).astype(dtype)
+
         self.random.set_seed = set_seed
         self.random.uniform = uniform
+        self.random.normal = normal
 
         def conv_transpose(input,
                            filters,
@@ -177,8 +209,11 @@ class ModTensorflow(ModBase):
         self.mean = mod.reduce_mean
         self.max = mod.reduce_max
         self.min = mod.reduce_min
+        self.std = mod.math.reduce_std
         self.log = mod.math.log
+        self.cumsum = mod.math.cumsum
         self.tanh = mod.math.tanh
+        self.relu = mod.nn.relu
         self.sigmoid = mod.math.sigmoid
         self.full = mod.fill
         self.arange = mod.range
@@ -186,6 +221,7 @@ class ModTensorflow(ModBase):
         self.mod = mod
         self.modsp = modsp
         self.floor = mod.math.floor
+        self.arctan2 = mod.math.atan2
         self.concatenate = mod.concat
         self.constant = mod.constant
         self.is_tensor = mod.is_tensor
@@ -202,6 +238,12 @@ class ModTensorflow(ModBase):
         self.variable = mod.Variable
         self.tf = mod
         self.stop_gradient = mod.stop_gradient
+        self.broadcast_to = mod.broadcast_to
+
+        def jit_wrap(static_argnames=None, **kwargs):
+            return partial(mod.function, **kwargs)
+
+        self.jit_wrap = jit_wrap
         self.jax = None
 
         def pad(array, pad_width, mode):
@@ -228,10 +270,13 @@ class ModTensorflow(ModBase):
 
         # Random.
         self.random = Namespace()
+
         def set_seed(seed):
             mod.random.set_seed(seed)
+
         self.random.set_seed = set_seed
         self.random.uniform = mod.random.uniform
+        self.random.normal = mod.random.normal
 
         if modsp is not None:
 

@@ -16,15 +16,20 @@ def solve(matr, rhs, args, status=None, linsolver="direct"):
 
     eye = get_sparse_eye(matr.shape[1])
     matr_reg = matr.T.dot(matr).tocsr()
-    if args.beta:
-        matr_reg += args.beta**2 * eye
-    if args.betadiag:
-        matr_reg += args.betadiag**2 * scipy.sparse.diags(matr_reg.diagonal())
+    if args.linsolver_damp:
+        matr_reg += args.linsolver_damp**2 * eye
+    if args.linsolver_dampdiag:
+        matr_reg += args.linsolver_dampdiag**2 * scipy.sparse.diags(
+            matr_reg.diagonal())
     rhs_reg = matr.T.dot(rhs)
     if linsolver == "direct":
+        # Normal equations.
         sol = scipy.sparse.linalg.spsolve(matr_reg,
                                           rhs_reg,
                                           permc_spec='MMD_ATA')
+    elif linsolver == "directsq":
+        # Original system, assuming a square matrix.
+        sol = scipy.sparse.linalg.spsolve(matr, rhs, permc_spec='MMD_ATA')
     elif linsolver == "direct_cu":
         import cupy
         import cupyx.scipy.sparse
@@ -41,7 +46,7 @@ def solve(matr, rhs, args, status=None, linsolver="direct"):
                 scipy.sparse.linalg.lsqr(
             matr,
             rhs,
-            damp=args.beta,
+            damp=args.linsolver_damp,
             atol=args.linsolver_tol,
             btol=args.linsolver_tol,
             iter_lim=args.linsolver_maxiter)[:8]
@@ -96,6 +101,7 @@ def add_arguments(parser):
                         choices=[
                             "multigrid",
                             "direct",
+                            "directsq",
                             "direct_cu",
                             "sparseqr",
                             "lsqr",
@@ -112,11 +118,11 @@ def add_arguments(parser):
                         type=float,
                         default=1e-6,
                         help="Tolerance for linear solver")
-    parser.add_argument('--beta',
+    parser.add_argument('--linsolver_damp',
                         type=float,
                         default=0,
                         help="Relaxation factor (0: no relaxation)")
-    parser.add_argument('--betadiag',
+    parser.add_argument('--linsolver_dampdiag',
                         type=float,
                         default=0,
                         help="Multiplier for diagonal (0: no relaxation)")

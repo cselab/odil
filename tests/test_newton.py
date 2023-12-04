@@ -118,19 +118,14 @@ def make_problem(args):
 
 
 def main():
+    if odil.runtime.backend == 'jax':
+        print('Skip test_newton.py with jax backend. Not implemented.')
+        exit(0)
     args = parse_args()
     odil.setup_outdir(args)
     problem, state = make_problem(args)
     domain = problem.domain
     extra = problem.extra
-    '''
-    values, grads, names = problem.eval_operator_grad(state)
-    for i in range(len(grads)):
-        printlog(f'\ni={i}')
-        printlog(f'value\n', values[i])
-        printlog(f'grad\n', grads[i])
-    exit()
-    '''
 
     # Linearize the operator.
     vector, matrix = problem.linearize(state)
@@ -154,7 +149,7 @@ def main():
         else:
             status = 'FAIL'
             failed += 1
-        print(f'{key:<4} {status} {error:.8g}')
+        print(f'{key:<4} {error:.6e} {status}')
     exit(failed)
 
 

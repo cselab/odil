@@ -144,6 +144,10 @@ def add_arguments(parser):
                         help="Continue from history in state_*_train.pickle"
                         ". By default, infers the name from --checkpoint"
                         ". Set to '' to disable default behavior")
+    parser.add_argument('--callback_update_state',
+                        type=int,
+                        default=0,
+                        help="Update state after callback")
     parser.add_argument('--bfgs_m',
                         type=int,
                         default=50,
@@ -215,7 +219,6 @@ def optimize_newton(args, problem, state, callback=None, **kwargs):
     printlog("Running {} optimizer".format(opt.displayname))
 
     # Compute loss and residuals with initial state, to be used by callback.
-    arrays = domain.arrays_from_state(state)
     pinfo = eval_pinfo(state)
     if callback:
         callback(state, args.epoch_start, pinfo)
@@ -247,7 +250,11 @@ def optimize_grad(args, optname, problem, state, callback=None, **kwargs):
 
     def callback_wrap(arrays, epoch, pinfo):
         domain.arrays_to_state(arrays, state)
-        return callback(state, epoch, pinfo)
+        callback(state, epoch, pinfo)
+        if args.callback_update_state:
+            new = domain.arrays_from_state(state)
+            for i in range(len(new)):
+                arrays[i] = new[i]
 
     # Custom parameters.
     if args.bfgs_m is not None:
@@ -370,19 +377,20 @@ def make_callback(problem,
         history = cbinfo.history
         time_prev = time.time()
 
-        task_report = (args.report_every and epoch % args.report_every == 0)
-        task_history = (history is not None
-                        and (epoch % args.history_every == 0
-                             or epoch < args.history_full))
-        task_plot = (epoch % args.plot_every == 0 and (epoch or args.frames))
-        task_checkpoint = (args.checkpoint_every
-                           and epoch % args.checkpoint_every == 0)
+        cbinfo.task_report = (args.report_every
+                              and epoch % args.report_every == 0)
+        cbinfo.task_history = (history is not None
+                               and (epoch % args.history_every == 0
+                                    or epoch < args.history_full))
+        cbinfo.task_plot = (epoch % args.plot_every == 0
+                            and (epoch or args.frames))
+        cbinfo.task_checkpoint = (args.checkpoint_every
+                                  and epoch % args.checkpoint_every == 0)
 
-        cbinfo.task_report = task_report
-        cbinfo.task_history = task_history
-        cbinfo.task_plot = task_plot
-        cbinfo.task_checkpoint = task_checkpoint
+        cbinfo.pinfo = pinfo
 
+        if isinstance(problem.tracers, dict):
+            problem.tracers['epoch'] = epoch
         if epoch_func is not None:
             epoch_func(problem, state, epoch, cbinfo)
 
@@ -392,7 +400,7 @@ def make_callback(problem,
         time_prev = curtime
         walltime = curtime - cbinfo.time_start - cbinfo.time_callback
 
-        if task_report:
+        if cbinfo.task_report:
             memusage = get_memory_usage_kb()
             printlog("\nepoch={:05d}".format(epoch))
             if pinfo and 'norms' in pinfo:
@@ -414,7 +422,7 @@ def make_callback(problem,
                 cbinfo.walltime = walltime
                 cbinfo.epoch = epoch
 
-        if task_history:
+        if cbinfo.task_history:
             memusage = get_memory_usage_kb()
             history.append('epoch', epoch)
             history.append('frame', cbinfo.frame)
@@ -435,12 +443,12 @@ def make_callback(problem,
                 history_func(problem, state, epoch, history, cbinfo)
             history.write()
 
-        if task_plot:
+        if cbinfo.task_plot:
             if plot_func is not None:
                 plot_func(problem, state, epoch, cbinfo.frame, cbinfo)
             cbinfo.frame += 1
 
-        if task_checkpoint:
+        if cbinfo.task_checkpoint:
             if checkpoint_func is not None:
                 checkpoint_func(problem, state, epoch, cbinfo)
             else:

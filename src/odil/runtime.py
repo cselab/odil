@@ -43,8 +43,8 @@ elif backend == 'jax':
     import jax
     if not usegpu:
         jax.config.update('jax_platform_name', 'cpu')
-        # Enable support for float64 operations.
-        jax.config.update("jax_enable_x64", True)
+    # Enable support for float64 operations.
+    jax.config.update("jax_enable_x64", True)
 
     mod = ModNumpy(jax.numpy, jax=jax)
 else:

@@ -105,7 +105,8 @@ class Domain:
                         self.cshape[d],
                         endpoint=False,
                         dtype=self.dtype)
-        x += (x[1] - x[0]) * 0.5
+        if len(x) > 1:
+            x += (x[1] - x[0]) * 0.5
         return x
 
     def _points_node_1d(self, d):
@@ -546,11 +547,12 @@ class Domain:
         res = lambda *inputs: eval_neural_net(net, inputs, self.mod)
         return res
 
-    def get_context(self, state, extra=None):
+    def get_context(self, state, extra=None, tracers=None):
         ctx = Context(self.domain,
                       state,
                       watch_func=lambda _: None,
                       extra=extra,
+                      tracers=tracers,
                       distinct_shift=False)
         return ctx
 
@@ -741,6 +743,7 @@ def interp_to_finer(u, loc=None, method=None, mod=None, depth=1):
         # Offsets of nodes of a dim-dimensional cube.
         dd = np.meshgrid(*[[0] if l == '.' else [0, 1] for l in loc],
                          indexing='ij')
+        dshape = tuple(1 if l == '.' else 2 for l in loc)
         # Example dim=2: dd = [(0,0), (0,1), (1,0), (1,1)].
         dd = np.reshape(dd, (dim, -1)).T
         # Indices with location in node.
@@ -754,12 +757,12 @@ def interp_to_finer(u, loc=None, method=None, mod=None, depth=1):
 
         uu = [term(*dd, ww=[weight(r, d) for r in dd]) for d in dd]
         res = mod.stack(uu)
-        res = mod.reshape(res, (2, ) * dim + upad.shape)
+        res = mod.reshape(res, dshape + upad.shape)
         for i in range(dim):
-            # Convert to list as required by `stack()`.
             res = [res[i] for i in range(res.shape[0])]
             res = mod.stack(res, axis=dim + i)
-        res = mod.reshape(res, tuple(s * 2 for s in upad.shape))
+        res = mod.reshape(res,
+                          tuple(s * d for s, d in zip(upad.shape, dshape)))
         # Remove edges.
         oslice = {'n': slice(0, -1), 'c': slice(1, -3), '.': slice(0, None)}
         res = res[tuple(oslice[l] for l in loc)]
@@ -888,7 +891,7 @@ def make_neural_net(layers,
                      activation=activation)
 
 
-def eval_neural_net(net: NeuralNet, inputs, mod):
+def eval_neural_net(net: NeuralNet, inputs, mod, frozen=False):
     '''
     Evaluates a fully connected neural network.
 
@@ -896,6 +899,8 @@ def eval_neural_net(net: NeuralNet, inputs, mod):
         Neural network to evaluate.
     inputs: `list` of `ndarray`
         List of input arrays. All arrays must have the same shape.
+    frozen: `bool`
+        Apply `stop_gradient()` to the weights.
 
     Returns: `list` of `ndarray`
         List of output arrays.
@@ -911,8 +916,13 @@ def eval_neural_net(net: NeuralNet, inputs, mod):
     for w, b in zip(weights, biases):
         assert_equal(w.shape[0], b.shape[0])
 
+    if frozen:
+        weights = [mod.stop_gradient(w) for w in weights]
+        biases = [mod.stop_gradient(b) for b in biases]
+
     func_act = {
         'tanh': mod.tanh,
+        'relu': mod.relu,
         'none': lambda x: x,
     }[net.activation]
 
@@ -952,6 +962,7 @@ class Context:
                  state,
                  watch_func=None,
                  extra=None,
+                 tracers=None,
                  distinct_shift=False):
         '''
         watch_func: `callable`
@@ -960,11 +971,19 @@ class Context:
             If True, fields with different shifts returned by `field()` are
             considered distinct symbols, which is used by `linearize()`
             and `eval_operator_grad()`.
+        extra:
+            Regular Python value to be available as `ctx.extra`.
+            Typically an `argparse.Namespace` object.
+            Changing this value does not trigger recompilation.
+        tracers: `dict`
+            Dictionary of arrays, scalars, or standard Python containers thereof.
+            This argument becomes part of the signature of the jitted function.
         '''
         self.domain = domain
         self.state = state
         self.watch_func = watch_func or (lambda _: None)
         self.extra = extra
+        self.tracers = tracers
         self.dtype = domain.dtype
         self.mod = domain.mod
         self.distinct_shift = distinct_shift
@@ -1055,7 +1074,7 @@ class Context:
             array = mod.stop_gradient(array)
         return array
 
-    def neural_net(self, key):
+    def neural_net(self, key, frozen=False):
         domain = self.domain
         net = self.state.fields[key]
         if not isinstance(net, NeuralNet):
@@ -1066,13 +1085,14 @@ class Context:
         self.watch_func(arrays)
         if self.distinct_shift:
             self.key_to_array_jac[(key, None, None)] = arrays
-        res = lambda *inputs: eval_neural_net(net, inputs, self.mod)
+        res = lambda *inputs: eval_neural_net(
+            net, inputs, self.mod, frozen=frozen)
         return res
 
 
 class Problem:
 
-    def __init__(self, operator, domain, extra=None, jit=None):
+    def __init__(self, operator, domain, extra=None, tracers=None, jit=None):
         '''
         operator: callable(mod, ctx)
             Discrete operator returning fields on grid.
@@ -1085,6 +1105,11 @@ class Problem:
         self.domain = domain
         self.operator = operator
         self.extra = extra
+        if tracers is None:
+            tracers = dict()
+        if 'epoch' not in tracers:
+            tracers['epoch'] = 0
+        self.tracers = tracers
         mod = domain.mod
         if jit is None:
             from .runtime import jit
@@ -1121,7 +1146,8 @@ class Problem:
                 ctx = Context(domain,
                               cache['state'],
                               watch_func=tape.watch,
-                              extra=self.extra)
+                              extra=self.extra,
+                              tracers=self.tracers)
                 ff = self.operator(ctx)
                 assert isinstance(ff, (tuple, list)) and len(ff), \
                     'Operator must return a non-empty list'
@@ -1159,11 +1185,14 @@ class Problem:
         jax = mod.jax
         cache = self._cache_eval_loss_grad
 
-        def eval_loss(arrays):
+        def eval_loss(arrays, tracers):
             if 'state' not in cache:
                 cache['state'] = domain.init_state(state)
             domain.arrays_to_state(arrays, cache['state'])
-            ctx = Context(domain, cache['state'], extra=self.extra)
+            ctx = Context(domain,
+                          cache['state'],
+                          extra=self.extra,
+                          tracers=tracers)
             ff = self.operator(ctx)
             assert isinstance(ff, (tuple, list)) and len(ff), \
                 'Operator must return a non-empty list'
@@ -1180,10 +1209,10 @@ class Problem:
             ]
             return loss, (terms, names, norms)
 
-        def func(arrays):
+        def func(arrays, tracers):
             # Create gradient function.
             fgrad = jax.value_and_grad(eval_loss, argnums=[0], has_aux=True)
-            (loss, (terms, names, norms)), grads = fgrad(arrays)
+            (loss, (terms, names, norms)), grads = fgrad(arrays, tracers)
             # Use cache to store the names as JAX does not support `str`.
             cache['names'] = names
             return loss, grads[0], terms, norms
@@ -1192,7 +1221,7 @@ class Problem:
             cache['func'] = jax.jit(func)
 
         arrays = domain.arrays_from_state(state)
-        loss, grads, terms, norms = cache['func'](arrays)
+        loss, grads, terms, norms = cache['func'](arrays, self.tracers)
         return loss, grads, terms, cache['names'], norms
 
     def linearize(self, state, modsp=None):
@@ -1339,9 +1368,12 @@ class Problem:
         if 'state' not in cache:
             cache['state'] = domain.init_state(state)
 
-        def func(arrays):
+        def func(arrays, tracers):
             domain.arrays_to_state(arrays, cache['state'])
-            ctx = Context(domain, cache['state'], extra=self.extra)
+            ctx = Context(domain,
+                          cache['state'],
+                          extra=self.extra,
+                          tracers=tracers)
             ff = self.operator(ctx)
             assert isinstance(ff, (tuple, list)) and len(ff), \
                 'Operator must return a non-empty list'
@@ -1356,7 +1388,7 @@ class Problem:
 
         # Evaluate gradients.
         arrays = domain.arrays_from_state(state)
-        values = cache['func'](arrays)
+        values = cache['func'](arrays, self.tracers)
         return values, cache['names']
 
     def _eval_operator_jax(self, state):
@@ -1365,25 +1397,28 @@ class Problem:
         jax = mod.jax
         cache = self._cache_eval_operator
 
-        def func(arrays):
+        def func(arrays, tracers):
             if 'state' not in cache:
                 cache['state'] = domain.init_state(state)
             domain.arrays_to_state(arrays, cache['state'])
-            ctx = Context(domain, cache['state'], extra=self.extra)
+            ctx = Context(domain,
+                          cache['state'],
+                          extra=self.extra,
+                          tracers=tracers)
             ff = self.operator(ctx)
             assert isinstance(ff, (tuple, list)) and len(ff), \
                 'Operator must return a non-empty list'
             names = [f[0] if isinstance(f, tuple) else '' for f in ff]
             values = [f[1] if isinstance(f, tuple) else f for f in ff]
-            if self._cache_names is None:
-                self._cache_names = names
+            if 'names' not in cache:
+                cache['names'] = names
             return values
 
         if 'func' not in cache:
             cache['func'] = jax.jit(func)
 
         arrays = domain.arrays_from_state(state)
-        values = cache['func'](arrays)
+        values = cache['func'](arrays, self.tracers)
         return values, cache['names']
 
     def eval_operator(self, state):
@@ -1411,7 +1446,7 @@ class Problem:
         if 'state' not in cache:
             cache['state'] = domain.init_state(state)
 
-        def func(arrays):
+        def func(arrays, tracers):
             with tf.GradientTape(persistent=True,
                                  watch_accessed_variables=False) as tape:
 
@@ -1420,6 +1455,7 @@ class Problem:
                               cache['state'],
                               watch_func=tape.watch,
                               extra=self.extra,
+                              tracers=tracers,
                               distinct_shift=True)
                 ff = self.operator(ctx)
                 assert isinstance(ff, (tuple, list)) and len(ff), \
@@ -1448,7 +1484,7 @@ class Problem:
 
         # Evaluate gradients.
         arrays = domain.arrays_from_state(state)
-        values, grads = cache['func'](arrays)
+        values, grads = cache['func'](arrays, self.tracers)
         return values, grads, cache['names']
 
     def _eval_operator_grad_jax(self, state):
@@ -1475,7 +1511,7 @@ class Problem:
         return values, grads, names
 
     def get_context(self, state):
-        return self.domain.get_context(extra=self.extra)
+        return self.domain.get_context(extra=self.extra, tracers=self.tracers)
 
 
 def checkpoint_save(domain, state, path):
@@ -1499,7 +1535,7 @@ def checkpoint_save(domain, state, path):
         pickle.dump(res, f)
 
 
-def checkpoint_load(domain, state, path, skip_missing=True):
+def checkpoint_load(domain, state, path, skip_missing=True, keys=None):
     '''
     Loads fields from a checkpoint file to state.
     The checkpoint file must contain a mapping with one entry `fields`
@@ -1510,11 +1546,14 @@ def checkpoint_load(domain, state, path, skip_missing=True):
         A state with defined fields to load.
     skip_missing: `bool`
         If True, ignore fields from `field_to_load` missing in the checkpoint.
+    keys: `list` of `str`
+        List of field keys to load.
     '''
     with open(path, 'rb') as f:
         s = pickle.load(f)
     data = s.get('fields', dict())
-    for key in state.fields:
+    keys = keys or state.fields.keys()
+    for key in keys:
         if key not in data:
             if not skip_missing:
                 raise RuntimeError(f"Field {key} not found in {path}")
