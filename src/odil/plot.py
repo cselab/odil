@@ -70,8 +70,8 @@ def plot_1d(
     for data, i in (u_state, 0), (u_ref, 1):
         axes[i] = fig.add_subplot(spec[1:-1, i])
         ax = axes[i]
-        ax.spines[['left', 'right', 'bottom', 'top']].set_visible(True)
-        ax.spines[['left', 'right', 'bottom', 'top']].set_linewidth(0.25)
+        ax.spines[:].set_visible(True)
+        ax.spines[:].set_linewidth(0.25)
         ax.imshow(data.T,
                   interpolation=interpolation,
                   cmap=cmap,
@@ -95,8 +95,8 @@ def plot_1d(
         yslice = i * (domain.cshape[iy] - 1) // max(1, nslices - 1)
         ns = nslices - 1 - i
         ax = fig.add_subplot(spec[2 * ns:2 * ns + 2, 2])
-        ax.spines[['left', 'right', 'bottom', 'top']].set_visible(True)
-        ax.spines[['left', 'right', 'bottom', 'top']].set_linewidth(0.25)
+        ax.spines[:].set_visible(True)
+        ax.spines[:].set_linewidth(0.25)
         l0, = ax.plot(xx,
                       u_ref[:, yslice],
                       c=cref,
@@ -110,10 +110,10 @@ def plot_1d(
                       label="inferred",
                       linewidth=0.6)
         # ax.axhline(y=0, color='black', linewidth=0.5)
-        ax.set_xlim(xlim)
-        ax.set_ylim(slim)
         ax.set_xticks([])
         ax.set_yticks([])
+        ax.set_xlim(xlim)
+        ax.set_ylim(slim)
         if invertx:
             ax.invert_xaxis()
         ax.arrow(-0.025,

@@ -5,6 +5,7 @@ import numpy as np
 
 import odil
 from odil import printlog
+from odil import plotutil
 """
 Inference of unknown constant parameters in the advection-diffusion equation
 from the solution at the initial and final time.
@@ -42,12 +43,13 @@ def transform_u(u, extra, mod):
     return u
 
 
-def operator_adv(mod, ctx):
+def operator_adv(ctx):
+    mod = ctx.mod
     dt, dx = ctx.step('t', 'x')
     x = ctx.points('x')
     it, ix = ctx.indices('t', 'x')
     nt, nx = ctx.size('t', 'x')
-    coeff = ctx.array('coeff')
+    coeff = ctx.field('coeff')
     extra = ctx.extra
 
     def stencil_roll(q):
@@ -86,7 +88,6 @@ def parse_args():
     parser.set_defaults(optimizer='lbfgsb')
     parser.set_defaults(double=1)
     parser.set_defaults(multigrid=1)
-    parser.set_defaults(plot_title=1)
     parser.set_defaults(outdir='out_infer_constant_adv')
     return parser.parse_args()
 
@@ -100,30 +101,21 @@ def plot(problem, state, epoch, frame, cbinfo=None):
     printlog('diff={:.5g}, src={:.5g}, vel={:.5g}'.format(
         *np.array(state.fields['coeff'].array)))
 
-    title0 = "u epoch={:05d}".format(epoch) if args.plot_title else None
     path0 = "u_{:05d}.png".format(frame)
     printlog(path0)
 
-    uu = domain.regular_array(state.fields['u'])
+    uu = domain.field(state, 'u')
     uu = np.array(transform_u(uu, extra, domain.mod))
-
-    x_imp = None
-    y_imp = None
-    marker_color = None
 
     umax = max(abs(np.max(uu_exact)), abs(np.min(uu_exact)))
     odil.plot.plot_1d(domain,
                       uu_exact,
                       uu,
                       path=path0,
-                      title=title0,
                       cmap='RdBu_r',
                       nslices=5,
                       transpose=True,
                       transparent=False,
-                      x_imp=x_imp,
-                      y_imp=y_imp,
-                      marker_color=marker_color,
                       umin=-umax,
                       umax=umax)
 
