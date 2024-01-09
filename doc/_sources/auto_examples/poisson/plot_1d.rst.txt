@@ -13,7 +13,15 @@
 1D Poisson
 ==========
 
-.. GENERATED FROM PYTHON SOURCE LINES 6-61
+This example solves the Poisson equation in 1D
+
+.. math::
+    \frac{\partial^2 u}{\partial x^2} = f
+
+where :math:`f=\frac{\partial^2 u_\mathrm{ref}}{\partial x^2}` and
+:math:`u_\mathrm{ref}` is a reference solution.
+
+.. GENERATED FROM PYTHON SOURCE LINES 14-69
 
 
 
@@ -100,6 +108,7 @@
       :download:`Download Jupyter notebook: plot_1d.ipynb <plot_1d.ipynb>`
 
     .. raw:: html
+
       <a href="https://colab.research.google.com/github/cselab/odil/blob/gh-pages/doc/_downloads/1d585bf137ffd9906e08a8ecc825a674/plot_1d.ipynb">
        <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab">
       </a>

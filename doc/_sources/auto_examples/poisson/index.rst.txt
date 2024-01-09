@@ -12,7 +12,7 @@
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="1D Poisson">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example solves the Poisson equation in 1D">
 
 .. only:: html
 

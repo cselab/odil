@@ -25,7 +25,24 @@ Below is a gallery of examples
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="field">
+    <div class="sphx-glr-thumbcontainer" tooltip="Harmonic oscillator">
+
+.. only:: html
+
+  .. image:: /auto_examples/basic/images/thumb/sphx_glr_harmonic_oscillator_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_basic_harmonic_oscillator.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Harmonic oscillator</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Field">
 
 .. only:: html
 
@@ -36,7 +53,7 @@ Below is a gallery of examples
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">field</div>
+      <div class="sphx-glr-thumbnail-title">Field</div>
     </div>
 
 
@@ -83,7 +100,7 @@ Below is a gallery of examples
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="1D Poisson">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example solves the Poisson equation in 1D">
 
 .. only:: html
 

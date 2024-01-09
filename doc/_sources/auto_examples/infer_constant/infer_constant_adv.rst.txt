@@ -216,6 +216,7 @@ infer_constant_adv
       :download:`Download Jupyter notebook: infer_constant_adv.ipynb <infer_constant_adv.ipynb>`
 
     .. raw:: html
+
       <a href="https://colab.research.google.com/github/cselab/odil/blob/gh-pages/doc/_downloads/319ebb28fc2a00a84a4950112fc7bbca/infer_constant_adv.ipynb">
        <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab">
       </a>
