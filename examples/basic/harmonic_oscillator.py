@@ -1,9 +1,15 @@
+#!/usr/bin/env python3
+'''
+Harmonic oscillator
+===================
+'''
+
+
 import numpy as np
 import torch
 import torch.nn as nn
 import matplotlib.pyplot as plt
 import math
-
 
 def oscillator(d, w0, x):
     w = math.sqrt(w0**2 - d**2)

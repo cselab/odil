@@ -26,6 +26,7 @@ def save_rst_example(example_rst, example_file, time_elapsed, memory_used,
 
 extensions = [
     "sphinx_gallery.gen_gallery",
+    "sphinx.ext.imgmath",
 ]
 sphinx_gallery_conf = {
     'examples_dirs': '../examples',
@@ -35,8 +36,8 @@ sphinx_gallery_conf = {
 %pip install -q git+https://github.com/cselab/odil"""
 }
 html_use_index = False
-html_theme = 'theme'
-html_theme_path = ['.']
+html_theme = 'alabaster'
+
 pygments_style = 'sphinx'
 EXAMPLE_HEADER = """
 .. DO NOT EDIT.
@@ -75,3 +76,9 @@ CODE_DOWNLOAD = """
 
 sphinx_gallery.gen_rst.save_rst_example = save_rst_example
 sphinx.builders.html.StandaloneHTMLBuilder.search = False
+
+# Latex.
+html_math_renderer = 'imgmath'
+imgmath_image_format = 'svg'
+imgmath_font_size = 15
+imgmath_use_preview = True

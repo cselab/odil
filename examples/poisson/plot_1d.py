@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
-"""
+r"""
 1D Poisson
 ==========
+
+This example solves the Poisson equation in 1D
+
+.. math::
+    \frac{\partial^2 u}{\partial x^2} = f
+
+where :math:`f=\frac{\partial^2 u_\mathrm{ref}}{\partial x^2}` and
+:math:`u_\mathrm{ref}` is a reference solution.
 """
 
 import odil
