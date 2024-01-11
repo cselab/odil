@@ -30,14 +30,14 @@ Values `CUDA_VISIBLE_DEVICES=` and `CUDA_VISIBLE_DEVICES=-1` disable GPU support
 
 ## Publications
 
-1. Karnakov P, Litvinov S, Koumoutsakos P. Optimizing a DIscrete Loss
-   (ODIL) to solve forward and inverse problems for partial
-   differential equations using machine learning tools.
-   _arXiv preprint_. 2022
+1. Karnakov P, Litvinov S, Koumoutsakos P. Solving inverse problems in physics
+   by optimizing a discrete loss: Fast and accurate learning without neural networks. PNAS Nexus, 2024.
+   [DOI:10.1093/pnasnexus/pgae005](https://doi.org/10.1093/pnasnexus/pgae005)
    [arXiv:2205.04611](https://arxiv.org/abs/2205.04611)
+
 
 2. Karnakov P, Litvinov S, Koumoutsakos P. Flow reconstruction by
    multiresolution optimization of a discrete loss with automatic
-   differentiation. Eur. Phys. J. 2023
+   differentiation. Eur. Phys. J, 2023.
    [DOI:10.1140/epje/s10189-023-00313-7](https://doi.org/10.1140/epje/s10189-023-00313-7)
    [arXiv:2303.04679](https://arxiv.org/abs/2303.04679)
