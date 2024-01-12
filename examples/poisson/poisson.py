@@ -210,29 +210,6 @@ def plot_func(problem, state, epoch, frame, cbinfo):
         plotutil.savefig(fig, "rhs{}".format(suff))
         plt.close(fig)
 
-        if 0 and args.multigrid:  # XXX
-            uw = np.array(state.weights['u'][1])
-            uu = MultigridDecomp.decomp_to_fields(uw,
-                                                  problem.nnw,
-                                                  tf,
-                                                  cell=args.cellbased)
-            fig, ax = plt.subplots()
-            us = [None] * len(uu)
-            us[0] = uu[-1]
-            for i in range(1, len(uu)):
-                us[i] = us[i - 1] + uu[len(uu) - 1 - i]
-            for i in range(len(uu)):
-                ax.plot(x,
-                        us[i],
-                        label='levels {:} to {:}'.format(len(uu) - i, len(uu)))
-            ax.plot(x, extra.ref_u, c='k', label='reference')
-            ax.set_ylim(0, 1)
-            ax.set_xlabel('x')
-            ax.set_ylabel('u')
-            ax.legend(loc='upper left', bbox_to_anchor=(1., 1.))
-            plotutil.savefig(fig, "upart{}".format(suff))
-            plt.close(fig)
-
     if args.dump_xmf and ndim in [2, 3]:
         u = domain.field(state, key)
         path = key + '{}.xmf'.format(suff)

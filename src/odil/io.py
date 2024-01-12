@@ -31,8 +31,13 @@ def read_raw(xmfpath):
     return u
 
 
-def write_raw_xmf(xmfpath, rawpath, count, spacing=(1, 1, 1), name='data',
-                  precision=8, cell=True):
+def write_raw_xmf(xmfpath,
+                  rawpath,
+                  count,
+                  spacing=(1, 1, 1),
+                  name='data',
+                  precision=8,
+                  cell=True):
     '''
     Writes XMF metadata for a `.raw` datafile.
     xmfpath: path to output `.xmf` file
@@ -113,7 +118,11 @@ def write_raw_xmf(xmfpath, rawpath, count, spacing=(1, 1, 1), name='data',
         fout.write(txt)
 
 
-def write_raw_with_xmf(u, xmfpath, rawpath=None, spacing=(1, 1, 1), cell=True,
+def write_raw_with_xmf(u,
+                       xmfpath,
+                       rawpath=None,
+                       spacing=(1, 1, 1),
+                       cell=True,
                        name='data'):
     '''
     Writes binary data in raw format with XMF metadata.
@@ -134,8 +143,13 @@ def write_raw_with_xmf(u, xmfpath, rawpath=None, spacing=(1, 1, 1), cell=True,
     return xmfpath
 
 
-def write_vtk_poly(fout, points, polygons, point_fields=None, cell_fields=None,
-                   comment="", fmt='%.16g'):
+def write_vtk_poly(fout,
+                   points,
+                   polygons,
+                   point_fields=None,
+                   cell_fields=None,
+                   comment="",
+                   fmt='%.16g'):
     """
     Writes polygons to ASCII legacy VTK file.
     fout: `str` or file-like

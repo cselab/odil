@@ -1,4 +1,3 @@
-tensorflow
 matplotlib
 scipy
 numpy

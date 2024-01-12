@@ -5,13 +5,6 @@ import os
 
 import numpy as np
 
-geodata_qualitative = [
-    "#FF1F5B", "#00CD6C", "#009ADE", "#AF58BA", "#FFC61E", "#F28522",
-    "#A0B1BA", "#A6761D", "#E9002D", "#FFAA00", "#00B000"
-]
-
-g_colorscheme = geodata_qualitative[:7]
-
 
 def plot_1d(
     domain,

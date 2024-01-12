@@ -5,7 +5,6 @@ import matplotlib
 if int(os.environ.get("ODIL_AGG", 1)):
     matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-
 mplstyle = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                         'odil.mplstyle')
 if int(os.environ.get("ODIL_STYLE", 1)):
@@ -23,6 +22,7 @@ def set_extlist(extlist=None):
 
 
 set_extlist()
+
 
 def apply_clip_box(ax, artists, lower=(0, 0), upper=(1, 1.02)):
     clipbox = matplotlib.transforms.TransformedBbox(

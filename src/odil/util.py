@@ -8,7 +8,6 @@ import numpy as np
 
 from .optimizer import make_optimizer, Optimizer
 from .history import History
-
 g_log_file = sys.stderr  # File used by printlog()
 g_log_echo = False  # True if printlog() should print to stderr.
 
@@ -19,10 +18,12 @@ def assert_equal(first, second, msg=None):
             first, second, msg))
 
 
-def set_log_file(f, echo=False):
+def set_log_file(f=None, echo=None):
     global g_log_file, g_log_echo
-    g_log_file = f
-    g_log_echo = echo
+    if f is not None:
+        g_log_file = f
+    if echo is not None:
+        g_log_echo = echo
 
 
 def printlog(*msg):
@@ -275,10 +276,12 @@ def optimize_grad(args, optname, problem, state, callback=None, **kwargs):
     if callback:
         callback(state, args.epoch_start, pinfo)
 
-    arrays, optinfo = opt.run(arrays, loss_grad=loss_grad,
+    arrays, optinfo = opt.run(arrays,
+                              loss_grad=loss_grad,
                               epochs=args.epochs - args.epoch_start,
                               callback=callback_wrap if callback else None,
-                              epoch_start=args.epoch_start, lr=args.lr,
+                              epoch_start=args.epoch_start,
+                              lr=args.lr,
                               **kwargs)
     return arrays, optinfo
 
@@ -306,6 +309,17 @@ def get_env_config():
 
 
 def setup_outdir(args, relpath_args=None):
+    '''
+    Creates the output directory, configuration `args.json`, and log file `train.log`.
+    Updates the arguments with new relative paths and number of epochs.
+    Sets random seeds.
+
+    args: `argparse.Namespace`
+        Arguments produced by `argparse.ArgumentParser.parse_args()`.
+    relpath_args: `list` of `str`
+        List of names of attributes of `args` to be treated as relative paths.
+        They are updated to paths relative to the output directory.
+    '''
     from . import runtime
     mod = runtime.mod
     outdir = args.outdir

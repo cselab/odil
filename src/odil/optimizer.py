@@ -24,6 +24,12 @@ class Optimizer:
         return x0, optinfo
 
 
+class EarlyStopError(Exception):
+
+    def __init__(self, msg):
+        super().__init__(msg)
+
+
 class LbfgsbOptimizer(Optimizer):
 
     def __init__(self,
@@ -112,9 +118,14 @@ class LbfgsbOptimizer(Optimizer):
                                              maxfun=np.inf,
                                              callback=callback_wrap)
         optinfo = Namespace()
-        optinfo.epochs = sinfo['nit']
-        optinfo.evals = sinfo['funcalls']
+        optinfo.warnflag = sinfo['warnflag']
         optinfo.task = sinfo['task']
+        optinfo.evals = sinfo['funcalls']
+        optinfo.epochs = sinfo['nit']
+        if optinfo.warnflag not in [0, 1]:
+            raise EarlyStopError(", ".join(
+                "{:}={:}".format(key, sinfo.get(key, ''))
+                for key in ['warnflag', 'task', 'funcalls', 'nit']))
         arrays = flat_to_arrays(x)
         return arrays, optinfo
 
