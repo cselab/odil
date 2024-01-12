@@ -1,11 +1,11 @@
 [project]
 name = "odil"
-version = "0.1"
+version = "0.1.0"
 authors = [
     { name="Petr Karnakov", email="pkarnakov@gmail.com" },
     { name="Sergey Litvinov", email="slitvinov@gmail.com" },
 ]
-description = "Solving inverse problems for differential equations by Optimizing a DIscrete Loss"
+description = "ODIL (Optimizing a DIscrete Loss) is a framework for solving inverse problems for differential equations"
 readme = "README.md"
 dependencies = [
     "numpy",

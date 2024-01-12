@@ -8,14 +8,13 @@ ODIL solves the same problems as the popular PINN (Physics-Informed Neural Netwo
 Key features:
 * automatic differentiation using TensorFlow or JAX
 * optimization by gradient-based methods (Adam, L-BFGS) and Newton's method
-* orders of magnitude lower computational cost than PINN [[1]](https://arxiv.org/abs/2205.04611)
+* orders of magnitude lower computational cost than PINN [[1]](https://doi.org/10.1093/pnasnexus/pgae005)
 * multigrid decomposition for faster optimization [[2]](https://doi.org/10.1140/epje/s10189-023-00313-7)
-* examples and benchmarks [[slides]](https://cselab.github.io/odil/slides/usc_workshop.pdf)
 
 ## Installation
 
 ```
-pip install .
+pip install odil
 ```
 
 or
@@ -27,6 +26,19 @@ pip install git+https://github.com/cselab/odil.git
 
 To enable GPU support, provide a non-empty list of devices in `CUDA_VISIBLE_DEVICES`.
 Values `CUDA_VISIBLE_DEVICES=` and `CUDA_VISIBLE_DEVICES=-1` disable GPU support.
+
+## Developers
+
+ODIL is developed by researchers at [Harvard University](https://cse-lab.seas.harvard.edu/)
+
+* [Petr Karnakov](https://cse-lab.seas.harvard.edu/people/petr-karnakov)
+  [<img src="https://cselab.github.io/aphros/images/twitter.png" height=16>](https://twitter.com/pkarnakov)
+  [<img src="https://cselab.github.io/aphros/images/youtube.png" height=16>](https://www.youtube.com/@pkarnakov)
+* [Sergey Litvinov](https://cse-lab.seas.harvard.edu/people/sergey-litvinov)
+
+advised by
+
+* [Prof. Petros Koumoutsakos](https://cse-lab.seas.harvard.edu/people/petros-koumoutsakos)
 
 ## Publications
 
@@ -41,3 +53,4 @@ Values `CUDA_VISIBLE_DEVICES=` and `CUDA_VISIBLE_DEVICES=-1` disable GPU support
    differentiation. Eur. Phys. J, 2023.
    [DOI:10.1140/epje/s10189-023-00313-7](https://doi.org/10.1140/epje/s10189-023-00313-7)
    [arXiv:2303.04679](https://arxiv.org/abs/2303.04679)
+   [slides](https://cselab.github.io/odil/slides/usc_workshop.pdf)
