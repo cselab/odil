@@ -275,14 +275,12 @@ def optimize_grad(args, optname, problem, state, callback=None, **kwargs):
     if callback:
         callback(state, args.epoch_start, pinfo)
 
-    arrays, optinfo = opt.run(arrays,
-                              loss_grad=loss_grad,
+    arrays, optinfo = opt.run(arrays, loss_grad=loss_grad,
                               epochs=args.epochs - args.epoch_start,
                               callback=callback_wrap if callback else None,
-                              epoch_start=args.epoch_start,
-                              lr=args.lr,
+                              epoch_start=args.epoch_start, lr=args.lr,
                               **kwargs)
-    printlog(optinfo)
+    return arrays, optinfo
 
 
 def optimize(args, optname, problem, state, callback, **kwargs):

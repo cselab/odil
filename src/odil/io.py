@@ -8,8 +8,8 @@ def parse_raw_xmf(xmfpath):
     Returns shape and path to `.raw` file
     xmfpath: path to `.xmf` metadata file
     '''
-    with open(xmfpath) as f:
-        text = ''.join(f.read().split('\n'))
+    with open(xmfpath) as fin:
+        text = ''.join(fin.read().split('\n'))
     m = re.findall(
         '<Xdmf.*<Attribute.*'
         '<DataItem.*<DataItem.*'
@@ -31,13 +31,8 @@ def read_raw(xmfpath):
     return u
 
 
-def write_raw_xmf(xmfpath,
-                  rawpath,
-                  count,
-                  spacing=(1, 1, 1),
-                  name='data',
-                  precision=8,
-                  cell=True):
+def write_raw_xmf(xmfpath, rawpath, count, spacing=(1, 1, 1), name='data',
+                  precision=8, cell=True):
     '''
     Writes XMF metadata for a `.raw` datafile.
     xmfpath: path to output `.xmf` file
@@ -114,15 +109,11 @@ def write_raw_xmf(xmfpath,
     txt = txt.replace('*}', '}')
     txt = txt.format(**info)
 
-    with open(xmfpath, 'w') as f:
-        f.write(txt)
+    with open(xmfpath, 'w') as fout:
+        fout.write(txt)
 
 
-def write_raw_with_xmf(u,
-                       xmfpath,
-                       rawpath=None,
-                       spacing=(1, 1, 1),
-                       cell=True,
+def write_raw_with_xmf(u, xmfpath, rawpath=None, spacing=(1, 1, 1), cell=True,
                        name='data'):
     '''
     Writes binary data in raw format with XMF metadata.
@@ -141,3 +132,81 @@ def write_raw_with_xmf(u,
     write_raw_xmf(xmfpath, rawrelpath, u.shape, spacing, name, precision, cell)
     u.tofile(rawpath)
     return xmfpath
+
+
+def write_vtk_poly(fout, points, polygons, point_fields=None, cell_fields=None,
+                   comment="", fmt='%.16g'):
+    """
+    Writes polygons to ASCII legacy VTK file.
+    fout: `str` or file-like
+        Path to output legacy VTK file or file-like object.
+    points: `numpy.ndarray`, shape (npoints, 3)
+        3D points.
+    polygons: `list` [`list` [ `int` ]], shape (ncells, ...)
+        Polygons as lists of indices in `points`.
+    point_fields: `dict` from `str` to array of shape (npoints,)
+        Mapping from names to arrays storing scalar fields on points.
+    cell_fields: `dict` from `str` to array of shape (ncells,)
+        Mapping from names to arrays storing scalar fields on cells.
+    """
+    path = None
+    if type(fout) is str:
+        path = fout
+        fout = open(path, 'wb')
+
+    def write(data):
+        if type(data) is str:
+            data = data.encode()
+        fout.write(data)
+
+    write("# vtk DataFile Version 2.0\n")
+
+    write(comment + '\n')
+
+    write("ASCII\n")
+
+    write("DATASET POLYDATA\n")
+
+    # Write points.
+    npoints = len(points)
+    write("POINTS {:} float\n".format(npoints))
+    np.savetxt(fout, points, fmt=fmt)
+
+    # Write cells.
+    ncells = len(polygons)
+    num_poly_data = len(polygons) + sum([len(p) for p in polygons])
+    write("POLYGONS {:} {:}\n".format(ncells, num_poly_data))
+    for p in polygons:
+        write(' '.join(map(str, [len(p)] + p)) + '\n')
+
+    # Write point fields.
+    if point_fields is None:
+        point_fields = dict()
+    if point_fields:
+        write("\nPOINT_DATA {:}\n".format(npoints))
+    for name, array in point_fields.items():
+        array = np.reshape(array, -1)
+        if array.size != npoints:
+            raise RuntimeError(
+                f"Expected equal array.size={array.size} and npoints={npoints}"
+            )
+        write("SCALARS {:} float\n".format(name))
+        write("LOOKUP_TABLE default\n")
+        np.savetxt(fout, array, fmt=fmt)
+
+    # Write cell fields.
+    if cell_fields is None:
+        cell_fields = dict()
+    if cell_fields:
+        write("\nCELL_DATA {:}\n".format(ncells))
+    for name, array in cell_fields.items():
+        array = np.reshape(array, -1)
+        if array.size != ncells:
+            raise RuntimeError(
+                f"Expected equal array.size={array.size} and ncells={ncells}")
+        write("SCALARS {:} float\n".format(name))
+        write("LOOKUP_TABLE default\n")
+        np.savetxt(fout, array, fmt=fmt)
+
+    if path:
+        fout.close()

@@ -183,8 +183,8 @@ def plot_func(problem, state, epoch, frame, cbinfo):
     mod = domain.mod
     extra = problem.extra
     args = extra.args
-    # Only plot the last frame.
     if args.frames == 0 and frame is not None:
+        # Only plot the last frame.
         return
     ndim = domain.ndim
     key = 'u'

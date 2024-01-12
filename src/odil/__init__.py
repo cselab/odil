@@ -15,7 +15,7 @@ def lazy_import(name):
 runtime = lazy_import("odil.runtime")
 plot = lazy_import("odil.plot")
 
-from .io import parse_raw_xmf, read_raw, write_raw_xmf, write_raw_with_xmf
+from .io import parse_raw_xmf, read_raw, write_raw_xmf, write_raw_with_xmf, write_vtk_poly
 from .backend import ModBase, ModNumpy, ModTensorflow
 from .history import History
 from .util import setup_outdir, optimize, make_callback, printlog
