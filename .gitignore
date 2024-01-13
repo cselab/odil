@@ -3,5 +3,6 @@ __pycache__
 *.egg-info
 *.pyc
 *.swp
+/*.tar.gz
 /data
 /dist
