@@ -122,7 +122,7 @@ def operator(ctx):
 def parse_args():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--ndim', type=int, default=3, help="Space dimension")
+    parser.add_argument('--ndim', type=int, default=2, help="Space dimension")
     parser.add_argument('--N', type=int, default=32, help="Grid size")
     parser.add_argument('--cellbased',
                         type=int,
@@ -156,13 +156,12 @@ def parse_args():
 
     parser.set_defaults(frames=4,
                         report_every=100,
-                        history_every=1,
-                        plot_every=100)
-    parser.set_defaults(history_full=50)
+                        history_every=10,
+                        plot_every=100,
+                        history_full=50)
 
+    parser.set_defaults(optimizer='adam')
     parser.set_defaults(multigrid=1)
-    parser.set_defaults(optimizer='lbfgsb')
-    parser.set_defaults(every_factor=1)
     parser.set_defaults(lr=0.005)
     parser.set_defaults(double=1)
 

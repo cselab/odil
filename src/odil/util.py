@@ -129,6 +129,10 @@ def add_arguments(parser):
                         type=int,
                         default=None,
                         help="Double precision. Defaults to runtime.dtype")
+    parser.add_argument('--echo',
+                        type=int,
+                        default=0,
+                        help="Echo log to stderr")
     parser.add_argument('--epoch_start',
                         type=int,
                         default=0,
@@ -337,7 +341,7 @@ def setup_outdir(args, relpath_args=None):
     # Switch to output directory.
     os.makedirs(outdir, exist_ok=True)
     os.chdir(outdir)
-    set_log_file(open("train.log", 'w'))
+    set_log_file(open("train.log", 'w'), echo=args.echo)
 
     # Update relative paths.
     if relpath_args is None:

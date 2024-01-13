@@ -1,0 +1,20 @@
+#!/bin/sh -eu
+
+: ${case=default}
+: ${k=2}
+
+export OMP_NUM_THREADS=1
+
+case $case in
+  default)
+    echo "$case k=$k"
+    outdir=out_poisson
+    ./poisson.py --echo 1 --N 64 --outdir $outdir --ndim 2 --ref osc --rhs exact --osc_k $k --epochs 1000 --frames 0
+    ./plot_field.py --data "$outdir/data.pickle" --out field
+    ./plot_train.py --data "$outdir/train.csv" --out train
+  ;;
+  *)
+    echo "Unknown case=$case"
+    exit 1
+  ;;
+esac
