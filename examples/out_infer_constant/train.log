@@ -1,0 +1,40 @@
+./infer_constant.py
+Running L-BFGS-B optimizer
+
+epoch=00000
+residual: 0:1.9361
+diff=0, src=0, vel=0.001
+memory: 499 MiB
+walltime: 4.597 s
+walltime+callback: 4.597 s
+u_00000.png
+
+epoch=00050
+residual: 0:0.25941
+diff=0.074909, src=0.13313, vel=0.0011297
+memory: 542 MiB
+walltime: 6.557 s
+walltime+callback: 6.918 s
+walltime/epoch: 131.146 ms
+throughput: 0.031M cells/s
+u_00001.png
+
+epoch=00100
+residual: 0:0.057637
+diff=0.012931, src=0.10354, vel=0.19582
+memory: 549 MiB
+walltime: 6.990 s
+walltime+callback: 7.643 s
+walltime/epoch: 8.652 ms
+throughput: 0.473M cells/s
+u_00002.png
+
+epoch=00150
+residual: 0:0.0073975
+diff=0.0071785, src=0.10007, vel=0.20508
+memory: 553 MiB
+walltime: 7.418 s
+walltime+callback: 8.359 s
+walltime/epoch: 8.557 ms
+throughput: 0.479M cells/s
+u_00003.png

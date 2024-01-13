@@ -1,0 +1,101 @@
+./poisson.py --echo 1 --N 64 --outdir out_poisson --ndim 2 --ref osc --rhs exact --osc_k 2 --epochs 1000 --frames 0
+multigrid levels: [(64, 64), (32, 32), (16, 16), (8, 8), (4, 4), (2, 2)]
+Running AdamNative optimizer
+
+epoch=00000
+residual: 0:145.67
+error: u:0.46781
+memory: 506 MiB
+walltime: 4.461 s
+walltime+callback: 4.461 s
+
+epoch=00100
+residual: 0:10.746
+error: u:0.096756
+memory: 555 MiB
+walltime: 5.131 s
+walltime+callback: 8.524 s
+walltime/epoch: 51.309 ms
+throughput: 0.080M cells/s
+
+epoch=00200
+residual: 0:4.6095
+error: u:0.0727
+memory: 555 MiB
+walltime: 5.516 s
+walltime+callback: 9.565 s
+walltime/epoch: 3.853 ms
+throughput: 1.063M cells/s
+
+epoch=00300
+residual: 0:4.8607
+error: u:0.055269
+memory: 555 MiB
+walltime: 5.896 s
+walltime+callback: 10.605 s
+walltime/epoch: 3.802 ms
+throughput: 1.077M cells/s
+
+epoch=00400
+residual: 0:5.0233
+error: u:0.041641
+memory: 555 MiB
+walltime: 6.278 s
+walltime+callback: 11.653 s
+walltime/epoch: 3.821 ms
+throughput: 1.072M cells/s
+
+epoch=00500
+residual: 0:3.6048
+error: u:0.031918
+memory: 555 MiB
+walltime: 6.665 s
+walltime+callback: 12.716 s
+walltime/epoch: 3.861 ms
+throughput: 1.061M cells/s
+
+epoch=00600
+residual: 0:3.2206
+error: u:0.025163
+memory: 555 MiB
+walltime: 7.043 s
+walltime+callback: 13.759 s
+walltime/epoch: 3.784 ms
+throughput: 1.082M cells/s
+
+epoch=00700
+residual: 0:4.9261
+error: u:0.02032
+memory: 555 MiB
+walltime: 7.440 s
+walltime+callback: 14.832 s
+walltime/epoch: 3.972 ms
+throughput: 1.031M cells/s
+
+epoch=00800
+residual: 0:3.5743
+error: u:0.0166
+memory: 555 MiB
+walltime: 7.830 s
+walltime+callback: 15.906 s
+walltime/epoch: 3.901 ms
+throughput: 1.050M cells/s
+
+epoch=00900
+residual: 0:3.8628
+error: u:0.013602
+memory: 555 MiB
+walltime: 8.203 s
+walltime+callback: 16.952 s
+walltime/epoch: 3.726 ms
+throughput: 1.099M cells/s
+
+epoch=01000
+residual: 0:5.9586
+error: u:0.011104
+memory: 556 MiB
+walltime: 8.584 s
+walltime+callback: 18.010 s
+walltime/epoch: 3.813 ms
+throughput: 1.074M cells/s
+data.pickle

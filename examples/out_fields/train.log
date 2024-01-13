@@ -1,0 +1,26 @@
+./fields.py
+Running AdamNative optimizer
+
+epoch=00000
+residual: uc:0.53855, un:0.55434, ufx:0.54367, ufy:0.54932
+memory: 493 MiB
+walltime: 3.629 s
+walltime+callback: 3.629 s
+grid_00000.png
+
+epoch=00050
+residual: uc:0.034254, un:0.052562, ufx:0.03799, ufy:0.047799
+memory: 567 MiB
+walltime: 5.570 s
+walltime+callback: 5.986 s
+walltime/epoch: 111.399 ms
+throughput: 0.000M cells/s
+
+epoch=00100
+residual: uc:0.0029653, un:0.0035613, ufx:0.0031611, ufy:0.0032508
+memory: 567 MiB
+walltime: 5.756 s
+walltime+callback: 6.175 s
+walltime/epoch: 3.728 ms
+throughput: 0.009M cells/s
+grid_00001.png
