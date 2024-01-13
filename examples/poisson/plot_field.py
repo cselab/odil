@@ -27,14 +27,14 @@ def plot_field(path, u_odil, u_ref, vmax):
         ax.set_title(title, y=0.97)
         ax.set_xticks([])
         ax.set_yticks([])
-    plotutil.savefig(fig, path, bbox_inches='tight', pad_inches=0.01)
+    plotutil.savefig(fig, path)
     plt.close(fig)
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", type=str, default='out_poisson/data.pickle')
-    parser.add_argument("--out", type=str, default='field')
+    parser.add_argument("--out", type=str, default='out_poisson/field')
     parser.add_argument("--vmax", type=float, default=1)
     args = parser.parse_args()
 

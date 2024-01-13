@@ -3,12 +3,14 @@
 import argparse
 import numpy as np
 import pickle
-
 import odil
 from odil import plotutil
 import matplotlib.pyplot as plt
 from odil import printlog
-from odil.core import Approx
+"""
+Solves the Poisson equation in a multi-dimensional cube
+with zero Dirichlet boundary conditions.
+"""
 
 
 def get_ref_u(name, args, domain):
@@ -122,7 +124,11 @@ def operator(ctx):
 def parse_args():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--ndim', type=int, default=2, help="Space dimension")
+    parser.add_argument('--ndim',
+                        type=int,
+                        choices=[1, 2, 3, 4, 5, 6],
+                        default=2,
+                        help="Space dimension")
     parser.add_argument('--N', type=int, default=32, help="Grid size")
     parser.add_argument('--cellbased',
                         type=int,
@@ -150,7 +156,7 @@ def parse_args():
     parser.add_argument('--mgloss',
                         type=int,
                         default=0,
-                        help="Use multigrid norm in loss")
+                        help="Use multigrid norm with mgloss terms in loss")
     odil.util.add_arguments(parser)
     odil.linsolver.add_arguments(parser)
 
@@ -199,14 +205,14 @@ def plot_func(problem, state, epoch, frame, cbinfo):
         ax.set_xlabel('x')
         ax.set_ylabel('u')
         ax.legend(loc='upper left', bbox_to_anchor=(1., 1.))
-        plotutil.savefig(fig, "u{}".format(suff))
+        plotutil.savefig(fig, "u" + suff, pad_inches=0.01)
         plt.close(fig)
 
         fig, ax = plt.subplots()
         ax.plot(x, extra.rhs)
         ax.set_xlabel('x')
         ax.set_ylabel('rhs')
-        plotutil.savefig(fig, "rhs{}".format(suff))
+        plotutil.savefig(fig, "rhs" + suff, pad_inches=0.01)
         plt.close(fig)
 
     if args.dump_xmf and ndim in [2, 3]:
@@ -263,7 +269,7 @@ def make_problem(args):
     dtype = np.float64 if args.double else np.float32
     ndim = args.ndim
     domain = odil.Domain(cshape=[args.N] * ndim,
-                         dimnames=['x', 'y', 'z', 's'][:ndim],
+                         dimnames=['x', 'y', 'z', 'sx', 'sy', 'sz'][:ndim],
                          multigrid=args.multigrid,
                          dtype=dtype)
     if domain.multigrid:

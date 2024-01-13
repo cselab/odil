@@ -2,9 +2,13 @@
 
 import argparse
 import numpy as np
-
 import odil
 from odil import printlog
+from odil import plotutil
+import matplotlib.pyplot as plt
+"""
+Demonstrates the use of fields with values centered in cell, faces, and nodes.
+"""
 
 
 def operator(ctx):
@@ -44,12 +48,13 @@ def parse_args():
     odil.util.add_arguments(parser)
     odil.linsolver.add_arguments(parser)
     parser.set_defaults(outdir='out_fields')
-    parser.set_defaults(multigrid=1)
-    parser.set_defaults(optimizer='adamn', lr=1e-2)
+    parser.set_defaults(echo=1)
     parser.set_defaults(frames=1,
                         plot_every=100,
-                        report_every=10,
+                        report_every=50,
                         history_every=10)
+    parser.set_defaults(optimizer='adam', lr=1e-2)
+    parser.set_defaults(multigrid=1)
     return parser.parse_args()
 
 
@@ -95,7 +100,8 @@ def plot(problem, state, epoch, frame, cbinfo=None):
 
     ax.set_aspect('equal')
     ax.set_axis_off()
-    plotutil.savefig(fig, f'grid_{frame:05d}', printf=printlog)
+    plotutil.savefig(fig, "grid_{:05d}".format(frame), printf=printlog)
+    plt.close(fig)
 
 
 def make_problem(args):

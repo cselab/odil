@@ -17,6 +17,7 @@ lines.markersize: 2
 pdf.fonttype: 42
 ps.fonttype: 42
 savefig.bbox: tight
+savefig.pad_inches: 0.01
 savefig.transparent: False
 svg.hashsalt: 2022
 xtick.major.size: 2.5

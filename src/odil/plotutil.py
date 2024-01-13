@@ -32,10 +32,10 @@ def apply_clip_box(ax, artists, lower=(0, 0), upper=(1, 1.02)):
 
 
 def savefig(fig,
-            path,
+            path_without_ext,
             extlist=None,
             skip_existing=False,
-            printf=print,
+            printf=None,
             **kwargs):
     if printf is None:
         printf = lambda _: None
@@ -48,12 +48,12 @@ def savefig(fig,
             'DateModified': None,
             'CreationDate': None,
         } if ext == 'pdf' else {}
-        p = path + '.' + ext
-        if skip_existing and os.path.isfile(p):
-            printf("skip existing '{}'".format(p))
+        path = path_without_ext + '.' + ext
+        if skip_existing and os.path.isfile(path):
+            printf("skip existing '{}'".format(path))
             continue
-        printf(p)
-        fig.savefig(p, metadata=metadata, **kwargs)
+        printf(path)
+        fig.savefig(path, metadata=metadata, **kwargs)
 
 
 def savelegend(fig, ax, path, **kwargs):

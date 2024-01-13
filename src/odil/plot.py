@@ -129,11 +129,7 @@ def plot_1d(
               fontsize=7)
 
     if path is not None:
-        fig.savefig(path,
-                    dpi=dpi,
-                    bbox_inches='tight',
-                    pad_inches=0.01,
-                    transparent=transparent)
+        fig.savefig(path, dpi=dpi, pad_inches=0.01, transparent=transparent)
         plt.close(fig)
     else:
         return fig
