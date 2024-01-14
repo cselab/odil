@@ -22,6 +22,15 @@ or
 pip install git+https://github.com/cselab/odil.git
 ```
 
+## Interactive demos
+
+These demos use a C++ implementation of ODIL using [autodiff](https://github.com/pkarnakov/autodiff) and [Emscripten](https://emscripten.org) to run interactively in the web browser.
+
+| [<img src="https://cselab.github.io/odil/media/wasm_poisson.png" width=120>](https://pkarnakov.github.io/autodiff/poisson) |
+|:---:|
+| [Poisson](https://pkarnakov.github.io/autodiff/poisson) |
+
+
 ## Using GPU
 
 To enable GPU support, provide a non-empty list of devices in `CUDA_VISIBLE_DEVICES`.
@@ -32,8 +41,8 @@ Values `CUDA_VISIBLE_DEVICES=` and `CUDA_VISIBLE_DEVICES=-1` disable GPU support
 ODIL is developed by researchers at [Harvard University](https://cse-lab.seas.harvard.edu/)
 
 * [Petr Karnakov](https://cse-lab.seas.harvard.edu/people/petr-karnakov)
-  [<img src="https://cselab.github.io/aphros/images/twitter.png" height=16>](https://twitter.com/pkarnakov)
-  [<img src="https://cselab.github.io/aphros/images/youtube.png" height=16>](https://www.youtube.com/@pkarnakov)
+  [<img src="https://cselab.github.io/odil/media/twitter.png" height=16>](https://twitter.com/pkarnakov)
+  [<img src="https://cselab.github.io/odil/media/youtube.png" height=16>](https://www.youtube.com/@pkarnakov)
 * [Sergey Litvinov](https://cse-lab.seas.harvard.edu/people/sergey-litvinov)
 
 advised by
