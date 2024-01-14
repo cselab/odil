@@ -11,6 +11,14 @@ Key features:
 * orders of magnitude lower computational cost than PINN [[1]](https://doi.org/10.1093/pnasnexus/pgae005)
 * multigrid decomposition for faster optimization [[2]](https://doi.org/10.1140/epje/s10189-023-00313-7)
 
+## Interactive demos
+
+These demos use a C++ implementation of ODIL with [autodiff](https://github.com/pkarnakov/autodiff) and [Emscripten](https://emscripten.org) to run interactively in the web browser.
+
+| [<img src="https://cselab.github.io/odil/media/wasm_poisson.png" width=120>](https://pkarnakov.github.io/autodiff/poisson) | [<img src="https://cselab.github.io/odil/media/wasm_wave.png" width=120>](https://pkarnakov.github.io/autodiff/wave) |
+|:---:|:---:|
+| [Poisson](https://pkarnakov.github.io/autodiff/poisson) | [Wave](https://pkarnakov.github.io/autodiff/wave) |
+
 ## Installation
 
 ```
@@ -21,15 +29,6 @@ or
 ```
 pip install git+https://github.com/cselab/odil.git
 ```
-
-## Interactive demos
-
-These demos use a C++ implementation of ODIL using [autodiff](https://github.com/pkarnakov/autodiff) and [Emscripten](https://emscripten.org) to run interactively in the web browser.
-
-| [<img src="https://cselab.github.io/odil/media/wasm_poisson.png" width=120>](https://pkarnakov.github.io/autodiff/poisson) |
-|:---:|
-| [Poisson](https://pkarnakov.github.io/autodiff/poisson) |
-
 
 ## Using GPU
 
