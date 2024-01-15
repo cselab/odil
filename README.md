@@ -15,9 +15,9 @@ Key features:
 
 These demos use a C++ implementation of ODIL with [autodiff](https://github.com/pkarnakov/autodiff) and [Emscripten](https://emscripten.org) to run interactively in the web browser.
 
-| [<img src="https://cselab.github.io/odil/media/wasm_poisson.png" width=120>](https://pkarnakov.github.io/autodiff/poisson) | [<img src="https://cselab.github.io/odil/media/wasm_wave.png" width=120>](https://pkarnakov.github.io/autodiff/wave) |
-|:---:|:---:|
-| [Poisson](https://pkarnakov.github.io/autodiff/poisson) | [Wave](https://pkarnakov.github.io/autodiff/wave) |
+| [<img src="https://cselab.github.io/odil/media/wasm_poisson.png" width=120>](https://pkarnakov.github.io/autodiff/demos/poisson.html) | [<img src="https://cselab.github.io/odil/media/wasm_wave.png" width=120>](https://pkarnakov.github.io/autodiff/demos/wave.html) | [<img src="https://cselab.github.io/odil/media/wasm_heat.png" width=120>](https://pkarnakov.github.io/autodiff/demos/heat.html) |
+|:---:|:---:|:---:|
+| [Poisson](https://pkarnakov.github.io/autodiff/demos/poisson.html) | [Wave](https://pkarnakov.github.io/autodiff/demos/wave.html) | [Heat](https://pkarnakov.github.io/autodiff/demos/heat.html) |
 
 ## Installation
 
