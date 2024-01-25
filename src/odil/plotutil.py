@@ -1,19 +1,25 @@
 import os
 import numpy as np
 
+# Check if running in Colab.
+try:
+    import google.colab
+    g_incolab = True
+except:
+    g_incolab = False
+
 import matplotlib
-if int(os.environ.get("ODIL_AGG", 1)):
+if int(os.environ.get("ODIL_AGG", not g_incolab)):
     matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import logging
-
 logging.getLogger("matplotlib.font_manager").setLevel(logging.ERROR)
 mplstyle = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                         'odil.mplstyle')
 if int(os.environ.get("ODIL_STYLE", 1)):
     matplotlib.style.use(mplstyle)
 
-
+# List of extensions for savefig().
 g_extlist = None
 
 
@@ -39,12 +45,14 @@ def savefig(fig,
             path_without_ext,
             extlist=None,
             skip_existing=False,
+            close_figure=True,
             printf=None,
             **kwargs):
     if printf is None:
         printf = lambda _: None
     if extlist is None:
         extlist = g_extlist
+    paths = []
     for ext in extlist:
         metadata = {
             'Date': None,
@@ -56,8 +64,11 @@ def savefig(fig,
         if skip_existing and os.path.isfile(path):
             printf("skip existing '{}'".format(path))
             continue
-        printf(path)
         fig.savefig(path, metadata=metadata, **kwargs)
+        paths.append(path)
+    if not g_incolab and close_figure:
+        plt.close(fig)
+    return paths
 
 
 def savelegend(fig, ax, path, **kwargs):
