@@ -18,6 +18,7 @@ plot = lazy_import("odil.plot")
 from .io import (
     parse_raw_xmf,
     read_raw,
+    read_raw_with_xmf,
     write_raw_xmf,
     write_raw_with_xmf,
     write_vtk_poly,

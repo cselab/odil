@@ -6,7 +6,7 @@ ARGS =
 
 default: all
 
-all: test_domain test_mg_interp test_mg_restrict test_optimize test_optimize_32 test_newton
+all: test_domain test_mg_interp test_mg_restrict test_optimize test_optimize_32 test_newton test_io
 
 test_domain:
 test_mg_interp:
@@ -19,6 +19,9 @@ test_optimize_lbfgs:
 test_newton:
 test_newton_jax:
 	@echo "Skip $@, not implemented"
+
+test_io:
+	$(PYTHON) -m unittest ./test_io.py
 
 test_%: test_%.py
 	ODIL_BACKEND=$(BACKEND) ODIL_DTYPE=$(DTYPE) $(PYTHON) $< $(ARGS)

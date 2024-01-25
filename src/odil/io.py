@@ -10,32 +10,57 @@ def parse_raw_xmf(xmfpath):
     '''
     with open(xmfpath) as fin:
         text = ''.join(fin.read().split('\n'))
+    # Extract RAW path and shape.
     m = re.findall(
         '<Xdmf.*<Attribute.*'
         '<DataItem.*<DataItem.*'
-        '<DataItem.*Dimensions="(\d*) (\d*) (\d*)".*?> *([a-z0-9_.]*)',
+        '<DataItem.*Dimensions="(\d*) (\d*) (\d*)".*Precision="(\d*)".*?> *([a-z0-9_.]*)',
         text)[0]
-    shape = tuple(map(int, m[:3]))
-    rawpath = m[3]
+    count = tuple(map(int, m[:3]))
+    precision = int(m[3])
+    rawpath = m[4]
     rawpath = os.path.join(os.path.dirname(xmfpath), rawpath)
-    return shape, rawpath
+
+    # Extract name and location.
+    m = re.findall(
+        '<Attribute Name="([^"]*)" AttributeType="Scalar" Center="([a-zA-Z]*)">',
+        text)[0]
+    name = m[0]
+    if m[1] not in ["Cell", "Node"]:
+        raise RuntimeError("Unknown Center='{}'".format(m[1]))
+    cell = (m[1] == "Cell")
+
+    m = re.findall('<DataItem Name="Spacing".*?> *(.*?)<', text)[0]
+    spacing = tuple(map(float, reversed(m.split())))
+    meta = {
+        'rawpath': rawpath,
+        'count': count,
+        'spacing': spacing,
+        'name': name,
+        'precision': precision,
+        'cell': cell,
+    }
+    return meta
 
 
-def read_raw(xmfpath):
+def read_raw_with_xmf(xmfpath):
     '''
-    Returns array from scalar field in raw format.
+    Returns array from scalar field in raw format and parsed metadata.
     xmfpath: path to xmf metadata file
     '''
-    shape, rawpath = parse_raw_xmf(xmfpath)
-    u = np.fromfile(rawpath).reshape(shape)
-    return u
+    meta = parse_raw_xmf(xmfpath)
+    dtype = {4: np.float32, 8: np.float64}[meta['precision']]
+    u = np.fromfile(meta['rawpath'], dtype).reshape(meta['count'])
+    return u, meta
 
+def read_raw(xmfpath):
+    return read_raw_with_xmf(xmfpath)
 
 def write_raw_xmf(xmfpath,
                   rawpath,
                   count,
                   spacing=(1, 1, 1),
-                  name='data',
+                  name=None,
                   precision=8,
                   cell=True):
     '''
@@ -44,8 +69,11 @@ def write_raw_xmf(xmfpath,
     rawpath: path to binary `.raw` file to be linked
     count: array size as (Nz, Ny, Nx)
     name: name of field
-    cell: cell-centered field, else node-centered
+    cell: cell-centered values if True, else node-centered
     '''
+
+    if name is None:
+        name = "data"
 
     txt = '''\
 <?xml version="1.0" ?>
@@ -123,17 +151,22 @@ def write_raw_with_xmf(u,
                        rawpath=None,
                        spacing=(1, 1, 1),
                        cell=True,
-                       name='data'):
+                       name=None):
     '''
     Writes binary data in raw format with XMF metadata.
     u: np.ndarray to write, shape (Nz, Ny, Nx)
-    spacing: cell size
+    xmfpath: path to output XMF
+    rawpath: path to output RAW, defaults to xmfpath with replaced extention
+    spacing: cell size, (hx, hy, hz)
+    cell: cell-centered values if True, else node-centered
     name: name of field
     '''
     if len(u.shape) != 3:
         u = u.reshape((1, ) + u.shape)
     if len(spacing) != 3:
         spacing = list(spacing) + [min(spacing)]
+    if name is None:
+        name = "data"
     precision = 4 if u.dtype == np.float32 else 8
     if rawpath is None:
         rawpath = os.path.splitext(xmfpath)[0] + ".raw"

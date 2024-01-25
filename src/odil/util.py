@@ -157,6 +157,14 @@ def add_arguments(parser):
                         type=int,
                         default=50,
                         help="History size for L-BFGS")
+    parser.add_argument('--bfgs_maxls',
+                        type=int,
+                        default=50,
+                        help="Max evaluations in line search")
+    parser.add_argument('--bfgs_pgtol',
+                        type=float,
+                        default=None,
+                        help="Convergence tolerance for L-BFGS-B")
     parser.add_argument('--adam_epsilon',
                         type=float,
                         help="Parameter epsilon in Adam")
@@ -241,6 +249,11 @@ def optimize_newton(args, problem, state, callback=None, **kwargs):
             pinfo = eval_pinfo(state)
             pinfo['linsolver'] = linstatus
             callback(state, epoch + 1, pinfo)
+    arrays = domain.arrays_from_state(state)
+    optinfo = argparse.Namespace()
+    optinfo.epochs = args.epochs
+    optinfo.evals = args.epochs
+    return arrays, optinfo
 
 
 def optimize_grad(args, optname, problem, state, callback=None, **kwargs):
@@ -264,6 +277,10 @@ def optimize_grad(args, optname, problem, state, callback=None, **kwargs):
     # Custom parameters.
     if args.bfgs_m is not None:
         kwargs['m'] = args.bfgs_m
+    if args.bfgs_pgtol is not None:
+        kwargs['pgtol'] = args.bfgs_pgtol
+    if args.bfgs_maxls is not None:
+        kwargs['maxls'] = args.bfgs_maxls
     if args.adam_epsilon is not None:
         kwargs['epsilon'] = args.adam_epsilon
     if args.adam_beta_1 is not None:
