@@ -1,0 +1,382 @@
+./heat.py --outdir out_odil --Nt 64 --Nx 64 --ref_path ref/ref.pickle --infer_k 1 --imposed stripe --every_factor 2
+multigrid levels: [(64, 64), (32, 32), (16, 16), (8, 8), (4, 4), (2, 2)]
+Loading reference solution from '../ref/ref.pickle'
+Running AdamNative optimizer
+
+epoch=00000
+residual: fu:6.5885, imp:0.76234
+error: u:0.36418, k:2.494
+memory: 622 MiB
+walltime: 8.215 s
+walltime+callback: 8.217 s
+u_00000.png k_00000.png
+
+epoch=01000
+residual: fu:0.1323, imp:0.23363
+error: u:0.1205, k:2.9751
+memory: 702 MiB
+walltime: 18.812 s
+walltime+callback: 22.269 s
+walltime/epoch: 18.812 ms
+throughput: 0.218M cells/s
+
+epoch=02000
+residual: fu:0.030447, imp:0.061116
+error: u:0.04217, k:0.48693
+memory: 702 MiB
+walltime: 24.276 s
+walltime+callback: 30.314 s
+walltime/epoch: 5.463 ms
+throughput: 0.750M cells/s
+
+epoch=03000
+residual: fu:0.024438, imp:0.052679
+error: u:0.03952, k:0.54721
+memory: 702 MiB
+walltime: 28.477 s
+walltime+callback: 36.643 s
+walltime/epoch: 4.201 ms
+throughput: 0.975M cells/s
+
+epoch=04000
+residual: fu:0.018051, imp:0.045387
+error: u:0.037826, k:0.73334
+memory: 702 MiB
+walltime: 33.238 s
+walltime+callback: 43.745 s
+walltime/epoch: 4.761 ms
+throughput: 0.860M cells/s
+u_00001.png k_00001.png
+
+epoch=05000
+residual: fu:0.015587, imp:0.043048
+error: u:0.03731, k:0.84949
+memory: 705 MiB
+walltime: 37.511 s
+walltime+callback: 50.691 s
+walltime/epoch: 4.273 ms
+throughput: 0.959M cells/s
+
+epoch=06000
+residual: fu:0.015363, imp:0.041626
+error: u:0.036433, k:0.81123
+memory: 705 MiB
+walltime: 41.936 s
+walltime+callback: 57.314 s
+walltime/epoch: 4.424 ms
+throughput: 0.926M cells/s
+
+epoch=07000
+residual: fu:0.013669, imp:0.03862
+error: u:0.034434, k:0.7092
+memory: 705 MiB
+walltime: 46.508 s
+walltime+callback: 64.108 s
+walltime/epoch: 4.572 ms
+throughput: 0.896M cells/s
+
+epoch=08000
+residual: fu:0.010588, imp:0.030828
+error: u:0.029382, k:0.5264
+memory: 705 MiB
+walltime: 50.697 s
+walltime+callback: 70.475 s
+walltime/epoch: 4.189 ms
+throughput: 0.978M cells/s
+u_00002.png k_00002.png
+
+epoch=09000
+residual: fu:0.0076716, imp:0.020907
+error: u:0.023283, k:0.36461
+memory: 707 MiB
+walltime: 54.619 s
+walltime+callback: 76.864 s
+walltime/epoch: 3.922 ms
+throughput: 1.044M cells/s
+
+epoch=10000
+residual: fu:0.0089015, imp:0.014801
+error: u:0.018252, k:0.22417
+memory: 708 MiB
+walltime: 58.635 s
+walltime+callback: 82.938 s
+walltime/epoch: 4.016 ms
+throughput: 1.020M cells/s
+
+epoch=11000
+residual: fu:0.0061797, imp:0.011731
+error: u:0.014753, k:0.14411
+memory: 708 MiB
+walltime: 62.489 s
+walltime+callback: 88.808 s
+walltime/epoch: 3.854 ms
+throughput: 1.063M cells/s
+
+epoch=12000
+residual: fu:0.0064285, imp:0.0086681
+error: u:0.011455, k:0.092499
+memory: 708 MiB
+walltime: 66.446 s
+walltime+callback: 94.823 s
+walltime/epoch: 3.957 ms
+throughput: 1.035M cells/s
+u_00003.png k_00003.png
+
+epoch=13000
+residual: fu:0.0060205, imp:0.0052501
+error: u:0.0080771, k:0.054947
+memory: 715 MiB
+walltime: 70.420 s
+walltime+callback: 101.194 s
+walltime/epoch: 3.974 ms
+throughput: 1.031M cells/s
+
+epoch=14000
+residual: fu:0.0049114, imp:0.0031409
+error: u:0.0057806, k:0.034515
+memory: 715 MiB
+walltime: 74.347 s
+walltime+callback: 107.117 s
+walltime/epoch: 3.927 ms
+throughput: 1.043M cells/s
+
+epoch=15000
+residual: fu:0.0043889, imp:0.002631
+error: u:0.0048935, k:0.027726
+memory: 718 MiB
+walltime: 78.147 s
+walltime+callback: 112.878 s
+walltime/epoch: 3.800 ms
+throughput: 1.078M cells/s
+
+epoch=16000
+residual: fu:0.0049743, imp:0.0024898
+error: u:0.0045051, k:0.025224
+memory: 718 MiB
+walltime: 81.925 s
+walltime+callback: 118.611 s
+walltime/epoch: 3.777 ms
+throughput: 1.084M cells/s
+u_00004.png k_00004.png
+
+epoch=17000
+residual: fu:0.004797, imp:0.0024055
+error: u:0.0043084, k:0.023681
+memory: 727 MiB
+walltime: 85.834 s
+walltime+callback: 124.860 s
+walltime/epoch: 3.909 ms
+throughput: 1.048M cells/s
+
+epoch=18000
+residual: fu:0.0061009, imp:0.0023024
+error: u:0.0041518, k:0.022498
+memory: 727 MiB
+walltime: 89.631 s
+walltime+callback: 130.713 s
+walltime/epoch: 3.798 ms
+throughput: 1.079M cells/s
+
+epoch=19000
+residual: fu:0.0036101, imp:0.0022478
+error: u:0.0040267, k:0.021501
+memory: 727 MiB
+walltime: 93.476 s
+walltime+callback: 136.561 s
+walltime/epoch: 3.845 ms
+throughput: 1.065M cells/s
+
+epoch=20000
+residual: fu:0.020152, imp:0.0022086
+error: u:0.0039256, k:0.020615
+memory: 728 MiB
+walltime: 97.355 s
+walltime+callback: 142.450 s
+walltime/epoch: 3.878 ms
+throughput: 1.056M cells/s
+u_00005.png k_00005.png
+
+epoch=21000
+residual: fu:0.0034228, imp:0.0021754
+error: u:0.0038293, k:0.019893
+memory: 739 MiB
+walltime: 101.273 s
+walltime+callback: 148.735 s
+walltime/epoch: 3.918 ms
+throughput: 1.045M cells/s
+
+epoch=22000
+residual: fu:0.004402, imp:0.002123
+error: u:0.0037267, k:0.019171
+memory: 739 MiB
+walltime: 105.223 s
+walltime+callback: 154.750 s
+walltime/epoch: 3.950 ms
+throughput: 1.037M cells/s
+
+epoch=23000
+residual: fu:0.0040108, imp:0.0020622
+error: u:0.0036343, k:0.018439
+memory: 739 MiB
+walltime: 109.089 s
+walltime+callback: 160.623 s
+walltime/epoch: 3.866 ms
+throughput: 1.059M cells/s
+
+epoch=24000
+residual: fu:0.0040725, imp:0.0020279
+error: u:0.0035536, k:0.017848
+memory: 739 MiB
+walltime: 112.913 s
+walltime+callback: 166.416 s
+walltime/epoch: 3.823 ms
+throughput: 1.071M cells/s
+u_00006.png k_00006.png
+
+epoch=25000
+residual: fu:0.0060093, imp:0.0019687
+error: u:0.0034627, k:0.017231
+memory: 740 MiB
+walltime: 116.741 s
+walltime+callback: 172.704 s
+walltime/epoch: 3.828 ms
+throughput: 1.070M cells/s
+
+epoch=26000
+residual: fu:0.0064852, imp:0.0019328
+error: u:0.0033876, k:0.016655
+memory: 740 MiB
+walltime: 120.463 s
+walltime+callback: 178.366 s
+walltime/epoch: 3.722 ms
+throughput: 1.100M cells/s
+
+epoch=27000
+residual: fu:0.0056793, imp:0.0019785
+error: u:0.0033544, k:0.016362
+memory: 740 MiB
+walltime: 124.170 s
+walltime+callback: 184.032 s
+walltime/epoch: 3.707 ms
+throughput: 1.105M cells/s
+
+epoch=28000
+residual: fu:0.0044545, imp:0.0019029
+error: u:0.0032818, k:0.01576
+memory: 740 MiB
+walltime: 127.896 s
+walltime+callback: 189.654 s
+walltime/epoch: 3.727 ms
+throughput: 1.099M cells/s
+u_00007.png k_00007.png
+
+epoch=29000
+residual: fu:0.013647, imp:0.001899
+error: u:0.0032253, k:0.015359
+memory: 744 MiB
+walltime: 131.464 s
+walltime+callback: 195.404 s
+walltime/epoch: 3.568 ms
+throughput: 1.148M cells/s
+
+epoch=30000
+residual: fu:0.0095939, imp:0.0018125
+error: u:0.0031333, k:0.0148
+memory: 744 MiB
+walltime: 135.012 s
+walltime+callback: 200.789 s
+walltime/epoch: 3.548 ms
+throughput: 1.154M cells/s
+
+epoch=31000
+residual: fu:0.006484, imp:0.0018027
+error: u:0.0030826, k:0.014372
+memory: 744 MiB
+walltime: 138.596 s
+walltime+callback: 206.213 s
+walltime/epoch: 3.583 ms
+throughput: 1.143M cells/s
+
+epoch=32000
+residual: fu:0.006453, imp:0.0017553
+error: u:0.0030213, k:0.013927
+memory: 744 MiB
+walltime: 142.216 s
+walltime+callback: 211.707 s
+walltime/epoch: 3.620 ms
+throughput: 1.131M cells/s
+u_00008.png k_00008.png
+
+epoch=33000
+residual: fu:0.010554, imp:0.0017713
+error: u:0.0029834, k:0.013645
+memory: 748 MiB
+walltime: 145.940 s
+walltime+callback: 217.633 s
+walltime/epoch: 3.725 ms
+throughput: 1.100M cells/s
+
+epoch=34000
+residual: fu:0.0082238, imp:0.0017486
+error: u:0.0029396, k:0.013398
+memory: 748 MiB
+walltime: 149.490 s
+walltime+callback: 223.021 s
+walltime/epoch: 3.549 ms
+throughput: 1.154M cells/s
+
+epoch=35000
+residual: fu:0.0060168, imp:0.0017258
+error: u:0.0028945, k:0.013039
+memory: 748 MiB
+walltime: 153.032 s
+walltime+callback: 228.394 s
+walltime/epoch: 3.543 ms
+throughput: 1.156M cells/s
+
+epoch=36000
+residual: fu:0.013482, imp:0.001688
+error: u:0.0028414, k:0.012689
+memory: 748 MiB
+walltime: 156.610 s
+walltime+callback: 233.807 s
+walltime/epoch: 3.577 ms
+throughput: 1.145M cells/s
+u_00009.png k_00009.png
+
+epoch=37000
+residual: fu:0.0080556, imp:0.0016603
+error: u:0.0028008, k:0.012314
+memory: 754 MiB
+walltime: 160.216 s
+walltime+callback: 239.591 s
+walltime/epoch: 3.606 ms
+throughput: 1.136M cells/s
+
+epoch=38000
+residual: fu:0.0042377, imp:0.0016659
+error: u:0.0027709, k:0.012095
+memory: 754 MiB
+walltime: 163.826 s
+walltime+callback: 245.063 s
+walltime/epoch: 3.610 ms
+throughput: 1.135M cells/s
+
+epoch=39000
+residual: fu:0.0038222, imp:0.0016493
+error: u:0.0027367, k:0.011879
+memory: 754 MiB
+walltime: 167.385 s
+walltime+callback: 250.472 s
+walltime/epoch: 3.560 ms
+throughput: 1.151M cells/s
+
+epoch=40000
+residual: fu:0.0064361, imp:0.0016118
+error: u:0.0026829, k:0.01154
+memory: 754 MiB
+walltime: 170.934 s
+walltime+callback: 255.862 s
+walltime/epoch: 3.548 ms
+throughput: 1.154M cells/s
+u_00010.png k_00010.png

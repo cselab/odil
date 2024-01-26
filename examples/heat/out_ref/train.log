@@ -1,0 +1,112 @@
+./heat.py --outdir out_ref --Nt 256 --Nx 256 --optimizer newton --multigrid 0 --report_every 5 --plot_every 5 --checkpoint_every 50
+Running Newton optimizer
+
+epoch=00000
+residual: fu:13.459
+error: u:0.42101
+memory: 535 MiB
+walltime: 2.555 s
+walltime+callback: 2.558 s
+u_00000.png k_00000.png
+checkpoint_000000.pickle
+
+epoch=00005
+residual: fu:0.95663
+error: u:0.14853
+memory: 651 MiB
+walltime: 17.169 s
+walltime+callback: 17.759 s
+walltime/epoch: 3433.767 ms
+throughput: 0.019M cells/s
+u_00001.png k_00001.png
+
+epoch=00010
+residual: fu:0.017798
+error: u:0.14581
+memory: 659 MiB
+walltime: 27.017 s
+walltime+callback: 27.970 s
+walltime/epoch: 1969.724 ms
+throughput: 0.033M cells/s
+u_00002.png k_00002.png
+
+epoch=00015
+residual: fu:0.00042942
+error: u:0.14585
+memory: 621 MiB
+walltime: 36.661 s
+walltime+callback: 37.967 s
+walltime/epoch: 1928.747 ms
+throughput: 0.034M cells/s
+u_00003.png k_00003.png
+
+epoch=00020
+residual: fu:4.5013e-05
+error: u:0.14585
+memory: 660 MiB
+walltime: 46.471 s
+walltime+callback: 48.313 s
+walltime/epoch: 1962.055 ms
+throughput: 0.033M cells/s
+u_00004.png k_00004.png
+
+epoch=00025
+residual: fu:4.4026e-05
+error: u:0.14585
+memory: 621 MiB
+walltime: 56.148 s
+walltime+callback: 58.336 s
+walltime/epoch: 1935.294 ms
+throughput: 0.034M cells/s
+u_00005.png k_00005.png
+
+epoch=00030
+residual: fu:4.4558e-05
+error: u:0.14585
+memory: 666 MiB
+walltime: 65.914 s
+walltime+callback: 68.447 s
+walltime/epoch: 1953.297 ms
+throughput: 0.034M cells/s
+u_00006.png k_00006.png
+
+epoch=00035
+residual: fu:4.4275e-05
+error: u:0.14585
+memory: 629 MiB
+walltime: 75.644 s
+walltime+callback: 78.611 s
+walltime/epoch: 1946.006 ms
+throughput: 0.034M cells/s
+u_00007.png k_00007.png
+
+epoch=00040
+residual: fu:4.4498e-05
+error: u:0.14585
+memory: 677 MiB
+walltime: 85.440 s
+walltime+callback: 88.748 s
+walltime/epoch: 1959.038 ms
+throughput: 0.033M cells/s
+u_00008.png k_00008.png
+
+epoch=00045
+residual: fu:4.4389e-05
+error: u:0.14585
+memory: 637 MiB
+walltime: 95.154 s
+walltime+callback: 98.798 s
+walltime/epoch: 1942.800 ms
+throughput: 0.034M cells/s
+u_00009.png k_00009.png
+
+epoch=00050
+residual: fu:4.3874e-05
+error: u:0.14585
+memory: 635 MiB
+walltime: 104.906 s
+walltime+callback: 109.128 s
+walltime/epoch: 1950.516 ms
+throughput: 0.034M cells/s
+u_00010.png k_00010.png
+checkpoint_000050.pickle
