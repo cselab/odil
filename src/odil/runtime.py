@@ -11,8 +11,8 @@ if not int(os.environ.get("ODIL_MT", 0)):
     os.environ["TENSORFLOW_INTER_OP_PARALLELISM"] = "1"
     os.environ["TENSORFLOW_INTRA_OP_PARALLELISM"] = "1"
 
-usegpu = os.environ.get("CUDA_VISIBLE_DEVICES", "") not in ["", "-1"]
-if not usegpu:
+enable_gpu = os.environ.get("CUDA_VISIBLE_DEVICES", "") not in ["", "-1"]
+if not enable_gpu:
     os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 if not int(os.environ.get("ODIL_WARN", 0)):
@@ -21,16 +21,34 @@ if not int(os.environ.get("ODIL_WARN", 0)):
     warnings.simplefilter(action='ignore', category=FutureWarning)
     warnings.simplefilter(action='ignore', category=Warning)
 
-backend = os.environ.get("ODIL_BACKEND", 'tf')
-jit = bool(int(os.environ.get("ODIL_JIT", 0)))
-if backend == 'tf':
+enable_jit = bool(int(os.environ.get("ODIL_JIT", 0)))
+
+backend_name = os.environ.get("ODIL_BACKEND", '')
+
+if not backend_name:
+    try:
+        import tensorflow as tf
+        backend_name = 'tf'
+    except:
+        pass
+
+if not backend_name:
+    try:
+        import jax
+        backend_name = 'jax'
+    except:
+        sys.stderr.write(
+            f"Cannot select a default backend. Tried: tensorflow, jax\n")
+        exit(1)
+
+if backend_name == 'tf':
     import tensorflow as tf
     tf.config.threading.set_inter_op_parallelism_threads(1)
     tf.config.threading.set_intra_op_parallelism_threads(1)
-    gpus = tf.config.list_physical_devices('GPU')
-    if gpus:
+    _gpus = tf.config.list_physical_devices('GPU')
+    if _gpus:
         try:
-            for gpu in gpus:
+            for gpu in _gpus:
                 tf.config.experimental.set_memory_growth(gpu, True)
             logical_gpus = tf.config.list_logical_devices('GPU')
         except RuntimeError as e:
@@ -38,10 +56,10 @@ if backend == 'tf':
 
     jax = None
     mod = ModTensorflow(tf)
-elif backend == 'jax':
+elif backend_name == 'jax':
     tf = None
     import jax
-    if not usegpu:
+    if not enable_gpu:
         jax.config.update('jax_platform_name', 'cpu')
     # Enable support for float64 operations.
     jax.config.update("jax_enable_x64", True)
@@ -49,7 +67,7 @@ elif backend == 'jax':
     mod = ModNumpy(jax.numpy, jax=jax)
 else:
     sys.stderr.write(
-        f"Unknown ODIL_BACKEND='{backend}', options are: tf, jax\n")
+        f"Unknown ODIL_BACKEND='{backend_name}', options are: tf, jax\n")
     exit(1)
 
 # Default data type.
@@ -60,3 +78,7 @@ else:
     sys.stderr.write(
         f"Expected ODIL_DTYPE=float32 or float64, got '{dtype}' \n")
     exit(1)
+
+del os
+del np
+del sys

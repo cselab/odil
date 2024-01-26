@@ -118,7 +118,7 @@ def make_problem(args):
 
 
 def main():
-    if odil.runtime.backend == 'jax':
+    if odil.runtime.backend_name == 'jax':
         print('Skip test_newton.py with jax backend. Not implemented.')
         exit(0)
     args = parse_args()

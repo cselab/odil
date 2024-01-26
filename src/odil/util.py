@@ -349,9 +349,10 @@ def setup_outdir(args, relpath_args=None):
         d = dict(
             vars(args),
             **get_env_config(),
-            runtime_backend=runtime.backend,
+            runtime_backend=runtime.backend_name,
             runtime_dtype=runtime.dtype_name,
-            runtime_jit=runtime.jit,
+            runtime_jit=runtime.enable_jit,
+            runtime_gpu=runtime.enable_gpu,
         )
         json.dump(d, f, sort_keys=True, indent=4)
 
@@ -406,6 +407,7 @@ def make_callback(problem,
     def callback(state, epoch, pinfo):
         problem = cbinfo.problem
         domain = problem.domain
+        mod = domain.mod
         args = cbinfo.args
         history = cbinfo.history
         time_prev = time.time()
@@ -422,8 +424,15 @@ def make_callback(problem,
 
         cbinfo.pinfo = pinfo
 
-        if isinstance(problem.tracers, dict):
-            problem.tracers['epoch'] = epoch
+        tracers = problem.tracers
+        if isinstance(tracers, dict):
+            # FIXME: Revise without check for TF.
+            if mod.tf and 'epoch' in problem.tracers:
+                # Need tf.Variable to avoid retracing.
+                assert isinstance(tracers['epoch'], mod.tf.Variable)
+                problem.tracers['epoch'].assign(epoch)
+            else:
+                problem.tracers['epoch'] = epoch
         if epoch_func is not None:
             epoch_func(problem, state, epoch, cbinfo)
 

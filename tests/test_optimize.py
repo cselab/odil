@@ -97,7 +97,10 @@ def main():
         domain = problem.domain
         extra = problem.extra
         callback = odil.make_callback(problem, args)
-        odil.util.optimize_grad(args, opt, problem, state, callback)
+        try:
+            odil.util.optimize_grad(args, opt, problem, state, callback)
+        except odil.EarlyStopError:
+            pass
         error = [
             domain.field(state, key) - extra.ref[key]
             for key in ['uc', 'un', 'ufx', 'ufy', 'a']

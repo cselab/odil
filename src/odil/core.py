@@ -1107,12 +1107,16 @@ class Problem:
         self.extra = extra
         if tracers is None:
             tracers = dict()
-        if 'epoch' not in tracers:
-            tracers['epoch'] = 0
-        self.tracers = tracers
         mod = domain.mod
+        if 'epoch' not in tracers:
+            if mod.tf:
+                tracers['epoch'] = mod.tf.Variable(0)
+            else:
+                tracers['epoch'] = 0
+        self.tracers = tracers
         if jit is None:
-            from .runtime import jit
+            from . import runtime
+            jit = runtime.enable_jit
         self.jit = jit
 
         self._cache_eval_loss_grad = dict()

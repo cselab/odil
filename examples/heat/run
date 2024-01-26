@@ -1,0 +1,83 @@
+#!/bin/sh -eu
+
+: ${force=0}
+: ${case=0}
+: ${gpus=}
+: ${outdir=out_heat}
+: ${N=64}
+: ${extra=}
+
+export OMP_NUM_THREADS=1
+export CUDA_VISIBLE_DEVICES=$gpus
+export ODIL_JIT=1
+
+run () {
+  done="$outdir/done"
+  if ! [ "$force" = "1" ] && [ -f "$done" ] ; then
+    echo "skip existing '$done'"
+    return
+  fi
+  cmd="./heat.py --outdir '$outdir' --Nt $N --Nx $N $@ $extra"
+  echo "$cmd"
+  eval "$cmd"
+}
+
+ext=
+
+refdir="ref"
+refpath="$refdir/ref.pickle"
+if [ -f "$refpath" ] ; then
+  ext="$ext --ref_path $refpath"
+else
+  echo "Reference solution '$refpath' not found."
+fi
+
+case $case in
+  0)
+    echo "Forward problem, compute reference solution"
+    if ! [ "$force" = "1" ] && [ -f "$refpath" ] ; then
+      echo "skip existing '$refpath'"
+      exit 0
+    fi
+    ext="$ext --optimizer newton --multigrid 0"
+    ext="$ext --report_every 5 --plot_every 5 --checkpoint_every 50"
+    N=256 run $ext "$@"
+    mkdir -p "$refdir"
+    cp -v $outdir/{train.*,args.json} "$refdir/"
+    cp -v $outdir/checkpoint_000050.pickle "$refpath"
+  ;;
+  1)
+    echo "Forward problem with gradient-based"
+    run $ext "$@"
+  ;;
+  1p)
+    echo "Forward problem with PINN"
+    ext="$ext --solver pinn --arch_u 32 32 32 32 --Nci 4096 --Ncb 128"
+    run $ext "$@"
+  ;;
+  2)
+    echo "Inverse problem with gradient-based"
+    ext="$ext --infer_k 1 --imposed stripe"
+    ext="$ext --every_factor 2"
+    run $ext "$@"
+  ;;
+  2n)
+    echo "Inverse problem with Newton"
+    ext="$ext --infer_k 1 --imposed stripe"
+    ext="$ext --optimizer newton --multigrid 0"
+    ext="$ext --kwreg 1"
+    ext="$ext --report_every 5 --history_every 1 --plot_every 10"
+    run $ext "$@"
+  ;;
+  2p)
+    echo "Inverse problem with PINN"
+    ext="$ext --infer_k 1 --imposed stripe"
+    ext="$ext --solver pinn --arch_u 32 32 32 32 --Nci 4096 --Ncb 128"
+    ext="$ext --every_factor 5"
+    run $ext "$@"
+  ;;
+  *)
+    echo "Unknown case=$case"
+    exit 1
+  ;;
+esac

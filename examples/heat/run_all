@@ -1,0 +1,21 @@
+#!/bin/sh -eu
+
+# Reference solution.
+case=0 outdir=out_ref ./run
+
+# ODIL Newton.
+case=2n outdir=out_odiln ./run &
+
+# ODIL Adam.
+case=2 outdir=out_odil ./run &
+
+# PINN.
+case=2p gpus=0 outdir=out_pinn ./run &
+
+pids=$(jobs -p | xargs)
+trap "echo '$pids' | xargs -n 1 pkill -P" SIGHUP SIGINT SIGTERM
+
+echo "Waiting for $pids"
+for pid in $pids ; do
+  wait $pid || true
+done
