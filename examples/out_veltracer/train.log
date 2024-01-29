@@ -1,0 +1,55 @@
+./veltracer.py
+multigrid levels: [(64, 64, 64), (32, 32, 32), (16, 16, 16), (8, 8, 8), (4, 4, 4), (2, 2, 2)]
+Running AdamNative optimizer
+
+epoch=00000
+residual: 0:3.364, 1:23.727, 2:0, 3:0, 4:0, 5:0
+memory: 544 MiB
+walltime: 3.389 s
+walltime+callback: 3.392 s
+u_00000.png
+
+epoch=00100
+residual: 0:0.17469, 1:0.098434, 2:0.10199, 3:0.10013, 4:0.059678, 5:0.028602
+memory: 626 MiB
+walltime: 9.089 s
+walltime+callback: 10.084 s
+walltime/epoch: 90.886 ms
+throughput: 2.884M cells/s
+u_00001.png
+
+epoch=00200
+residual: 0:0.13996, 1:0.0059983, 2:0.11697, 3:0.11661, 4:0.06921, 5:0.036461
+memory: 650 MiB
+walltime: 13.912 s
+walltime+callback: 15.730 s
+walltime/epoch: 48.231 ms
+throughput: 5.435M cells/s
+u_00002.png
+
+epoch=00300
+residual: 0:0.13633, 1:0.0060321, 2:0.11326, 3:0.12411, 4:0.070651, 5:0.038746
+memory: 667 MiB
+walltime: 18.721 s
+walltime+callback: 21.402 s
+walltime/epoch: 48.094 ms
+throughput: 5.451M cells/s
+u_00003.png
+
+epoch=00400
+residual: 0:0.13546, 1:0.0060918, 2:0.10975, 3:0.11495, 4:0.070531, 5:0.032382
+memory: 658 MiB
+walltime: 23.751 s
+walltime+callback: 27.453 s
+walltime/epoch: 50.304 ms
+throughput: 5.211M cells/s
+u_00004.png
+
+epoch=00500
+residual: 0:0.13375, 1:0.0061238, 2:0.1074, 3:0.10494, 4:0.070201, 5:0.031102
+memory: 669 MiB
+walltime: 28.776 s
+walltime+callback: 33.367 s
+walltime/epoch: 50.246 ms
+throughput: 5.217M cells/s
+u_00005.png
