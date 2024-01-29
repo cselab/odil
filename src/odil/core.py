@@ -193,7 +193,7 @@ class Domain:
         return tuple(s + 1 if c == 'n' else s for s, c in zip(cshape, loc))
 
     def get_field_shape(self, loc=None):
-        return _get_field_shape(self.cshape, loc=loc)
+        return self._get_field_shape(self.cshape, loc=loc)
 
     def _size_1d(self, d, loc):
         if loc == 'c':

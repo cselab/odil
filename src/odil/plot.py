@@ -140,6 +140,7 @@ def plot_2d(
     exact_uu,
     pred_uu,
     slices_it,
+    slices_t,
     path,
     title=None,
     umin=None,
@@ -173,15 +174,15 @@ def plot_2d(
     ]
     if title:
         fig.suptitle(title)
-    tt = domain.cell_center_1d(0)
     axes = [[None] * nslices for i in range(2)]
-    for j in range(nslices):
-        it = slices_it[j]
+    for islice in range(nslices):
+        it = slices_it[islice]
         for i, data in enumerate((exact_uu[it], pred_uu[it])):
-            ax = fig.add_subplot(spec[i, j])
-            axes[i][j] = ax
-            ax.spines[['left', 'right', 'bottom', 'top']].set_visible(True)
-            ax.spines[['left', 'right', 'bottom', 'top']].set_linewidth(0.25)
+            data = np.array(data)
+            ax = fig.add_subplot(spec[i, islice])
+            axes[i][islice] = ax
+            ax.spines[:].set_visible(True)
+            ax.spines[:].set_linewidth(0.25)
             ax.set_xticks([])
             ax.set_yticks([])
             ax.set_xlim(extent[:2])
@@ -196,16 +197,16 @@ def plot_2d(
                       aspect='equal')
             if i == 1:
                 if xlabel:
-                    ax.set_xlabel(xlabel.format(tt[it]))
-            if j == 0 and i == 0:
+                    ax.set_xlabel(xlabel.format(slices_t[islice]))
+            if islice == 0 and i == 0:
                 if ylabel_exact:
                     ax.set_ylabel(ylabel_exact)
-            if j == 0 and i == 1:
+            if islice == 0 and i == 1:
                 if ylabel_pred:
                     ax.set_ylabel(ylabel_pred)
 
             if callback:
-                callback(i, j, ax, fig)
+                callback(i, islice, ax, fig)
 
     fig.savefig(path,
                 dpi=dpi,

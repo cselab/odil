@@ -1,6 +1,6 @@
 [project]
 name = "odil"
-version = "0.1.6"
+version = "0.1.7"
 authors = [
     { name="Petr Karnakov", email="pkarnakov@gmail.com" },
     { name="Sergey Litvinov", email="slitvinov@gmail.com" },

@@ -4,4 +4,6 @@
 
 * Poison equation in two dimensions: [`poisson`](poisson/)
 
-* Inferring conductivity from temperature: [`heat`](heat/)
+* Velocity from tracer: [`heat`](heat/)
+
+* Inferring conductivity from temperature: [`velocity_from_tracer`](velocity_from_tracer/)

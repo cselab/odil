@@ -8,4 +8,3 @@ data_*.pickle
 done
 args.json
 out_*
-*.html

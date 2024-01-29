@@ -178,14 +178,18 @@ def add_arguments(parser):
                         type=int,
                         default=0,
                         help="Use multigrid decomposition")
-    parser.add_argument('--mg_interp',
-                        type=str,
-                        default='stack',
-                        choices=[
-                            'conv',
-                            'stack',
-                        ],
-                        help="Multigrid interpolation method")
+    parser.add_argument(
+        '--mg_interp',
+        type=str,
+        default='stack',
+        choices=[
+            'conv',
+            'stack',
+        ],
+        help="Multigrid interpolation method:"
+        " stack (using a stack of shifted arrays)"
+        ", conv (using the transpose of convolution"
+        ", may be slower than 'stack' with JIT (JAX and TF XLA))")
     parser.add_argument('--dump_data',
                         type=int,
                         default=1,
