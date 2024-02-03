@@ -39,9 +39,7 @@ Values `CUDA_VISIBLE_DEVICES=` and `CUDA_VISIBLE_DEVICES=-1` disable GPU support
 
 ODIL is developed by researchers at [Harvard University](https://cse-lab.seas.harvard.edu/)
 
-* [Petr Karnakov](https://cse-lab.seas.harvard.edu/people/petr-karnakov)
-  [<img src="https://cselab.github.io/odil/media/twitter.png" height=16>](https://twitter.com/pkarnakov)
-  [<img src="https://cselab.github.io/odil/media/youtube.png" height=16>](https://www.youtube.com/@pkarnakov)
+* [Petr Karnakov](https://pkarnakov.com)
 * [Sergey Litvinov](https://cse-lab.seas.harvard.edu/people/sergey-litvinov)
 
 advised by
