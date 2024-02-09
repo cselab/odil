@@ -37,7 +37,7 @@ Values `CUDA_VISIBLE_DEVICES=` and `CUDA_VISIBLE_DEVICES=-1` disable GPU support
 
 ## Developers
 
-ODIL is developed by researchers at [Harvard University](https://cse-lab.seas.harvard.edu/)
+ODIL is developed by researchers at [Harvard University](https://cse-lab.seas.harvard.edu)
 
 * [Petr Karnakov](https://pkarnakov.com)
 * [Sergey Litvinov](https://cse-lab.seas.harvard.edu/people/sergey-litvinov)
@@ -51,8 +51,6 @@ advised by
 1. Karnakov P, Litvinov S, Koumoutsakos P. Solving inverse problems in physics
    by optimizing a discrete loss: Fast and accurate learning without neural networks. PNAS Nexus, 2024.
    [DOI:10.1093/pnasnexus/pgae005](https://doi.org/10.1093/pnasnexus/pgae005)
-   [arXiv:2205.04611](https://arxiv.org/abs/2205.04611)
-
 
 2. Karnakov P, Litvinov S, Koumoutsakos P. Flow reconstruction by
    multiresolution optimization of a discrete loss with automatic
