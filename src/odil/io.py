@@ -53,8 +53,10 @@ def read_raw_with_xmf(xmfpath):
     u = np.fromfile(meta['rawpath'], dtype).reshape(meta['count'])
     return u, meta
 
+
 def read_raw(xmfpath):
     return read_raw_with_xmf(xmfpath)
+
 
 def write_raw_xmf(xmfpath,
                   rawpath,
@@ -178,9 +180,11 @@ def write_raw_with_xmf(u,
 
 def write_vtk_poly(fout,
                    points,
-                   polygons,
+                   polygons=None,
+                   lines=None,
                    point_fields=None,
                    cell_fields=None,
+                   tcoords=None,
                    comment="",
                    fmt='%.16g'):
     """
@@ -191,10 +195,14 @@ def write_vtk_poly(fout,
         3D points.
     polygons: `list` [`list` [ `int` ]], shape (ncells, ...)
         Polygons as lists of indices in `points`.
+    lines: `list` [`list` [ `int` ]], shape (nlines, ...)
+        Lines as lists of indices in `points`.
     point_fields: `dict` from `str` to array of shape (npoints,)
         Mapping from names to arrays storing scalar fields on points.
     cell_fields: `dict` from `str` to array of shape (ncells,)
         Mapping from names to arrays storing scalar fields on cells.
+    tcoords: `numpy.ndarray`, shape (npoints, 2)
+        Array storing texture coordinates of the points.
     """
     path = None
     if type(fout) is str:
@@ -220,40 +228,56 @@ def write_vtk_poly(fout,
     np.savetxt(fout, points, fmt=fmt)
 
     # Write cells.
-    ncells = len(polygons)
-    num_poly_data = len(polygons) + sum([len(p) for p in polygons])
-    write("POLYGONS {:} {:}\n".format(ncells, num_poly_data))
-    for p in polygons:
-        write(' '.join(map(str, [len(p)] + p)) + '\n')
+    if polygons is not None:
+        ncells = len(polygons)
+        cells_data_size = len(polygons) + sum([len(p) for p in polygons])
+        write("POLYGONS {:} {:}\n".format(ncells, cells_data_size))
+        for p in polygons:
+            write(' '.join(map(str, [len(p)] + p)) + '\n')
+
+    # Write lines.
+    if lines is not None:
+        nlines = len(lines)
+        lines_data_size = len(lines) + sum([len(p) for p in lines])
+        write("LINES {:} {:}\n".format(nlines, lines_data_size))
+        for p in lines:
+            write(' '.join(map(str, [len(p)] + p)) + '\n')
+
+    # Write point data header.
+    if point_fields is not None or tcoords is not None:
+        write("\nPOINT_DATA {:}\n".format(npoints))
 
     # Write point fields.
-    if point_fields is None:
-        point_fields = dict()
-    if point_fields:
-        write("\nPOINT_DATA {:}\n".format(npoints))
-    for name, array in point_fields.items():
-        array = np.reshape(array, -1)
-        if array.size != npoints:
-            raise RuntimeError(
-                f"Expected equal array.size={array.size} and npoints={npoints}"
-            )
-        write("SCALARS {:} float\n".format(name))
-        write("LOOKUP_TABLE default\n")
-        np.savetxt(fout, array, fmt=fmt)
+    if point_fields is not None:
+        for name, array in point_fields.items():
+            array = np.reshape(array, -1)
+            if array.size != npoints:
+                raise RuntimeError(
+                    f"Expected equal array.size={array.size} and npoints={npoints}"
+                )
+            write("SCALARS {:} float\n".format(name))
+            write("LOOKUP_TABLE default\n")
+            np.savetxt(fout, array, fmt=fmt)
+
+    # Write texture coordinates.
+    if tcoords is not None:
+        if tcoords.shape != (npoints, 2):
+            raise RuntimeError("Expected array.shape=({}, 2), got {}".format(
+                npoints, tcoords.shape))
+        write("TEXTURE_COORDINATES {} 2 float\n".format('tcoords'))
+        np.savetxt(fout, tcoords, fmt=fmt)
 
     # Write cell fields.
-    if cell_fields is None:
-        cell_fields = dict()
-    if cell_fields:
+    if cell_fields is not None:
         write("\nCELL_DATA {:}\n".format(ncells))
-    for name, array in cell_fields.items():
-        array = np.reshape(array, -1)
-        if array.size != ncells:
-            raise RuntimeError(
-                f"Expected equal array.size={array.size} and ncells={ncells}")
-        write("SCALARS {:} float\n".format(name))
-        write("LOOKUP_TABLE default\n")
-        np.savetxt(fout, array, fmt=fmt)
+        for name, array in cell_fields.items():
+            array = np.reshape(array, -1)
+            if array.size != ncells:
+                raise RuntimeError(
+                    f"Expected equal array.size={array.size} and ncells={ncells}")
+            write("SCALARS {:} float\n".format(name))
+            write("LOOKUP_TABLE default\n")
+            np.savetxt(fout, array, fmt=fmt)
 
     if path:
         fout.close()

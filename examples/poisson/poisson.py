@@ -217,7 +217,7 @@ def plot_func(problem, state, epoch, frame, cbinfo):
 
     if args.dump_xmf and ndim in [2, 3]:
         u = domain.field(state, key)
-        path = key + '{}.xmf'.format(suff)
+        path = key + '{}.xdmf2'.format(suff)
         write_field(u, key, path, domain, args.cellbased)
         paths.append(path)
 
@@ -300,8 +300,8 @@ def make_problem(args):
     extra.rhs = rhs
     extra.args = args
     if args.plot:
-        write_field(extra.ref_u, 'u', 'ref_u.xmf', domain, cellbased)
-        write_field(extra.rhs, 'rhs', 'rhs.xmf', domain, cellbased)
+        write_field(extra.ref_u, 'u', 'ref_u.xdmf2', domain, cellbased)
+        write_field(extra.rhs, 'rhs', 'rhs.xdmf2', domain, cellbased)
 
     problem = odil.Problem(operator, domain, extra)
     return problem, state

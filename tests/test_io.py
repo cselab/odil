@@ -8,7 +8,7 @@ class TestIO(unittest.TestCase):
 
     def test_raw_xmf(self):
         name = "foo"
-        xmfpath = "data.xmf"
+        xmfpath = "data.xdmf2"
         nx, ny, nz = 3, 4, 5
         lx, ly, lz = 4, 5, 6
         for dtype in [np.float32, np.float64]:

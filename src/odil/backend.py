@@ -105,6 +105,7 @@ class ModNumpy(ModBase):
             self.jit_wrap = lambda **kwargs: partial(jax.jit, **kwargs)
         else:
             self.broadcast_to = mod.broadcast_to
+            self.stop_gradient = lambda x: x
 
         def convolution(input, filters, strides, padding):
             '''
