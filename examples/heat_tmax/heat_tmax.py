@@ -145,7 +145,7 @@ def make_problem(args):
                          mg_nlvl=args.nlvl)
 
     # Evaluate exact solution, boundary and initial conditions.
-    tt, xx = domain.points()
+    tt, xx = domain.points(loc='nc')
     # Node-based in time, cell-based in space.
     tone = domain.points_1d('t', loc='n')
     xone = domain.points_1d('x', loc='c')
