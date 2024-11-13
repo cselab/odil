@@ -11,12 +11,12 @@ from odil import printlog
 from odil.runtime import tf
 
 
-def get_init_u(t, x):
+def get_init_u(t, x, mod):
     # Gaussian.
     def f(z):
-        return np.exp(-(z - 0.5)**2 * 50)
+        return mod.exp(-(z - 0.5)**2 * 50)
 
-    return f(x) - f(-0.5)
+    return f(x) - f(-mod.cast(0.5, x.dtype))
 
 
 def get_ref_k(u, mod=np):
@@ -508,7 +508,7 @@ def make_problem(args):
     # Evaluate exact solution, boundary and initial conditions.
     tt, xx = domain.points()
     t1, x1 = domain.points_1d()
-    init_u = get_init_u(x1 * 0, x1)
+    init_u = get_init_u(x1 * 0, x1, mod)
 
     # Load reference solution.
     if args.ref_path is not None:
@@ -516,7 +516,7 @@ def make_problem(args):
         ref_state = load_fields_interp(args.ref_path, ['u'], domain)
         ref_u = domain.cast(ref_state.fields['u'].array)
     else:
-        ref_u = get_init_u(tt, xx)
+        ref_u = get_init_u(tt, xx, mod)
 
     # Add noise after choosing points with imposed values.
     imp_u = ref_u
@@ -551,8 +551,8 @@ def make_problem(args):
         t_bound = np.hstack((t_bound0, t_bound1))
         x_bound = np.hstack((x_bound0, x_bound1))
         t_init, x_init = domain.random_boundary(0, 0, args.Ncb)
-        u_init = get_init_u(t_init, x_init)
-        u_bound = get_init_u(t_bound, x_bound)
+        u_init = get_init_u(t_init, x_init, mod)
+        u_bound = get_init_u(t_bound, x_bound, mod)
         printlog('Number of collocation points:')
         printlog('inner: {:}'.format(len(t_inner)))
         printlog('init: {:}'.format(len(t_init)))
