@@ -35,15 +35,22 @@ def operator_adv(ctx):
     extra = ctx.extra
     args = extra.args
 
-    def stencil_roll(q):
-        return [
-            mod.roll(q, shift=np.negative(s), axis=(0, 1))
-            for s in [(0, 0), (0, -1), (0, 1), (-1, 0), (-1, -1), (-1, 1)]
-        ]
+    def roll(u, shift):
+        return mod.roll(u, shift, (0, 1))
 
-    u = transform_u(ctx.field('u'), extra, mod)
-    u_st = stencil_roll(u)
-    u, uxm, uxp, um, umxm, umxp = u_st
+    def stencil(name):
+        # Offsets along t and x.
+        offsets = [(0, 0), (0, -1), (0, 1), (-1, 0), (-1, -1), (-1, 1)]
+        # Shifted source fields, using ctx.field() to support Newton.
+        fields = [ctx.field(name, *otx) for otx in offsets]
+        # Cancel the shift, transform the field, and shift back.
+        fields = [
+            roll(transform_u(roll(u, otx), extra, mod), np.negative(otx))
+            for u, otx in zip(fields, offsets)
+        ]
+        return fields
+
+    u, uxm, uxp, um, umxm, umxp = stencil('u')
 
     # Impose zero boundary conditions.
     uxm = mod.where(ix == 0, -u, uxm)
@@ -61,7 +68,8 @@ def operator_adv(ctx):
 
     # Discretization.
     fu = u_t - u_xx
-    res = [('eqn', fu[1:])]
+    fu = mod.where(it == 0, ctx.cast(0), fu)  # Valid values are for it > 0.
+    res = [('eqn', fu)]
 
     # Impose a value at t=tmax.
     ixc = nx // 2
@@ -101,7 +109,7 @@ def plot_func(problem, state, epoch, frame, cbinfo=None):
     coeff = np.array(domain.field(state, 'coeff'))
 
     ixc = domain.size('x') // 2
-    title = 'epoch={:}, tmax={:.5g}\nu(pi/2, tmax) / u(pi/2, 0) = {:.5g}'.format(
+    title = 'epoch={:}, tmax={:.8g}\nu(pi/2, tmax) / u(pi/2, 0) = {:.5g}'.format(
         epoch, coeff[0], state_u[-1, ixc] / state_u[0, ixc])
     umax = np.max(ref_u)
     fig = odil.plot.plot_1d(domain,
@@ -153,13 +161,11 @@ def make_problem(args):
     u_init = get_ref_u(np.full_like(xone, domain.lower[0]), xone, args)
     u_final = get_ref_u(np.full_like(xone, domain.upper[0]), xone, args)
 
-
     # Initial state.
     state = odil.State(
         fields={
+            'u': odil.Field(np.tile(u_init, [args.Nt + 1, 1]), loc='nc'),
             'coeff': odil.Array([args.tmax_init]),
-            # None will be converted to a zero field.
-            'u': odil.Field(None, loc='nc'),
         })
     state = domain.init_state(state)
 

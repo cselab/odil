@@ -1,5 +1,6 @@
 import numpy as np
 import pickle
+import math
 
 from .util import assert_equal, printlog
 from .backend import ModTensorflow
@@ -491,7 +492,7 @@ class Domain:
         '''
         mod = self.mod
         arrays = self.arrays_from_field(field)
-        sizes = [np.prod(a.shape) for a in arrays]
+        sizes = [math.prod(a.shape) for a in arrays]
         split = mod.split_by_sizes(packed[:sum(sizes)], sizes)
         arrays = [mod.reshape(s, a.shape) for s, a in zip(split, arrays)]
         self.arrays_to_field(arrays, field)
@@ -504,7 +505,7 @@ class Domain:
         '''
         mod = self.mod
         arrays = self.arrays_from_state(state)
-        sizes = [np.prod(a.shape) for a in arrays]
+        sizes = [math.prod(a.shape) for a in arrays]
         split = mod.split_by_sizes(packed[:sum(sizes)], sizes)
         arrays = [mod.reshape(s, a.shape) for s, a in zip(split, arrays)]
         self.arrays_to_state(arrays, state)
@@ -1156,6 +1157,9 @@ class Problem:
                 assert isinstance(ff, (tuple, list)) and len(ff), \
                     'Operator must return a non-empty list'
                 names = [f[0] if isinstance(f, tuple) else '' for f in ff]
+                nonempty = [name for name in names if name]
+                assert len(nonempty) == len(set(nonempty)), \
+                    'Name of fields must be unique, got {}'.format(nonempty)
                 values = [f[1] if isinstance(f, tuple) else f for f in ff]
                 terms = [
                     mod.mean(v.value) if isinstance(v, Context.Raw)  #
@@ -1201,6 +1205,9 @@ class Problem:
             assert isinstance(ff, (tuple, list)) and len(ff), \
                 'Operator must return a non-empty list'
             names = [f[0] if isinstance(f, tuple) else '' for f in ff]
+            nonempty = [name for name in names if name]
+            assert len(nonempty) == len(set(nonempty)), \
+                'Name of fields must be unique, got {}'.format(nonempty)
             values = [f[1] if isinstance(f, tuple) else f for f in ff]
             terms = [
                 mod.mean(f.value) if isinstance(f, Context.Raw) \
@@ -1254,7 +1261,7 @@ class Problem:
         # Iterate over unknown fields.
         for key, field in state.fields.items():
             arrays = domain.arrays_from_field(field)
-            size = sum(np.prod(array.shape) for array in arrays)
+            size = sum(math.prod(array.shape) for array in arrays)
             key_to_offset[key] = offset
             key_to_size[key] = size
             offset += size
@@ -1273,6 +1280,8 @@ class Problem:
             if any(pad_flag):
                 pad_width = [(1, 0) if f else (0, 0) for f in pad_flag]
                 cols = mod.pad(cols, pad_width=pad_width, mode='constant')
+            # Shift of the source field.
+            shift_src = (0, ) * domain.ndim
             # Shift the array.
             if shift != shift_src:
                 cols = mod.roll(cols, np.negative(shift), range(domain.ndim))
@@ -1285,21 +1294,20 @@ class Problem:
                 trim_slice = [slice(0, -1 if f else None) for f in trim_flag]
                 cols = cols[trim_slice]
             # Indices of rows, i.e. components of operator value.
-            rows = mod.arange(np.prod(value.shape))
+            rows = mod.arange(math.prod(value.shape))
             # Indices of columns, i.e. components of unknown field.
             cols = mod.flatten(cols)
             garray = mod.flatten(garray)
             matr = modsp.csr_array((garray, (rows, cols)),
                                    dtype=domain.dtype,
-                                   shape=(np.prod(value.shape), size_all))
+                                   shape=(math.prod(value.shape), size_all))
             return matr
 
-        shift_src = (0, ) * domain.ndim
         matrices = []
         vectors = []
         for name, value, grad in zip(names, values, grads):
             # Shape of the resulting matrix.
-            mshape = (np.prod(value.shape), size_all)
+            mshape = (math.prod(value.shape), size_all)
             # Rows of the resulting matrix corresponding to one operator value.
             matrix = modsp.csr_array(mshape, dtype=domain.dtype)
             for desc, garray in grad.items():
@@ -1311,12 +1319,18 @@ class Problem:
                     # Skip array of empty gradients.
                     continue
                 field = state.fields[key]
-                if shift is None:  # Full Jacobian.
+                if shift is None or len(value.shape) < len(shift):
+                    '''
+                    Gradient in cases where the value or the unknown
+                    is not a grid field. This requres the full Jacobian.
+                    '''
                     if isinstance(garray, list):
                         garray = [
                             mod.reshape(a, [mshape[0], -1]) for a in garray
                         ]
                         garray = mod.concatenate(garray, axis=1)
+                    # Reshape to 2-dimensional array.
+                    garray = mod.reshape(garray, (mshape[0], -1))
                     # Dense array to sparse.
                     m = modsp.csr_array(garray)
                     # Shift the columns to the field's offset.
@@ -1324,7 +1338,10 @@ class Problem:
                         (m.data, m.indices + key_to_offset[key], m.indptr),
                         shape=mshape)
                     matrix += m
-                else:  # Element-wise gradient.
+                else:
+                    '''
+                    Gradient of a field with respect to a field.
+                    '''
                     if not isinstance(field, Field):
                         raise TypeError(
                             "Expected Field, got type {} for key='{}'".format(
@@ -1465,6 +1482,9 @@ class Problem:
                 assert isinstance(ff, (tuple, list)) and len(ff), \
                     'Operator must return a non-empty list'
                 names = [f[0] if isinstance(f, tuple) else '' for f in ff]
+                nonempty = [name for name in names if name]
+                assert len(nonempty) == len(set(nonempty)), \
+                    'Name of fields must be unique, got {}'.format(nonempty)
                 values = [f[1] if isinstance(f, tuple) else f for f in ff]
                 sums = [tf.reduce_sum(v) for v in values]
             grads = [tape.gradient(s, ctx.desc_to_array) for s in sums]

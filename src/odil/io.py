@@ -12,9 +12,9 @@ def parse_raw_xmf(xmfpath):
         text = ''.join(fin.read().split('\n'))
     # Extract RAW path and shape.
     m = re.findall(
-        '<Xdmf.*<Attribute.*'
-        '<DataItem.*<DataItem.*'
-        '<DataItem.*Dimensions="(\d*) (\d*) (\d*)".*Precision="(\d*)".*?> *([a-z0-9_.]*)',
+        r'<Xdmf.*<Attribute.*'
+        r'<DataItem.*<DataItem.*'
+        r'<DataItem.*Dimensions="(\d*) (\d*) (\d*)".*Precision="(\d*)".*?> *([a-z0-9_.]*)',
         text)[0]
     count = tuple(map(int, m[:3]))
     precision = int(m[3])
@@ -274,7 +274,8 @@ def write_vtk_poly(fout,
             array = np.reshape(array, -1)
             if array.size != ncells:
                 raise RuntimeError(
-                    f"Expected equal array.size={array.size} and ncells={ncells}")
+                    f"Expected equal array.size={array.size} and ncells={ncells}"
+                )
             write("SCALARS {:} float\n".format(name))
             write("LOOKUP_TABLE default\n")
             np.savetxt(fout, array, fmt=fmt)
