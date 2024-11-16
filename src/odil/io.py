@@ -23,14 +23,14 @@ def parse_raw_xmf(xmfpath):
 
     # Extract name and location.
     m = re.findall(
-        '<Attribute Name="([^"]*)" AttributeType="Scalar" Center="([a-zA-Z]*)">',
+        r'<Attribute Name="([^"]*)" AttributeType="Scalar" Center="([a-zA-Z]*)">',
         text)[0]
     name = m[0]
     if m[1] not in ["Cell", "Node"]:
         raise RuntimeError("Unknown Center='{}'".format(m[1]))
     cell = (m[1] == "Cell")
 
-    m = re.findall('<DataItem Name="Spacing".*?> *(.*?)<', text)[0]
+    m = re.findall(r'<DataItem Name="Spacing".*?> *(.*?)<', text)[0]
     spacing = tuple(map(float, reversed(m.split())))
     meta = {
         'rawpath': rawpath,
@@ -186,7 +186,8 @@ def write_vtk_poly(fout,
                    cell_fields=None,
                    tcoords=None,
                    comment="",
-                   fmt='%.16g'):
+                   fmt='%.16g',
+                   binary=False):
     """
     Writes polygons to ASCII legacy VTK file.
     fout: `str` or file-like
@@ -209,43 +210,52 @@ def write_vtk_poly(fout,
         path = fout
         fout = open(path, 'wb')
 
-    def write(data):
-        if type(data) is str:
-            data = data.encode()
-        fout.write(data)
+    def writeline(data=None,):
+        if data is not None:
+            if type(data) is str:
+                data = data.encode()
+            fout.write(data)
+        fout.write('\n'.encode())
 
-    write("# vtk DataFile Version 2.0\n")
+    def writearray(array):
+        if binary:
+            np.asarray(array, dtype='>f').tofile(fout)
+        else:
+            np.savetxt(fout, array, fmt=fmt)
 
-    write(comment + '\n')
-
-    write("ASCII\n")
-
-    write("DATASET POLYDATA\n")
+    writeline("# vtk DataFile Version 2.0")
+    writeline(comment)
+    writeline("BINARY" if binary else "ASCII")
+    writeline("DATASET POLYDATA")
 
     # Write points.
     npoints = len(points)
-    write("POINTS {:} float\n".format(npoints))
-    np.savetxt(fout, points, fmt=fmt)
+    writeline("POINTS {:} float".format(npoints))
+    writearray(points)
 
     # Write cells.
     if polygons is not None:
         ncells = len(polygons)
         cells_data_size = len(polygons) + sum([len(p) for p in polygons])
-        write("POLYGONS {:} {:}\n".format(ncells, cells_data_size))
+        writeline("POLYGONS {:} {:}".format(ncells, cells_data_size))
         for p in polygons:
-            write(' '.join(map(str, [len(p)] + p)) + '\n')
+            writeline(' '.join(map(str, [len(p)] + p)))
 
     # Write lines.
     if lines is not None:
         nlines = len(lines)
         lines_data_size = len(lines) + sum([len(p) for p in lines])
-        write("LINES {:} {:}\n".format(nlines, lines_data_size))
-        for p in lines:
-            write(' '.join(map(str, [len(p)] + p)) + '\n')
+        writeline("LINES {:} {:}".format(nlines, lines_data_size))
+        if binary:
+            for p in lines:
+                np.array([len(p)] + p, dtype='>i4').tofile(fout)
+        else:
+            for p in lines:
+                writeline(' '.join(map(str, [len(p)] + p)))
 
     # Write point data header.
     if point_fields is not None or tcoords is not None:
-        write("\nPOINT_DATA {:}\n".format(npoints))
+        writeline("POINT_DATA {:}".format(npoints))
 
     # Write point fields.
     if point_fields is not None:
@@ -255,30 +265,30 @@ def write_vtk_poly(fout,
                 raise RuntimeError(
                     f"Expected equal array.size={array.size} and npoints={npoints}"
                 )
-            write("SCALARS {:} float\n".format(name))
-            write("LOOKUP_TABLE default\n")
-            np.savetxt(fout, array, fmt=fmt)
+            writeline("SCALARS {:} float".format(name))
+            writeline("LOOKUP_TABLE default")
+            writearray(array)
 
     # Write texture coordinates.
     if tcoords is not None:
         if tcoords.shape != (npoints, 2):
             raise RuntimeError("Expected array.shape=({}, 2), got {}".format(
                 npoints, tcoords.shape))
-        write("TEXTURE_COORDINATES {} 2 float\n".format('tcoords'))
-        np.savetxt(fout, tcoords, fmt=fmt)
+        writeline("TEXTURE_COORDINATES {} 2 float".format('tcoords'))
+        writearray(tcoords)
 
     # Write cell fields.
     if cell_fields is not None:
-        write("\nCELL_DATA {:}\n".format(ncells))
+        writeline("CELL_DATA {:}".format(ncells))
         for name, array in cell_fields.items():
             array = np.reshape(array, -1)
             if array.size != ncells:
                 raise RuntimeError(
                     f"Expected equal array.size={array.size} and ncells={ncells}"
                 )
-            write("SCALARS {:} float\n".format(name))
-            write("LOOKUP_TABLE default\n")
-            np.savetxt(fout, array, fmt=fmt)
+            writeline("SCALARS {:} float".format(name))
+            writeline("LOOKUP_TABLE default")
+            writearray(array)
 
     if path:
         fout.close()

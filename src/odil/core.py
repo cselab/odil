@@ -526,7 +526,7 @@ class Domain:
         if not isinstance(field, (Field, MultigridField, Array)):
             raise TypeError(
                 "Expected Field or MultigridField, got type {} for field '{}'".
-                format(type(net).__name__, key))
+                format(type(field).__name__, key))
         if isinstance(field, Array):
             if len(shift):
                 raise RuntimeError('Array requires an empty shift')
@@ -1431,6 +1431,9 @@ class Problem:
                 'Operator must return a non-empty list'
             names = [f[0] if isinstance(f, tuple) else '' for f in ff]
             values = [f[1] if isinstance(f, tuple) else f for f in ff]
+            values = [
+                v.value if isinstance(v, Context.Raw) else v for v in values
+            ]
             if 'names' not in cache:
                 cache['names'] = names
             return values

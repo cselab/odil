@@ -8,11 +8,12 @@ import numpy as np
 
 from .optimizer import make_optimizer, Optimizer
 from .history import History
+
 g_log_file = sys.stderr  # File used by printlog()
 g_log_echo = False  # True if printlog() should print to stderr.
 
 
-def assert_equal(first, second, msg=None):
+def assert_equal(first, second, msg=''):
     if not (first == second):
         raise ValueError("Expected equal '{:}' and '{:}'{}".format(
             first, second, msg))
@@ -325,6 +326,24 @@ def get_memory_usage_kb():
     return process.memory_info().rss // 1024
 
 
+def get_gpu_memory_usage_kb():
+    '''
+    Returns current memory usage in KiB.
+    '''
+    from . import runtime
+    jax = runtime.jax
+    used = 0
+    pool = 0
+    if jax:
+        try:
+            d = jax.devices()[0]
+            used = d.memory_stats()['bytes_in_use'] // 1024
+            pool = d.memory_stats()['pool_bytes'] // 1024
+        except:
+            pass
+    return used, pool
+
+
 def get_env_config():
     keys = [
         'OMP_NUM_THREADS', 'CUDA_VISIBLE_DEVICES', 'ODIL_WARN', 'ODIL_BACKEND',
@@ -447,7 +466,6 @@ def make_callback(problem,
         walltime = curtime - cbinfo.time_start - cbinfo.time_callback
 
         if cbinfo.task_report:
-            memusage = get_memory_usage_kb()
             printlog("\nepoch={:05d}".format(epoch))
             if pinfo and 'norms' in pinfo:
                 norms, names = pinfo['norms'], pinfo['names']
@@ -456,20 +474,28 @@ def make_callback(problem,
                     for i, (norm, name) in enumerate(zip(norms, names))))
             if report_func is not None:
                 report_func(problem, state, epoch, cbinfo)
-            printlog("memory: {:} MiB".format(memusage // 1024))
-            printlog("walltime: {:.3f} s".format(walltime))
-            printlog("walltime+callback: {:.3f} s".format(  #
-                walltime + cbinfo.time_callback))
+            cpu_used = get_memory_usage_kb()
+            gpu_used, gpu_pool = get_gpu_memory_usage_kb()
+            printlog(
+                "memory: {:} MiB, gpu_used: {:} MiB, gpu_pool: {:} MiB".format(
+                    cpu_used // 1024, gpu_used // 1024, gpu_pool // 1024))
             if epoch > cbinfo.epoch:
                 wte = (walltime - cbinfo.walltime) / (epoch - cbinfo.epoch)
-                printlog("walltime/epoch: {:.3f} ms".format(wte * 1000))
-                printlog("throughput: {:.3f}M cells/s".format(
-                    np.prod(domain.cshape) / wte / 1e6))
-                cbinfo.walltime = walltime
-                cbinfo.epoch = epoch
+                thr = np.prod(domain.cshape) / wte
+            else:
+                wte = 0
+                thr = 0
+            printlog("walltime: {:.3f} s".format(walltime) +
+                     ", walltime+callback: {:.3f} s".format(
+                         walltime + cbinfo.time_callback) +
+                     ", walltime/epoch: {:.3f} ms".format(wte * 1000))
+            printlog("throughput: {:.3f} Mcells/s".format(thr / 1e6))
+            cbinfo.walltime = walltime
+            cbinfo.epoch = epoch
 
         if cbinfo.task_history:
-            memusage = get_memory_usage_kb()
+            cpu_used = get_memory_usage_kb()
+            gpu_used, gpu_pool = get_gpu_memory_usage_kb()
             history.append('epoch', epoch)
             history.append('frame', cbinfo.frame)
             if pinfo and 'norms' in pinfo:
@@ -483,8 +509,10 @@ def make_callback(problem,
                 for key, val in pinfo['linsolver'].items():
                     if isinstance(val, (int, float, str, np.floating)):
                         history.append('lin_' + key, val)
-            history.append('walltime', walltime)
-            history.append('memory', memusage / 1024)
+            history.append('walltime', np.round(walltime, 3))
+            history.append('memory', cpu_used // 1024)
+            history.append('gpu_used', gpu_used // 1024)
+            history.append('gpu_pool', gpu_pool // 1024)
             if history_func is not None:
                 history_func(problem, state, epoch, history, cbinfo)
             history.write()
