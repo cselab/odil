@@ -25,7 +25,7 @@ def transform_u(u, extra, mod):
     return u
 
 
-def operator_adv(ctx):
+def operator_heat(ctx):
     mod = ctx.mod
     dt, dx = ctx.step('t', 'x')
     x = ctx.points('x')
@@ -175,7 +175,7 @@ def make_problem(args):
     extra.u_final = u_final
     extra.args = args
 
-    problem = odil.Problem(operator_adv, domain, extra)
+    problem = odil.Problem(operator_heat, domain, extra)
     return problem, state
 
 
