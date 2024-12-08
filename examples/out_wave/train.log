@@ -1,0 +1,153 @@
+./wave.py --optimizer lbfgsb --multigrid 1 --kimp 100 --every_factor 2
+multigrid levels: [(64, 64), (32, 32), (16, 16), (8, 8), (4, 4), (2, 2)]
+Running L-BFGS-B optimizer
+
+epoch=00000
+residual: fu:67.937
+error: u:0.22361
+memory: 546 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 4.401 s, walltime+callback: 4.402 s, walltime/epoch: 0.000 ms
+throughput: 0.000 Mcells/s
+u_00000.png ut_00000.png
+
+epoch=00020
+residual: fu:9.4493
+error: u:0.215
+memory: 572 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 4.587 s, walltime+callback: 5.502 s, walltime/epoch: 9.311 ms
+throughput: 0.440 Mcells/s
+
+epoch=00040
+residual: fu:6.0507
+error: u:0.20188
+memory: 572 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 4.722 s, walltime+callback: 5.759 s, walltime/epoch: 6.761 ms
+throughput: 0.606 Mcells/s
+
+epoch=00060
+residual: fu:4.7993
+error: u:0.19112
+memory: 572 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 4.878 s, walltime+callback: 6.040 s, walltime/epoch: 7.797 ms
+throughput: 0.525 Mcells/s
+
+epoch=00080
+residual: fu:4.2391
+error: u:0.18424
+memory: 572 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 5.044 s, walltime+callback: 6.330 s, walltime/epoch: 8.296 ms
+throughput: 0.494 Mcells/s
+
+epoch=00100
+residual: fu:3.8024
+error: u:0.1721
+memory: 572 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 5.202 s, walltime+callback: 6.612 s, walltime/epoch: 7.908 ms
+throughput: 0.518 Mcells/s
+
+epoch=00120
+residual: fu:3.3458
+error: u:0.15588
+memory: 572 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 5.375 s, walltime+callback: 6.909 s, walltime/epoch: 8.625 ms
+throughput: 0.475 Mcells/s
+
+epoch=00140
+residual: fu:2.7322
+error: u:0.13724
+memory: 572 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 5.533 s, walltime+callback: 7.190 s, walltime/epoch: 7.904 ms
+throughput: 0.518 Mcells/s
+
+epoch=00160
+residual: fu:2.3319
+error: u:0.12511
+memory: 572 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 5.691 s, walltime+callback: 7.471 s, walltime/epoch: 7.940 ms
+throughput: 0.516 Mcells/s
+
+epoch=00180
+residual: fu:2.062
+error: u:0.11691
+memory: 572 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 5.858 s, walltime+callback: 7.761 s, walltime/epoch: 8.330 ms
+throughput: 0.492 Mcells/s
+
+epoch=00200
+residual: fu:1.8437
+error: u:0.10995
+memory: 572 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 6.020 s, walltime+callback: 8.047 s, walltime/epoch: 8.121 ms
+throughput: 0.504 Mcells/s
+u_00001.png ut_00001.png
+
+epoch=00220
+residual: fu:1.6821
+error: u:0.10403
+memory: 579 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 6.187 s, walltime+callback: 8.799 s, walltime/epoch: 8.347 ms
+throughput: 0.491 Mcells/s
+
+epoch=00240
+residual: fu:1.6116
+error: u:0.10088
+memory: 579 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 6.352 s, walltime+callback: 9.093 s, walltime/epoch: 8.233 ms
+throughput: 0.498 Mcells/s
+
+epoch=00260
+residual: fu:1.5596
+error: u:0.097678
+memory: 579 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 6.511 s, walltime+callback: 9.376 s, walltime/epoch: 7.929 ms
+throughput: 0.517 Mcells/s
+
+epoch=00280
+residual: fu:1.5135
+error: u:0.092575
+memory: 579 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 6.673 s, walltime+callback: 9.662 s, walltime/epoch: 8.095 ms
+throughput: 0.506 Mcells/s
+
+epoch=00300
+residual: fu:1.3805
+error: u:0.079017
+memory: 579 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 6.830 s, walltime+callback: 9.946 s, walltime/epoch: 7.874 ms
+throughput: 0.520 Mcells/s
+
+epoch=00320
+residual: fu:1.2163
+error: u:0.065975
+memory: 579 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 6.992 s, walltime+callback: 10.231 s, walltime/epoch: 8.083 ms
+throughput: 0.507 Mcells/s
+
+epoch=00340
+residual: fu:1.0667
+error: u:0.058497
+memory: 579 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 7.153 s, walltime+callback: 10.516 s, walltime/epoch: 8.068 ms
+throughput: 0.508 Mcells/s
+
+epoch=00360
+residual: fu:0.85918
+error: u:0.051654
+memory: 579 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 7.316 s, walltime+callback: 10.801 s, walltime/epoch: 8.163 ms
+throughput: 0.502 Mcells/s
+
+epoch=00380
+residual: fu:0.76651
+error: u:0.049368
+memory: 579 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 7.478 s, walltime+callback: 11.100 s, walltime/epoch: 8.068 ms
+throughput: 0.508 Mcells/s
+
+epoch=00400
+residual: fu:0.71657
+error: u:0.047221
+memory: 579 MiB, gpu_used: 0 MiB, gpu_pool: 0 MiB
+walltime: 7.644 s, walltime+callback: 11.389 s, walltime/epoch: 8.319 ms
+throughput: 0.492 Mcells/s
+u_00002.png ut_00002.png
