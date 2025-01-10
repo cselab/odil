@@ -8,7 +8,6 @@ import numpy as np
 
 from .optimizer import make_optimizer, Optimizer
 from .history import History
-
 g_log_file = sys.stderr  # File used by printlog()
 g_log_echo = False  # True if printlog() should print to stderr.
 

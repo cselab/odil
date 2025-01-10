@@ -210,7 +210,7 @@ def write_vtk_poly(fout,
         path = fout
         fout = open(path, 'wb')
 
-    def writeline(data=None,):
+    def writeline(data=None):
         if data is not None:
             if type(data) is str:
                 data = data.encode()

@@ -6,13 +6,11 @@ if int(os.environ.get("ODIL_AGG", 1)):
     matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import logging
-
 logging.getLogger("matplotlib.font_manager").setLevel(logging.ERROR)
 mplstyle = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                         'odil.mplstyle')
 if int(os.environ.get("ODIL_STYLE", 1)):
     matplotlib.style.use(mplstyle)
-
 
 g_extlist = None
 
