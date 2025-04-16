@@ -1,3 +1,0 @@
-[style]
-based_on_style = pep8
-blank_lines_between_top_level_imports_and_variables = 0
