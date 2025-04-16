@@ -4,53 +4,52 @@ import numpy as np
 
 
 def parse_raw_xmf(xmfpath):
-    '''
+    """
     Returns shape and path to `.raw` file
     xmfpath: path to `.xmf` metadata file
-    '''
+    """
     with open(xmfpath) as fin:
-        text = ''.join(fin.read().split('\n'))
+        text = "".join(fin.read().split("\n"))
     # Extract RAW path and shape.
     m = re.findall(
-        r'<Xdmf.*<Attribute.*'
-        r'<DataItem.*<DataItem.*'
+        r"<Xdmf.*<Attribute.*"
+        r"<DataItem.*<DataItem.*"
         r'<DataItem.*Dimensions="(\d*) (\d*) (\d*)".*Precision="(\d*)".*?> *([a-z0-9_.]*)',
-        text)[0]
+        text,
+    )[0]
     count = tuple(map(int, m[:3]))
     precision = int(m[3])
     rawpath = m[4]
     rawpath = os.path.join(os.path.dirname(xmfpath), rawpath)
 
     # Extract name and location.
-    m = re.findall(
-        r'<Attribute Name="([^"]*)" AttributeType="Scalar" Center="([a-zA-Z]*)">',
-        text)[0]
+    m = re.findall(r'<Attribute Name="([^"]*)" AttributeType="Scalar" Center="([a-zA-Z]*)">', text)[0]
     name = m[0]
     if m[1] not in ["Cell", "Node"]:
         raise RuntimeError("Unknown Center='{}'".format(m[1]))
-    cell = (m[1] == "Cell")
+    cell = m[1] == "Cell"
 
     m = re.findall(r'<DataItem Name="Spacing".*?> *(.*?)<', text)[0]
     spacing = tuple(map(float, reversed(m.split())))
     meta = {
-        'rawpath': rawpath,
-        'count': count,
-        'spacing': spacing,
-        'name': name,
-        'precision': precision,
-        'cell': cell,
+        "rawpath": rawpath,
+        "count": count,
+        "spacing": spacing,
+        "name": name,
+        "precision": precision,
+        "cell": cell,
     }
     return meta
 
 
 def read_raw_with_xmf(xmfpath):
-    '''
+    """
     Returns array from scalar field in raw format and parsed metadata.
     xmfpath: path to xmf metadata file
-    '''
+    """
     meta = parse_raw_xmf(xmfpath)
-    dtype = {4: np.float32, 8: np.float64}[meta['precision']]
-    u = np.fromfile(meta['rawpath'], dtype).reshape(meta['count'])
+    dtype = {4: np.float32, 8: np.float64}[meta["precision"]]
+    u = np.fromfile(meta["rawpath"], dtype).reshape(meta["count"])
     return u, meta
 
 
@@ -58,26 +57,20 @@ def read_raw(xmfpath):
     return read_raw_with_xmf(xmfpath)
 
 
-def write_raw_xmf(xmfpath,
-                  rawpath,
-                  count,
-                  spacing=(1, 1, 1),
-                  name=None,
-                  precision=8,
-                  cell=True):
-    '''
+def write_raw_xmf(xmfpath, rawpath, count, spacing=(1, 1, 1), name=None, precision=8, cell=True):
+    """
     Writes XMF metadata for a `.raw` datafile.
     xmfpath: path to output `.xmf` file
     rawpath: path to binary `.raw` file to be linked
     count: array size as (Nz, Ny, Nx)
     name: name of field
     cell: cell-centered values if True, else node-centered
-    '''
+    """
 
     if name is None:
         name = "data"
 
-    txt = '''\
+    txt = """\
 <?xml version="1.0" ?>
 <!DOCTYPE Xdmf SYSTEM "Xdmf.dtd" []>
 <Xdmf Version="2.0">
@@ -107,54 +100,49 @@ def write_raw_xmf(xmfpath,
    </Grid>
  </Domain>
 </Xdmf>
-'''
+"""
 
     def tostrrev(v):
-        return ' '.join(map(str, reversed(v)))
+        return " ".join(map(str, reversed(v)))
 
     def tostr(v):
-        return ' '.join(map(str, v))
+        return " ".join(map(str, v))
 
     info = dict()
     dim = 3
-    info['name'] = name
-    info['dim'] = dim
-    info['origin'] = tostrrev([0] * dim)
-    info['spacing'] = tostrrev(spacing)
-    info['start'] = tostrrev([0] * dim)
-    info['stride'] = tostrrev([1] * dim)
-    info['count'] = tostr(count)
-    info['bindim'] = tostr(count)
-    info['countd'] = tostr(count)
+    info["name"] = name
+    info["dim"] = dim
+    info["origin"] = tostrrev([0] * dim)
+    info["spacing"] = tostrrev(spacing)
+    info["start"] = tostrrev([0] * dim)
+    info["stride"] = tostrrev([1] * dim)
+    info["count"] = tostr(count)
+    info["bindim"] = tostr(count)
+    info["countd"] = tostr(count)
     if cell:
-        info['nodes'] = tostr([a + 1 for a in count])
-        info['center'] = 'Cell'
+        info["nodes"] = tostr([a + 1 for a in count])
+        info["center"] = "Cell"
     else:
-        info['nodes'] = tostr([a for a in count])
-        info['center'] = 'Node'
-    info['precision'] = precision
+        info["nodes"] = tostr([a for a in count])
+        info["center"] = "Node"
+    info["precision"] = precision
     if precision == 8:
-        info['type'] = 'Double'
+        info["type"] = "Double"
     else:
-        info['type'] = 'Float'
-    info['binpath'] = rawpath
-    info['seek'] = '0'
-    info['geomtype'] = 'ORIGIN_DXDYDZ'
+        info["type"] = "Float"
+    info["binpath"] = rawpath
+    info["seek"] = "0"
+    info["geomtype"] = "ORIGIN_DXDYDZ"
     # Remove '*' which are only used in `aphros/src/dump/xmf.ipp`.
-    txt = txt.replace('*}', '}')
+    txt = txt.replace("*}", "}")
     txt = txt.format(**info)
 
-    with open(xmfpath, 'w') as fout:
+    with open(xmfpath, "w") as fout:
         fout.write(txt)
 
 
-def write_raw_with_xmf(u,
-                       xmfpath,
-                       rawpath=None,
-                       spacing=(1, 1, 1),
-                       cell=True,
-                       name=None):
-    '''
+def write_raw_with_xmf(u, xmfpath, rawpath=None, spacing=(1, 1, 1), cell=True, name=None):
+    """
     Writes binary data in raw format with XMF metadata.
     u: np.ndarray to write, shape (Nz, Ny, Nx)
     xmfpath: path to output XMF
@@ -162,9 +150,9 @@ def write_raw_with_xmf(u,
     spacing: cell size, (hx, hy, hz)
     cell: cell-centered values if True, else node-centered
     name: name of field
-    '''
+    """
     if len(u.shape) != 3:
-        u = u.reshape((1, ) + u.shape)
+        u = u.reshape((1,) + u.shape)
     if len(spacing) != 3:
         spacing = list(spacing) + [min(spacing)]
     if name is None:
@@ -178,16 +166,18 @@ def write_raw_with_xmf(u,
     return xmfpath
 
 
-def write_vtk_poly(fout,
-                   points,
-                   polygons=None,
-                   lines=None,
-                   point_fields=None,
-                   cell_fields=None,
-                   tcoords=None,
-                   comment="",
-                   fmt='%.16g',
-                   binary=False):
+def write_vtk_poly(
+    fout,
+    points,
+    polygons=None,
+    lines=None,
+    point_fields=None,
+    cell_fields=None,
+    tcoords=None,
+    comment="",
+    fmt="%.16g",
+    binary=False,
+):
     """
     Writes polygons to ASCII legacy VTK file.
     fout: `str` or file-like
@@ -208,18 +198,18 @@ def write_vtk_poly(fout,
     path = None
     if type(fout) is str:
         path = fout
-        fout = open(path, 'wb')
+        fout = open(path, "wb")
 
     def writeline(data=None):
         if data is not None:
             if type(data) is str:
                 data = data.encode()
             fout.write(data)
-        fout.write('\n'.encode())
+        fout.write("\n".encode())
 
     def writearray(array):
         if binary:
-            np.asarray(array, dtype='>f').tofile(fout)
+            np.asarray(array, dtype=">f").tofile(fout)
         else:
             np.savetxt(fout, array, fmt=fmt)
 
@@ -239,7 +229,7 @@ def write_vtk_poly(fout,
         cells_data_size = len(polygons) + sum([len(p) for p in polygons])
         writeline("POLYGONS {:} {:}".format(ncells, cells_data_size))
         for p in polygons:
-            writeline(' '.join(map(str, [len(p)] + p)))
+            writeline(" ".join(map(str, [len(p)] + p)))
 
     # Write lines.
     if lines is not None:
@@ -248,10 +238,10 @@ def write_vtk_poly(fout,
         writeline("LINES {:} {:}".format(nlines, lines_data_size))
         if binary:
             for p in lines:
-                np.array([len(p)] + p, dtype='>i4').tofile(fout)
+                np.array([len(p)] + p, dtype=">i4").tofile(fout)
         else:
             for p in lines:
-                writeline(' '.join(map(str, [len(p)] + p)))
+                writeline(" ".join(map(str, [len(p)] + p)))
 
     # Write point data header.
     if point_fields is not None or tcoords is not None:
@@ -262,9 +252,7 @@ def write_vtk_poly(fout,
         for name, array in point_fields.items():
             array = np.reshape(array, -1)
             if array.size != npoints:
-                raise RuntimeError(
-                    f"Expected equal array.size={array.size} and npoints={npoints}"
-                )
+                raise RuntimeError(f"Expected equal array.size={array.size} and npoints={npoints}")
             writeline("SCALARS {:} float".format(name))
             writeline("LOOKUP_TABLE default")
             writearray(array)
@@ -272,9 +260,8 @@ def write_vtk_poly(fout,
     # Write texture coordinates.
     if tcoords is not None:
         if tcoords.shape != (npoints, 2):
-            raise RuntimeError("Expected array.shape=({}, 2), got {}".format(
-                npoints, tcoords.shape))
-        writeline("TEXTURE_COORDINATES {} 2 float".format('tcoords'))
+            raise RuntimeError("Expected array.shape=({}, 2), got {}".format(npoints, tcoords.shape))
+        writeline("TEXTURE_COORDINATES {} 2 float".format("tcoords"))
         writearray(tcoords)
 
     # Write cell fields.
@@ -283,9 +270,7 @@ def write_vtk_poly(fout,
         for name, array in cell_fields.items():
             array = np.reshape(array, -1)
             if array.size != ncells:
-                raise RuntimeError(
-                    f"Expected equal array.size={array.size} and ncells={ncells}"
-                )
+                raise RuntimeError(f"Expected equal array.size={array.size} and ncells={ncells}")
             writeline("SCALARS {:} float".format(name))
             writeline("LOOKUP_TABLE default")
             writearray(array)

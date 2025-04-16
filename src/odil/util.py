@@ -8,14 +8,14 @@ import numpy as np
 
 from .optimizer import make_optimizer, Optimizer
 from .history import History
+
 g_log_file = sys.stderr  # File used by printlog()
 g_log_echo = False  # True if printlog() should print to stderr.
 
 
-def assert_equal(first, second, msg=''):
+def assert_equal(first, second, msg=""):
     if not (first == second):
-        raise ValueError("Expected equal '{:}' and '{:}'{}".format(
-            first, second, msg))
+        raise ValueError("Expected equal '{:}' and '{:}'{}".format(first, second, msg))
 
 
 def set_log_file(f=None, echo=None):
@@ -27,7 +27,7 @@ def set_log_file(f=None, echo=None):
 
 
 def printlog(*msg):
-    m = ' '.join(map(str, msg)) + '\n'
+    m = " ".join(map(str, msg)) + "\n"
     if g_log_echo and g_log_file != sys.stderr:
         sys.stderr.write(m)
         sys.stderr.flush()
@@ -35,7 +35,7 @@ def printlog(*msg):
     g_log_file.flush()
 
 
-class Timer():
+class Timer:
 
     def __init__(self):
         self._starts = []  # Stack of pairs (key, time).
@@ -46,180 +46,106 @@ class Timer():
 
     def pop(self, key=None):
         start = self._starts.pop()
-        assert start[0] is None or key is None or start[0] == key, \
-                "Inconsistent keys passed to push() and pop(): "\
-                "{:} and {:}".format(start[0], key)
+        assert (
+            start[0] is None or key is None or start[0] == key
+        ), "Inconsistent keys passed to push() and pop(): " "{:} and {:}".format(start[0], key)
         if key is None:
             key = start[0]
         dt = time.time() - start[1]
-        self.counters[key] = self.counters.get(key, 0.) + dt
+        self.counters[key] = self.counters.get(key, 0.0) + dt
 
     def append(self, timer):
         for k in timer.counters:
-            self.counters[k] = self.counters.get(k, 0.) + timer.counters[k]
+            self.counters[k] = self.counters.get(k, 0.0) + timer.counters[k]
 
 
 def get_error(u, v):
     e1 = np.mean(abs(u - v))
-    e2 = np.mean((u - v)**2)**0.5
+    e2 = np.mean((u - v) ** 2) ** 0.5
     einf = np.max(abs(u - v))
     return e1, e2, einf
 
 
 def add_arguments(parser):
-    parser.add_argument('--epochs',
-                        type=int,
-                        default=None,
-                        help="Maximum epochs, "
-                        "defaults to product of plot_every and frames")
-    parser.add_argument('--every_factor',
-                        type=float,
-                        default=1,
-                        help="Multiplier for all *_every options")
-    parser.add_argument('--plot_every',
-                        type=int,
-                        default=5,
-                        help="Epochs between plots")
-    parser.add_argument('--report_every',
-                        type=int,
-                        default=10,
-                        help="Epochs between reports to stdout")
-    parser.add_argument('--history_every',
-                        type=int,
-                        default=1,
-                        help="Epochs between entries of training history")
-    parser.add_argument('--checkpoint_every',
-                        type=int,
-                        default=0,
-                        help="Epochs between checkpoints")
-    parser.add_argument('--frames',
-                        type=int,
-                        default=10,
-                        help="Frames to plot. Zero disables first frame.")
-    parser.add_argument('--outdir',
-                        type=str,
-                        default='.',
-                        help='Output directory')
-    parser.add_argument('--optimizer',
-                        type=str,
-                        default='adamn',
-                        help="Optimizer")
-    parser.add_argument('--seed',
-                        default=1000,
-                        type=int,
-                        help="Seed for numpy.random and tensorflow.random")
-    parser.add_argument('--plot_title',
-                        type=int,
-                        default=0,
-                        help="Enable title in plots")
-    parser.add_argument('--plotext',
-                        type=str,
-                        default='pdf',
-                        help="Extension of plots")
-    parser.add_argument('--history_full',
-                        type=int,
-                        default=0,
-                        help="Number of epochs to write "
-                        "history at every point")
-    parser.add_argument('--montage',
-                        type=int,
-                        default=1,
-                        help="Run montage after plotting")
-    parser.add_argument('--double',
-                        type=int,
-                        default=None,
-                        help="Double precision. Defaults to runtime.dtype")
-    parser.add_argument('--echo',
-                        type=int,
-                        default=0,
-                        help="Echo log to stderr")
-    parser.add_argument('--epoch_start',
-                        type=int,
-                        default=0,
-                        help="Initial value of epoch")
-    parser.add_argument('--frame_start',
-                        type=int,
-                        default=0,
-                        help="Initial value of frame")
-    parser.add_argument('--checkpoint',
-                        type=str,
-                        help="Continue from checkpoint in state_*.pickle")
-    parser.add_argument('--checkpoint_train',
-                        type=str,
-                        help="Continue from history in state_*_train.pickle"
-                        ". By default, infers the name from --checkpoint"
-                        ". Set to '' to disable default behavior")
-    parser.add_argument('--callback_update_state',
-                        type=int,
-                        default=0,
-                        help="Update state after callback")
-    parser.add_argument('--bfgs_m',
-                        type=int,
-                        default=50,
-                        help="History size for L-BFGS")
-    parser.add_argument('--bfgs_maxls',
-                        type=int,
-                        default=50,
-                        help="Max evaluations in line search")
-    parser.add_argument('--bfgs_pgtol',
-                        type=float,
-                        default=None,
-                        help="Convergence tolerance for L-BFGS-B")
-    parser.add_argument('--adam_epsilon',
-                        type=float,
-                        help="Parameter epsilon in Adam")
-    parser.add_argument('--adam_beta_1',
-                        type=float,
-                        help="Parameter beta_1 in Adam")
-    parser.add_argument('--adam_beta_2',
-                        type=float,
-                        help="Parameter beta_2 in Adam")
-    parser.add_argument('--multigrid',
-                        type=int,
-                        default=0,
-                        help="Use multigrid decomposition")
     parser.add_argument(
-        '--mg_interp',
+        "--epochs", type=int, default=None, help="Maximum epochs, " "defaults to product of plot_every and frames"
+    )
+    parser.add_argument("--every_factor", type=float, default=1, help="Multiplier for all *_every options")
+    parser.add_argument("--plot_every", type=int, default=5, help="Epochs between plots")
+    parser.add_argument("--report_every", type=int, default=10, help="Epochs between reports to stdout")
+    parser.add_argument("--history_every", type=int, default=1, help="Epochs between entries of training history")
+    parser.add_argument("--checkpoint_every", type=int, default=0, help="Epochs between checkpoints")
+    parser.add_argument("--frames", type=int, default=10, help="Frames to plot. Zero disables first frame.")
+    parser.add_argument("--outdir", type=str, default=".", help="Output directory")
+    parser.add_argument("--optimizer", type=str, default="adamn", help="Optimizer")
+    parser.add_argument("--seed", default=1000, type=int, help="Seed for numpy.random and tensorflow.random")
+    parser.add_argument("--plot_title", type=int, default=0, help="Enable title in plots")
+    parser.add_argument("--plotext", type=str, default="pdf", help="Extension of plots")
+    parser.add_argument(
+        "--history_full", type=int, default=0, help="Number of epochs to write " "history at every point"
+    )
+    parser.add_argument("--montage", type=int, default=1, help="Run montage after plotting")
+    parser.add_argument("--double", type=int, default=None, help="Double precision. Defaults to runtime.dtype")
+    parser.add_argument("--echo", type=int, default=0, help="Echo log to stderr")
+    parser.add_argument("--epoch_start", type=int, default=0, help="Initial value of epoch")
+    parser.add_argument("--frame_start", type=int, default=0, help="Initial value of frame")
+    parser.add_argument("--checkpoint", type=str, help="Continue from checkpoint in state_*.pickle")
+    parser.add_argument(
+        "--checkpoint_train",
         type=str,
-        default='stack',
+        help="Continue from history in state_*_train.pickle"
+        ". By default, infers the name from --checkpoint"
+        ". Set to '' to disable default behavior",
+    )
+    parser.add_argument("--callback_update_state", type=int, default=0, help="Update state after callback")
+    parser.add_argument("--bfgs_m", type=int, default=50, help="History size for L-BFGS")
+    parser.add_argument("--bfgs_maxls", type=int, default=50, help="Max evaluations in line search")
+    parser.add_argument("--bfgs_pgtol", type=float, default=None, help="Convergence tolerance for L-BFGS-B")
+    parser.add_argument("--adam_epsilon", type=float, help="Parameter epsilon in Adam")
+    parser.add_argument("--adam_beta_1", type=float, help="Parameter beta_1 in Adam")
+    parser.add_argument("--adam_beta_2", type=float, help="Parameter beta_2 in Adam")
+    parser.add_argument("--multigrid", type=int, default=0, help="Use multigrid decomposition")
+    parser.add_argument(
+        "--mg_interp",
+        type=str,
+        default="stack",
         choices=[
-            'conv',
-            'stack',
+            "conv",
+            "stack",
         ],
         help="Multigrid interpolation method:"
         " stack (using a stack of shifted arrays)"
         ", conv (using the transpose of convolution"
-        ", may be slower than 'stack' with JIT (JAX and TF XLA))")
-    parser.add_argument('--dump_data',
-                        type=int,
-                        default=1,
-                        help="Dump data_*.pickle with every plot")
-    parser.add_argument('--jac_nsmp0',
-                        type=int,
-                        default=50,
-                        help="Number of samples "
-                        "for initialization of Jacobi optimizer")
-    parser.add_argument('--jac_nsmp1',
-                        type=int,
-                        default=1,
-                        help="Number of samples "
-                        "for each step of Jacobi optimizer")
-    parser.add_argument('--jac_factor',
-                        type=float,
-                        default=1,
-                        help="Factor for the diagonal update"
-                        "for each step of Jacobi optimizer. "
-                        "Increase above 1 for more weight to recent values")
-    parser.add_argument('--jac_epsilon',
-                        type=float,
-                        default=1e-8,
-                        help="Parameter epsilon in Jacobi optimizer. "
-                        "Added to the diagonal to avoid division by zero")
-    parser.add_argument('--nn_initializer',
-                        type=str,
-                        default='legacy',
-                        choices=['legacy', 'glorot', 'lecun', 'he'],
-                        help="Initializer for weights of neural networks")
+        ", may be slower than 'stack' with JIT (JAX and TF XLA))",
+    )
+    parser.add_argument("--dump_data", type=int, default=1, help="Dump data_*.pickle with every plot")
+    parser.add_argument(
+        "--jac_nsmp0", type=int, default=50, help="Number of samples " "for initialization of Jacobi optimizer"
+    )
+    parser.add_argument(
+        "--jac_nsmp1", type=int, default=1, help="Number of samples " "for each step of Jacobi optimizer"
+    )
+    parser.add_argument(
+        "--jac_factor",
+        type=float,
+        default=1,
+        help="Factor for the diagonal update"
+        "for each step of Jacobi optimizer. "
+        "Increase above 1 for more weight to recent values",
+    )
+    parser.add_argument(
+        "--jac_epsilon",
+        type=float,
+        default=1e-8,
+        help="Parameter epsilon in Jacobi optimizer. " "Added to the diagonal to avoid division by zero",
+    )
+    parser.add_argument(
+        "--nn_initializer",
+        type=str,
+        default="legacy",
+        choices=["legacy", "glorot", "lecun", "he"],
+        help="Initializer for weights of neural networks",
+    )
 
 
 def optimize_newton(args, problem, state, callback=None, **kwargs):
@@ -228,11 +154,12 @@ def optimize_newton(args, problem, state, callback=None, **kwargs):
 
     def eval_pinfo(state):
         loss, _, terms, names, norms = problem.eval_loss_grad(state)
-        pinfo = {'terms': terms, 'names': names, 'norms': norms, 'loss': loss}
+        pinfo = {"terms": terms, "names": names, "norms": norms, "loss": loss}
         return pinfo
 
     from .linsolver import solve
-    opt = Optimizer(name='newton', displayname='Newton')
+
+    opt = Optimizer(name="newton", displayname="Newton")
     printlog("Running {} optimizer".format(opt.displayname))
 
     # Compute loss and residuals with initial state, to be used by callback.
@@ -251,7 +178,7 @@ def optimize_newton(args, problem, state, callback=None, **kwargs):
         domain.unpack_state(packed + delta, state)
         if callback:
             pinfo = eval_pinfo(state)
-            pinfo['linsolver'] = linstatus
+            pinfo["linsolver"] = linstatus
             callback(state, epoch + 1, pinfo)
     arrays = domain.arrays_from_state(state)
     optinfo = argparse.Namespace()
@@ -267,7 +194,7 @@ def optimize_grad(args, optname, problem, state, callback=None, **kwargs):
     def loss_grad(arrays):
         domain.arrays_to_state(arrays, state)
         loss, grads, terms, names, norms = problem.eval_loss_grad(state)
-        pinfo = {'terms': terms, 'names': names, 'norms': norms, 'loss': loss}
+        pinfo = {"terms": terms, "names": names, "norms": norms, "loss": loss}
         return loss, grads, pinfo
 
     def callback_wrap(arrays, epoch, pinfo):
@@ -280,17 +207,17 @@ def optimize_grad(args, optname, problem, state, callback=None, **kwargs):
 
     # Custom parameters.
     if args.bfgs_m is not None:
-        kwargs['m'] = args.bfgs_m
+        kwargs["m"] = args.bfgs_m
     if args.bfgs_pgtol is not None:
-        kwargs['pgtol'] = args.bfgs_pgtol
+        kwargs["pgtol"] = args.bfgs_pgtol
     if args.bfgs_maxls is not None:
-        kwargs['maxls'] = args.bfgs_maxls
+        kwargs["maxls"] = args.bfgs_maxls
     if args.adam_epsilon is not None:
-        kwargs['epsilon'] = args.adam_epsilon
+        kwargs["epsilon"] = args.adam_epsilon
     if args.adam_beta_1 is not None:
-        kwargs['beta_1'] = args.adam_beta_1
+        kwargs["beta_1"] = args.adam_beta_1
     if args.adam_beta_2 is not None:
-        kwargs['beta_2'] = args.adam_beta_2
+        kwargs["beta_2"] = args.adam_beta_2
 
     opt = make_optimizer(optname, dtype=domain.dtype, mod=mod, **kwargs)
     printlog("Running {} optimizer".format(opt.displayname))
@@ -301,58 +228,58 @@ def optimize_grad(args, optname, problem, state, callback=None, **kwargs):
     if callback:
         callback(state, args.epoch_start, pinfo)
 
-    arrays, optinfo = opt.run(arrays,
-                              loss_grad=loss_grad,
-                              epochs=args.epochs - args.epoch_start,
-                              callback=callback_wrap if callback else None,
-                              epoch_start=args.epoch_start,
-                              lr=args.lr,
-                              **kwargs)
+    arrays, optinfo = opt.run(
+        arrays,
+        loss_grad=loss_grad,
+        epochs=args.epochs - args.epoch_start,
+        callback=callback_wrap if callback else None,
+        epoch_start=args.epoch_start,
+        lr=args.lr,
+        **kwargs,
+    )
     return arrays, optinfo
 
 
 def optimize(args, optname, problem, state, callback, **kwargs):
-    if optname == 'newton':
+    if optname == "newton":
         return optimize_newton(args, problem, state, callback, **kwargs)
     return optimize_grad(args, optname, problem, state, callback, **kwargs)
 
 
 def get_memory_usage_kb():
-    '''
+    """
     Returns current memory usage in KiB.
-    '''
+    """
     process = psutil.Process()
     return process.memory_info().rss // 1024
 
 
 def get_gpu_memory_usage_kb():
-    '''
+    """
     Returns current memory usage in KiB.
-    '''
+    """
     from . import runtime
+
     jax = runtime.jax
     used = 0
     pool = 0
     if jax:
         try:
             d = jax.devices()[0]
-            used = d.memory_stats()['bytes_in_use'] // 1024
-            pool = d.memory_stats()['pool_bytes'] // 1024
+            used = d.memory_stats()["bytes_in_use"] // 1024
+            pool = d.memory_stats()["pool_bytes"] // 1024
         except:
             pass
     return used, pool
 
 
 def get_env_config():
-    keys = [
-        'OMP_NUM_THREADS', 'CUDA_VISIBLE_DEVICES', 'ODIL_WARN', 'ODIL_BACKEND',
-        'ODIL_JIT', 'ODIL_MT', 'ODIL_DTYPE'
-    ]
-    return {k: os.environ.get(k, '') for k in keys}
+    keys = ["OMP_NUM_THREADS", "CUDA_VISIBLE_DEVICES", "ODIL_WARN", "ODIL_BACKEND", "ODIL_JIT", "ODIL_MT", "ODIL_DTYPE"]
+    return {k: os.environ.get(k, "") for k in keys}
 
 
 def setup_outdir(args, relpath_args=None):
-    '''
+    """
     Creates the output directory, configuration `args.json`, and log file `train.log`.
     Updates the arguments with new relative paths and number of epochs.
     Sets random seeds.
@@ -362,12 +289,13 @@ def setup_outdir(args, relpath_args=None):
     relpath_args: `list` of `str`
         List of names of attributes of `args` to be treated as relative paths.
         They are updated to paths relative to the output directory.
-    '''
+    """
     from . import runtime
+
     mod = runtime.mod
     outdir = args.outdir
     os.makedirs(outdir, exist_ok=True)
-    with open(os.path.join(outdir, 'args.json'), 'w') as f:
+    with open(os.path.join(outdir, "args.json"), "w") as f:
         d = dict(
             vars(args),
             **get_env_config(),
@@ -381,7 +309,7 @@ def setup_outdir(args, relpath_args=None):
     # Switch to output directory.
     os.makedirs(outdir, exist_ok=True)
     os.chdir(outdir)
-    set_log_file(open("train.log", 'w'), echo=args.echo)
+    set_log_file(open("train.log", "w"), echo=args.echo)
 
     # Update relative paths.
     if relpath_args is None:
@@ -401,16 +329,12 @@ def setup_outdir(args, relpath_args=None):
     if args.seed is not None:
         np.random.seed(args.seed)
         mod.random.set_seed(args.seed)
-    printlog(' '.join(sys.argv))
+    printlog(" ".join(sys.argv))
 
 
-def make_callback(problem,
-                  args=None,
-                  epoch_func=None,
-                  report_func=None,
-                  history_func=None,
-                  checkpoint_func=None,
-                  plot_func=None):
+def make_callback(
+    problem, args=None, epoch_func=None, report_func=None, history_func=None, checkpoint_func=None, plot_func=None
+):
     # Persistent state of the callback.
     cbinfo = argparse.Namespace()
     cbinfo.walltime = 0  # Walltime of the last call with task_report=True.
@@ -422,7 +346,7 @@ def make_callback(problem,
     cbinfo.frame = 0
 
     if args.history_every:
-        cbinfo.history = History(csvpath='train.csv', warmup=1)
+        cbinfo.history = History(csvpath="train.csv", warmup=1)
     else:
         cbinfo.history = None
 
@@ -434,27 +358,22 @@ def make_callback(problem,
         history = cbinfo.history
         time_prev = time.time()
 
-        cbinfo.task_report = (args.report_every
-                              and epoch % args.report_every == 0)
-        cbinfo.task_history = (history is not None
-                               and (epoch % args.history_every == 0
-                                    or epoch < args.history_full))
-        cbinfo.task_plot = (epoch % args.plot_every == 0
-                            and (epoch or args.frames))
-        cbinfo.task_checkpoint = (args.checkpoint_every
-                                  and epoch % args.checkpoint_every == 0)
+        cbinfo.task_report = args.report_every and epoch % args.report_every == 0
+        cbinfo.task_history = history is not None and (epoch % args.history_every == 0 or epoch < args.history_full)
+        cbinfo.task_plot = epoch % args.plot_every == 0 and (epoch or args.frames)
+        cbinfo.task_checkpoint = args.checkpoint_every and epoch % args.checkpoint_every == 0
 
         cbinfo.pinfo = pinfo
 
         tracers = problem.tracers
         if isinstance(tracers, dict):
             # FIXME: Revise without check for TF.
-            if mod.tf and 'epoch' in problem.tracers:
+            if mod.tf and "epoch" in problem.tracers:
                 # Need tf.Variable to avoid retracing.
-                assert isinstance(tracers['epoch'], mod.tf.Variable)
-                problem.tracers['epoch'].assign(epoch)
+                assert isinstance(tracers["epoch"], mod.tf.Variable)
+                problem.tracers["epoch"].assign(epoch)
             else:
-                problem.tracers['epoch'] = epoch
+                problem.tracers["epoch"] = epoch
         if epoch_func is not None:
             epoch_func(problem, state, epoch, cbinfo)
 
@@ -466,28 +385,35 @@ def make_callback(problem,
 
         if cbinfo.task_report:
             printlog("\nepoch={:05d}".format(epoch))
-            if pinfo and 'norms' in pinfo:
-                norms, names = pinfo['norms'], pinfo['names']
-                printlog('residual: ' + ', '.join(
-                    '{}:{:.5g}'.format(name or str(i), np.array(norm))
-                    for i, (norm, name) in enumerate(zip(norms, names))))
+            if pinfo and "norms" in pinfo:
+                norms, names = pinfo["norms"], pinfo["names"]
+                printlog(
+                    "residual: "
+                    + ", ".join(
+                        "{}:{:.5g}".format(name or str(i), np.array(norm))
+                        for i, (norm, name) in enumerate(zip(norms, names))
+                    )
+                )
             if report_func is not None:
                 report_func(problem, state, epoch, cbinfo)
             cpu_used = get_memory_usage_kb()
             gpu_used, gpu_pool = get_gpu_memory_usage_kb()
             printlog(
                 "memory: {:} MiB, gpu_used: {:} MiB, gpu_pool: {:} MiB".format(
-                    cpu_used // 1024, gpu_used // 1024, gpu_pool // 1024))
+                    cpu_used // 1024, gpu_used // 1024, gpu_pool // 1024
+                )
+            )
             if epoch > cbinfo.epoch:
                 wte = (walltime - cbinfo.walltime) / (epoch - cbinfo.epoch)
                 thr = np.prod(domain.cshape) / wte
             else:
                 wte = 0
                 thr = 0
-            printlog("walltime: {:.3f} s".format(walltime) +
-                     ", walltime+callback: {:.3f} s".format(
-                         walltime + cbinfo.time_callback) +
-                     ", walltime/epoch: {:.3f} ms".format(wte * 1000))
+            printlog(
+                "walltime: {:.3f} s".format(walltime)
+                + ", walltime+callback: {:.3f} s".format(walltime + cbinfo.time_callback)
+                + ", walltime/epoch: {:.3f} ms".format(wte * 1000)
+            )
             printlog("throughput: {:.3f} Mcells/s".format(thr / 1e6))
             cbinfo.walltime = walltime
             cbinfo.epoch = epoch
@@ -495,23 +421,22 @@ def make_callback(problem,
         if cbinfo.task_history:
             cpu_used = get_memory_usage_kb()
             gpu_used, gpu_pool = get_gpu_memory_usage_kb()
-            history.append('epoch', epoch)
-            history.append('frame', cbinfo.frame)
-            if pinfo and 'norms' in pinfo:
-                norms, names = pinfo['norms'], pinfo['names']
+            history.append("epoch", epoch)
+            history.append("frame", cbinfo.frame)
+            if pinfo and "norms" in pinfo:
+                norms, names = pinfo["norms"], pinfo["names"]
                 for i, (norm, name) in enumerate(zip(norms, names)):
-                    history.append('norm_{:}'.format(name or str(i)),
-                                   np.array(norm))
-            if pinfo and 'loss' in pinfo:
-                history.append('loss', pinfo['loss'])
-            if args.linsolver_history and 'linsolver' in pinfo:
-                for key, val in pinfo['linsolver'].items():
+                    history.append("norm_{:}".format(name or str(i)), np.array(norm))
+            if pinfo and "loss" in pinfo:
+                history.append("loss", pinfo["loss"])
+            if args.linsolver_history and "linsolver" in pinfo:
+                for key, val in pinfo["linsolver"].items():
                     if isinstance(val, (int, float, str, np.floating)):
-                        history.append('lin_' + key, val)
-            history.append('walltime', np.round(walltime, 3))
-            history.append('memory', cpu_used // 1024)
-            history.append('gpu_used', gpu_used // 1024)
-            history.append('gpu_pool', gpu_pool // 1024)
+                        history.append("lin_" + key, val)
+            history.append("walltime", np.round(walltime, 3))
+            history.append("memory", cpu_used // 1024)
+            history.append("gpu_used", gpu_used // 1024)
+            history.append("gpu_pool", gpu_pool // 1024)
             if history_func is not None:
                 history_func(problem, state, epoch, history, cbinfo)
             history.write()
@@ -526,6 +451,7 @@ def make_callback(problem,
                 checkpoint_func(problem, state, epoch, cbinfo)
             else:
                 from .core import checkpoint_save
+
                 path = "checkpoint_{:06d}.pickle".format(epoch)
                 printlog(path)
                 checkpoint_save(domain, state, path)

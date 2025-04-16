@@ -11,13 +11,7 @@ class Optimizer:
         self.pinfo = None
         self.evals = 0
 
-    def run(self,
-            x0,
-            loss_grad,
-            epochs,
-            callback=None,
-            epoch_start=0,
-            **kwargs):
+    def run(self, x0, loss_grad, epochs, callback=None, epoch_start=0, **kwargs):
         optinfo = Namespace()
         optinfo.evals = 0  # Number of `loss_grad()` evaluations.
         optinfo.epochs = 0  # Number of epochs actually done.
@@ -33,14 +27,7 @@ class EarlyStopError(Exception):
 
 class LbfgsbOptimizer(Optimizer):
 
-    def __init__(self,
-                 pgtol=1e-16,
-                 m=50,
-                 maxls=50,
-                 factr=0,
-                 dtype=None,
-                 mod=None,
-                 **kwargs):
+    def __init__(self, pgtol=1e-16, m=50, maxls=50, factr=0, dtype=None, mod=None, **kwargs):
         """
         pgtol: `float`
             Gradient convergence condition.
@@ -63,13 +50,7 @@ class LbfgsbOptimizer(Optimizer):
         self.factr = factr
         self.evals = 0
 
-    def run(self,
-            x0,
-            loss_grad,
-            epochs=None,
-            callback=None,
-            epoch_start=0,
-            **kwargs):
+    def run(self, x0, loss_grad, epochs=None, callback=None, epoch_start=0, **kwargs):
         self.epoch = epoch_start
         mod = self.mod
         dtype = self.dtype
@@ -81,7 +62,7 @@ class LbfgsbOptimizer(Optimizer):
         def flat_to_arrays(x):
             x = np.array(x, dtype=dtype)
             sizes = [np.prod(a.shape) for a in x0]
-            split = split_by_sizes(x[:sum(sizes)], sizes)
+            split = split_by_sizes(x[: sum(sizes)], sizes)
             arrays = [mod.reshape(s, a.shape) for s, a in zip(split, x0)]
             return arrays
 
@@ -109,39 +90,35 @@ class LbfgsbOptimizer(Optimizer):
         x0_flat = arrays_to_flat(x0)
 
         from scipy import optimize
-        x, f, sinfo = optimize.fmin_l_bfgs_b(func=func_wrap,
-                                             x0=x0_flat,
-                                             maxiter=epochs,
-                                             pgtol=self.pgtol,
-                                             m=self.m,
-                                             maxls=self.maxls,
-                                             factr=self.factr,
-                                             maxfun=np.inf,
-                                             callback=callback_wrap)
+
+        x, f, sinfo = optimize.fmin_l_bfgs_b(
+            func=func_wrap,
+            x0=x0_flat,
+            maxiter=epochs,
+            pgtol=self.pgtol,
+            m=self.m,
+            maxls=self.maxls,
+            factr=self.factr,
+            maxfun=np.inf,
+            callback=callback_wrap,
+        )
         optinfo = Namespace()
-        optinfo.warnflag = sinfo['warnflag']
-        optinfo.task = sinfo['task']
-        optinfo.evals = sinfo['funcalls']
-        optinfo.epochs = sinfo['nit']
+        optinfo.warnflag = sinfo["warnflag"]
+        optinfo.task = sinfo["task"]
+        optinfo.evals = sinfo["funcalls"]
+        optinfo.epochs = sinfo["nit"]
         if optinfo.warnflag not in [0, 1] or optinfo.epochs < epochs:
             raise EarlyStopError(
-                ", ".join("{:}={:}".format(key, sinfo.get(key, ''))
-                          for key in ['warnflag', 'task', 'funcalls', 'nit']),
-                optinfo)
+                ", ".join("{:}={:}".format(key, sinfo.get(key, "")) for key in ["warnflag", "task", "funcalls", "nit"]),
+                optinfo,
+            )
         arrays = flat_to_arrays(x)
         return arrays, optinfo
 
 
 class LbfgsOptimizer(Optimizer):
 
-    def __init__(self,
-                 pgtol=1e-16,
-                 m=50,
-                 maxls=50,
-                 factr=0,
-                 dtype=None,
-                 mod=None,
-                 **kwargs):
+    def __init__(self, pgtol=1e-16, m=50, maxls=50, factr=0, dtype=None, mod=None, **kwargs):
         """
         pgtol: `float`
             Gradient convergence condition.
@@ -165,13 +142,7 @@ class LbfgsOptimizer(Optimizer):
         self.evals = 0
         self.last_x = None
 
-    def run(self,
-            x0,
-            loss_grad,
-            epochs=None,
-            callback=None,
-            epoch_start=0,
-            **kwargs):
+    def run(self, x0, loss_grad, epochs=None, callback=None, epoch_start=0, **kwargs):
         self.epoch = epoch_start
         mod = self.mod
         tf = mod.tf
@@ -179,7 +150,7 @@ class LbfgsOptimizer(Optimizer):
 
         def flat_to_arrays(x):
             sizes = [np.prod(a.shape) for a in x0]
-            split = mod.split_by_sizes(x[:sum(sizes)], sizes)
+            split = mod.split_by_sizes(x[: sum(sizes)], sizes)
             arrays = [mod.reshape(s, a.shape) for s, a in zip(split, x0)]
             return arrays
 
@@ -191,7 +162,7 @@ class LbfgsOptimizer(Optimizer):
             self.epoch += 1
             if callback:
                 sizes = [np.prod(a.shape) for a in x0]
-                split = mod.split_by_sizes(x[:sum(sizes)], sizes)
+                split = mod.split_by_sizes(x[: sum(sizes)], sizes)
                 arrays = [mod.reshape(s, a.shape) for s, a in zip(split, x0)]
                 callback(arrays, self.epoch, self.pinfo)
 
@@ -239,14 +210,7 @@ class AdamTfOptimizer(Optimizer):
         super().__init__(name="adam_tf", displayname="AdamTf", dtype=dtype)
         self.mod = mod
 
-    def run(self,
-            x0,
-            loss_grad,
-            epochs=None,
-            callback=None,
-            lr=1e-3,
-            epoch_start=0,
-            **kwargs):
+    def run(self, x0, loss_grad, epochs=None, callback=None, lr=1e-3, epoch_start=0, **kwargs):
 
         mod = self.mod
         tf = mod.tf
@@ -267,7 +231,7 @@ class AdamTfOptimizer(Optimizer):
                 loss, grads, pinfo = self()
                 self.optimizer.apply_gradients(zip(grads, self.x))
                 self.pinfo = pinfo
-                return {'loss': loss}
+                return {"loss": loss}
 
         x = [mod.tf.Variable(e) for e in x0]
         model = CustomModel(x)
@@ -279,13 +243,9 @@ class AdamTfOptimizer(Optimizer):
                 if epoch > 0 and callback:
                     callback(model.x, model.epoch, model.pinfo)
 
-        model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=lr),
-                      run_eagerly=True)
+        model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=lr), run_eagerly=True)
         dummy = [1]  # Unused input.
-        model.fit(dummy,
-                  epochs=epochs + 1,
-                  callbacks=[CustomCallback()],
-                  verbose=0)
+        model.fit(dummy, epochs=epochs + 1, callbacks=[CustomCallback()], verbose=0)
         optinfo = Namespace()
         optinfo.epochs = epochs
         optinfo.evals = model.evals
@@ -298,14 +258,7 @@ class GdOptimizer(Optimizer):
         super().__init__(name="gd", displayname="GD", dtype=dtype)
         self.mod = mod
 
-    def run(self,
-            x0,
-            loss_grad,
-            epochs=None,
-            callback=None,
-            lr=1e-3,
-            epoch_start=0,
-            **kwargs):
+    def run(self, x0, loss_grad, epochs=None, callback=None, lr=1e-3, epoch_start=0, **kwargs):
 
         mod = self.mod
         x = [mod.copy(e) for e in x0]
@@ -329,22 +282,24 @@ class AdamNativeOptimizer(Optimizer):
         super().__init__(name="adamn", displayname="AdamNative", dtype=dtype)
         self.mod = mod
 
-    def run(self,
-            x0,
-            loss_grad,
-            epochs=None,
-            callback=None,
-            lr=1e-3,
-            epoch_start=0,
-            beta_1=0.9,
-            beta_2=0.999,
-            epsilon=1e-7,
-            jit=True,
-            **kwargs):
-        '''
+    def run(
+        self,
+        x0,
+        loss_grad,
+        epochs=None,
+        callback=None,
+        lr=1e-3,
+        epoch_start=0,
+        beta_1=0.9,
+        beta_2=0.999,
+        epsilon=1e-7,
+        jit=True,
+        **kwargs
+    ):
+        """
         Based on
         https://github.com/keras-team/keras/blob/v2.12.0/keras/optimizers/adam.py
-        '''
+        """
 
         dtype = self.dtype
         mod = self.mod
@@ -358,14 +313,8 @@ class AdamNativeOptimizer(Optimizer):
             beta_2_power = beta_2**local_epoch
             alpha = lr * mod.sqrt(1 - beta_2_power) / (1 - beta_1_power)
             m = [m + (g - m) * (1 - beta_1) for m, g in zip(m, grads)]
-            v = [
-                v + (mod.square(g) - v) * (1 - beta_2)
-                for v, g in zip(v, grads)
-            ]
-            x = [
-                x - (m * alpha) / (mod.sqrt(v) + epsilon)
-                for x, m, v in zip(x, m, v)
-            ]
+            v = [v + (mod.square(g) - v) * (1 - beta_2) for v, g in zip(v, grads)]
+            x = [x - (m * alpha) / (mod.sqrt(v) + epsilon) for x, m, v in zip(x, m, v)]
             return x, m, v
 
         step = _step

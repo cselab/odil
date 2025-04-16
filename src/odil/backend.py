@@ -1,7 +1,7 @@
-'''
+"""
 Wrappers for backend modules, e.g. TensorFlow, JAX, NumPy, CuPy.
 The interface tends to follow NumPy's conventions.
-'''
+"""
 
 import numpy as np
 from argparse import Namespace
@@ -14,28 +14,28 @@ class ModBase:
         assert mod is not None
         self.mod = mod
         for name in [
-                'int32',
-                'float32',
-                'float64',
-                'linspace',
-                'ones',
-                'ones_like',
-                'roll',
-                'reshape',
-                'stack',
-                'abs',
-                'cos',
-                'sin',
-                'exp',
-                'zeros',
-                'zeros_like',
-                'square',
-                'sqrt',
-                'transpose',
-                'minimum',
-                'maximum',
-                'meshgrid',
-                'where',
+            "int32",
+            "float32",
+            "float64",
+            "linspace",
+            "ones",
+            "ones_like",
+            "roll",
+            "reshape",
+            "stack",
+            "abs",
+            "cos",
+            "sin",
+            "exp",
+            "zeros",
+            "zeros_like",
+            "square",
+            "sqrt",
+            "transpose",
+            "minimum",
+            "maximum",
+            "meshgrid",
+            "where",
         ]:
             setattr(self, name, getattr(mod, name))
         self.flatten = lambda x: mod.reshape(x, [-1])
@@ -91,6 +91,7 @@ class ModNumpy(ModBase):
             def split_by_sizes(array, sizes, axis=0):
                 cumsum = np.cumsum(sizes)[:-1]
                 return jax.numpy.split(array, cumsum, axis=axis)
+
         else:
 
             def split_by_sizes(array, sizes, axis=0):
@@ -108,19 +109,16 @@ class ModNumpy(ModBase):
             self.stop_gradient = lambda x: x
 
         def convolution(input, filters, strides, padding):
-            '''
+            """
             input: n-dimensional input array
             filters: n-dimiensional kernel
             strides: `int` or sequence of n integers
-            '''
+            """
             if isinstance(strides, int):
-                strides = (strides, ) * len(input.shape)
+                strides = (strides,) * len(input.shape)
             input = mod.reshape(input, (1, 1) + input.shape)
             filters = mod.reshape(filters, (1, 1) + filters.shape)
-            res = jax.lax.conv(lhs=input,
-                               rhs=filters,
-                               window_strides=strides,
-                               padding=padding)
+            res = jax.lax.conv(lhs=input, rhs=filters, window_strides=strides, padding=padding)
             res = res[0, 0, ...]
             return res
 
@@ -138,11 +136,7 @@ class ModNumpy(ModBase):
                 if self.random.key is None:
                     set_seed(np.random.default_rng().integers(1 << 16))
                 self.random.key, subkey = jax.random.split(self.random.key)
-                return jax.random.uniform(subkey,
-                                          shape=shape,
-                                          minval=minval,
-                                          maxval=maxval,
-                                          dtype=dtype)
+                return jax.random.uniform(subkey, shape=shape, minval=minval, maxval=maxval, dtype=dtype)
 
             def normal(shape, mean=0, stddev=1, dtype=None):
                 if self.random.key is None:
@@ -150,37 +144,28 @@ class ModNumpy(ModBase):
                 self.random.key, subkey = jax.random.split(self.random.key)
                 mean = self.cast(mean, dtype)
                 stddev = self.cast(stddev, dtype)
-                return mean + stddev * jax.random.normal(
-                    subkey, shape=shape, dtype=dtype)
+                return mean + stddev * jax.random.normal(subkey, shape=shape, dtype=dtype)
+
         else:
 
             def set_seed(seed):
                 self.random.set_seed(seed)
 
             def uniform(shape, minval, maxval, dtype):
-                return mod.random.uniform(low=minval, high=maxval,
-                                          size=shape).astype(dtype)
+                return mod.random.uniform(low=minval, high=maxval, size=shape).astype(dtype)
 
             def normal(shape, mean, stddev, dtype):
-                return mod.random.normal(loc=mean, scale=stddev,
-                                         size=shape).astype(dtype)
+                return mod.random.normal(loc=mean, scale=stddev, size=shape).astype(dtype)
 
         self.random.set_seed = set_seed
         self.random.uniform = uniform
         self.random.normal = normal
 
-        def conv_transpose(input,
-                           filters,
-                           output_shape=None,
-                           strides=None,
-                           padding=None):
+        def conv_transpose(input, filters, output_shape=None, strides=None, padding=None):
             dim = len(input.shape)
             if isinstance(strides, int):
-                strides = (strides, ) * dim
-            res = jax.lax.conv_transpose(lhs=input,
-                                         rhs=filters,
-                                         strides=strides,
-                                         padding=padding)
+                strides = (strides,) * dim
+            res = jax.lax.conv_transpose(lhs=input, rhs=filters, strides=strides, padding=padding)
             return res
 
         self.conv_transpose = conv_transpose
@@ -191,8 +176,7 @@ class ModNumpy(ModBase):
             self.block_diag = modsp.block_diag
             self.tril = modsp.tril
             tmp = self.numpy
-            self.numpy = (lambda x: x
-                          if isinstance(x, modsp.csr_matrix) else tmp(x))
+            self.numpy = lambda x: x if isinstance(x, modsp.csr_matrix) else tmp(x)
             self.spnorm = modsp.linalg.norm
             self.spsolve = modsp.linalg.spsolve
 
@@ -205,7 +189,7 @@ class ModTensorflow(ModBase):
         self.cast = mod.cast
         self.numpy = lambda x: x.numpy()
         self.native = lambda x: x
-        self.spnative = lambda x: x.numpy() if hasattr(x, 'numpy') else x
+        self.spnative = lambda x: x.numpy() if hasattr(x, "numpy") else x
         self.sum = mod.reduce_sum
         self.mean = mod.reduce_mean
         self.max = mod.reduce_max
@@ -218,7 +202,7 @@ class ModTensorflow(ModBase):
         self.sigmoid = mod.math.sigmoid
         self.full = mod.fill
         self.arange = mod.range
-        self.norm = lambda x: mod.reduce_sum(x**2)**0.5
+        self.norm = lambda x: mod.reduce_sum(x**2) ** 0.5
         self.mod = mod
         self.modsp = modsp
         self.floor = mod.math.floor
@@ -253,17 +237,14 @@ class ModTensorflow(ModBase):
         self.pad = pad
 
         def convolution(input, filters, strides, padding):
-            '''
+            """
             input: n-dimensional input array
             filters: n-dimiensional kernel
             strides: `int` or sequence of n integers
-            '''
-            input = mod.reshape(input, (1, ) + input.shape + (1, ))
+            """
+            input = mod.reshape(input, (1,) + input.shape + (1,))
             filters = mod.reshape(filters, filters.shape + (1, 1))
-            res = mod.nn.convolution(input=input,
-                                     filters=filters,
-                                     strides=strides,
-                                     padding=padding)
+            res = mod.nn.convolution(input=input, filters=filters, strides=strides, padding=padding)
             res = res[0, ..., 0]
             return res
 
@@ -282,11 +263,8 @@ class ModTensorflow(ModBase):
         if modsp is not None:
 
             def csr_matrix(*args, **kwargs):
-                if 'dtype' in kwargs:
-                    kwargs['dtype'] = {
-                        mod.float32: np.float32,
-                        mod.float64: np.float64
-                    }[kwargs['dtype']]
+                if "dtype" in kwargs:
+                    kwargs["dtype"] = {mod.float32: np.float32, mod.float64: np.float64}[kwargs["dtype"]]
                 return modsp.csr_matrix(*args, **kwargs)
 
             self.csr_matrix = csr_matrix
@@ -295,8 +273,7 @@ class ModTensorflow(ModBase):
             self.block_diag = modsp.block_diag
             self.tril = modsp.tril
             tmp = self.numpy
-            self.numpy = (lambda x: x
-                          if isinstance(x, modsp.csr_matrix) else tmp(x))
+            self.numpy = lambda x: x if isinstance(x, modsp.csr_matrix) else tmp(x)
             self.spnorm = modsp.linalg.norm
             self.spsolve = modsp.linalg.spsolve
 
@@ -329,12 +306,11 @@ class ModCupy(ModBase):
                 for i in range(n):
                     for j in range(n):
                         res[i][i] = bb[i]
-                return modsp.bmat(res, format='csr')
+                return modsp.bmat(res, format="csr")
 
             self.block_diag = block_diag
             self.tril = modsp.tril
             tmp = self.numpy
-            self.numpy = (lambda x: x.get()
-                          if isinstance(x, modsp.csr_matrix) else tmp(x))
+            self.numpy = lambda x: x.get() if isinstance(x, modsp.csr_matrix) else tmp(x)
             self.spnorm = modsp.linalg.norm
             self.spsolve = modsp.linalg.spsolve
