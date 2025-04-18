@@ -5,25 +5,22 @@ from copy import deepcopy
 import odil
 from odil.runtime import mod
 
-cases = ['pack', 'arrays']
+cases = ["pack", "arrays"]
 
 
 def test(case, dim):
     cshape = (1 + np.array(range(dim))) * 2
-    dimnames = ['x', 'y', 'z', 'w'][:dim]
-    domain = odil.Domain(cshape=cshape,
-                         dimnames=dimnames,
-                         multigrid=1,
-                         mg_convert_all=False)
+    dimnames = ["x", "y", "z", "w"][:dim]
+    domain = odil.Domain(cshape=cshape, dimnames=dimnames, multigrid=1, mg_convert_all=False)
 
     state = odil.State(
         fields={
-            'field': np.random.rand(*cshape),
-            'mgfield': domain.regular_to_multigrid(  #
-                np.random.rand(*cshape)),
-            'net': domain.make_neural_net([3, 3]),
-            'array': [1, 2, 3],
-        })
+            "field": np.random.rand(*cshape),
+            "mgfield": domain.regular_to_multigrid(np.random.rand(*cshape)),
+            "net": domain.make_neural_net([3, 3]),
+            "array": [1, 2, 3],
+        }
+    )
     state = domain.init_state(state)
     state2 = deepcopy(state)
 
@@ -71,8 +68,7 @@ def main():
                 error = e
                 raise e
             failed += bool(error)
-            print(f'case={case:>6} dim={dim}:',
-                  f"FAIL {error}" if error else "PASS")
+            print(f"case={case:>6} dim={dim}:", f"FAIL {error}" if error else "PASS")
     exit(failed)
 
 
