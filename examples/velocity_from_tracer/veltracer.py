@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
 import argparse
+
+import matplotlib.pyplot as plt
 import numpy as np
+
 import odil
 from odil import printlog
-import matplotlib.pyplot as plt
 
 
 def u_init_smooth(x, y):

@@ -1,10 +1,11 @@
-import numpy as np
-import pickle
 import math
+import pickle
 
-from .util import assert_equal
-from .backend import ModTensorflow
+import numpy as np
+
 from . import core_min
+from .backend import ModTensorflow
+from .util import assert_equal
 
 
 class Domain:

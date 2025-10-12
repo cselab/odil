@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 import argparse
+
 import numpy as np
+
 import odil
 from odil.runtime import mod
 

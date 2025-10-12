@@ -1,12 +1,13 @@
 import os
-import numpy as np
 
 import matplotlib
+import numpy as np
 
 if int(os.environ.get("ODIL_AGG", 1)):
     matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import logging
+
+import matplotlib.pyplot as plt
 
 logging.getLogger("matplotlib.font_manager").setLevel(logging.ERROR)
 mplstyle = os.path.join(os.path.dirname(os.path.realpath(__file__)), "odil.mplstyle")

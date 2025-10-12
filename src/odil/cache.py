@@ -1,5 +1,5 @@
-import os
 import functools
+import os
 
 
 def cache_to_file(targetbase, update=False, name_with_arg0=False):

@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
-import numpy as np
 from copy import deepcopy
+
+import numpy as np
+
 import odil
 
 cases = ["pack", "arrays"]

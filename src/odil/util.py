@@ -1,13 +1,14 @@
-import sys
-import os
-import json
 import argparse
-import psutil
+import json
+import os
+import sys
 import time
-import numpy as np
 
-from .optimizer import make_optimizer, Optimizer
+import numpy as np
+import psutil
+
 from .history import History
+from .optimizer import Optimizer, make_optimizer
 
 g_log_file = sys.stderr  # File used by printlog()
 g_log_echo = False  # True if printlog() should print to stderr.

@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
 import argparse
-import numpy as np
-import odil
-from odil import printlog
-from odil import plotutil
+
 import matplotlib.pyplot as plt
+import numpy as np
+
+import odil
+from odil import plotutil, printlog
 
 """
 Demonstrates the use of fields with values centered in cell, faces, and nodes.

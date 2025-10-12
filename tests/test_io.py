@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
 import unittest
-import odil
+
 import numpy as np
+
+import odil
 
 
 class TestIO(unittest.TestCase):

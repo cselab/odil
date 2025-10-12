@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 import argparse
-import numpy as np
 import pickle
+
+import numpy as np
 
 import odil
 from odil import printlog

@@ -1,52 +1,52 @@
 # ruff: noqa: F401
 
-from .io import (
-    parse_raw_xmf,
-    read_raw,
-    read_raw_with_xmf,
-    write_raw_xmf,
-    write_raw_with_xmf,
-    write_vtk_poly,
+from . import (
+    core,
+    core_min,
+    linsolver,
 )
 from .backend import (
     ModBase,
     ModNumpy,
     ModTensorflow,
 )
-from .history import (
-    History,
-)
-from .util import (
-    setup_outdir,
-    optimize,
-    make_callback,
-    printlog,
-    set_log_file,
-)
 from .core import (
+    Array,
     Domain,
-    State,
-    Problem,
     Field,
     MultigridField,
     NeuralNet,
-    Array,
+    Problem,
+    State,
     restrict_to_coarser,
 )
-from . import (
-    linsolver,
-    core_min,
-    core,
+from .history import (
+    History,
+)
+from .io import (
+    parse_raw_xmf,
+    read_raw,
+    read_raw_with_xmf,
+    write_raw_with_xmf,
+    write_raw_xmf,
+    write_vtk_poly,
 )
 from .optimizer import (
     EarlyStopError,
 )
+from .util import (
+    make_callback,
+    optimize,
+    printlog,
+    set_log_file,
+    setup_outdir,
+)
 
 
 def lazy_import(name):
+    import importlib.util
     import os
     import sys
-    import importlib.util
 
     spec = importlib.util.find_spec(name)
     loader = importlib.util.LazyLoader(spec.loader)

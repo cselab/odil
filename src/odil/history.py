@@ -1,7 +1,7 @@
-import numpy as np
 import pickle
 from typing import cast
 
+import numpy as np
 
 Value = float | str | np.float32 | np.float64 | np.ndarray | None
 

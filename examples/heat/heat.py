@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 
 import argparse
-import numpy as np
-import pickle
 import os
+import pickle
+
+import matplotlib.pyplot as plt
+import numpy as np
 
 import odil
-import matplotlib.pyplot as plt
-from odil import printlog, history
+from odil import history, printlog
 from odil.runtime import tf
 
 

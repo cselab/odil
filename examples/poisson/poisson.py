@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
 import argparse
-import numpy as np
 import pickle
-import odil
-from odil import plotutil
+
 import matplotlib.pyplot as plt
-from odil import printlog
+import numpy as np
+
+import odil
+from odil import plotutil, printlog
 
 """
 Solves the Poisson equation in a multi-dimensional cube

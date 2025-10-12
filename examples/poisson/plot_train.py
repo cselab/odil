@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
-import numpy as np
 import argparse
-from odil import plotutil
+
 import matplotlib.pyplot as plt
+import numpy as np
+
+from odil import plotutil
 
 plotutil.set_extlist(["png"])
 

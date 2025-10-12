@@ -50,10 +50,14 @@ line-length = 120
 target-version = ['py312']
 
 [tool.ruff]
+lint.select = [
+    "I",  # Import sorting
+]
 lint.ignore = [
     "E741",  # Ambiguous variable name
 ]
 output-format = 'concise'
+line-length = 120
 
 [tool.mypy]
 python_version = "3.12"
