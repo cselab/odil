@@ -1,3 +1,6 @@
+RUFF_FLAGS =
+BLACK_FLAGS =
+
 default:
 
 data:
@@ -6,4 +9,8 @@ data:
 release:
 	V=$$(sed -rn 's/^version = "(.*)"$$/\1/p' pyproject.toml) && git archive --prefix="odil-$$V/" -o "odil-$$V.tar.gz" HEAD
 
-.PHONY: default release
+lint:
+	ruff check $(RUFF_FLAGS)
+	black $(BLACK_FLAGS)
+
+.PHONY: default release lint
