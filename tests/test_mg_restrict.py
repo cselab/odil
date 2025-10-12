@@ -55,6 +55,7 @@ def main():
                 try:
                     failed, msg = test(method, ndim, loc)
                 except Exception as e:
+                    failed = True
                     msg = e
                 count_failed += bool(failed)
                 print(

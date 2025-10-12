@@ -267,7 +267,7 @@ def get_gpu_memory_usage_kb():
             d = jax.devices()[0]
             used = d.memory_stats()["bytes_in_use"] // 1024
             pool = d.memory_stats()["pool_bytes"] // 1024
-        except AttributeError:
+        except (AttributeError, TypeError):
             pass
     return used, pool
 
