@@ -1,5 +1,9 @@
 RUFF_FLAGS =
 BLACK_FLAGS =
+MYPY_FLAGS =
+
+MYPY_TARGETS = \
+    src/odil/history.py \
 
 default:
 
@@ -10,7 +14,10 @@ release:
 	V=$$(sed -rn 's/^version = "(.*)"$$/\1/p' pyproject.toml) && git archive --prefix="odil-$$V/" -o "odil-$$V.tar.gz" HEAD
 
 lint:
-	ruff check --fix --output-format concise $(RUFF_FLAGS) .
+	ruff check --fix $(RUFF_FLAGS) .
 	black $(BLACK_FLAGS) .
 
-.PHONY: default release lint
+mypy:
+	mypy $(MYPY_FLAGS) $(MYPY_TARGETS)
+
+.PHONY: default release lint mypy

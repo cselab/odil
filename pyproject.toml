@@ -53,3 +53,12 @@ target-version = ['py312']
 lint.ignore = [
     "E741",  # Ambiguous variable name
 ]
+output-format = 'concise'
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+ignore_missing_imports = true
