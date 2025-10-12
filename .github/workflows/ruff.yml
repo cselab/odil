@@ -1,4 +1,4 @@
-name: mypy
+name: ruff
 
 on:
   push:
@@ -21,5 +21,5 @@ jobs:
         uses: astral-sh/setup-uv@v6
       - name: Install project
         run: uv sync --locked --dev
-      - name: Run mypy
-        run: uv run make mypy
+      - name: Run ruff
+        run: uv run ruff check
