@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 
 import argparse
+
 import numpy as np
-import scipy
 import scipy.sparse as sp
 
 import odil
-from odil import printlog
 
 
 def operator(ctx):
@@ -73,7 +72,7 @@ def make_problem(args):
     )
     dtype = domain.dtype
 
-    from odil import Field, Array
+    from odil import Array, Field
 
     state = odil.State(
         fields={

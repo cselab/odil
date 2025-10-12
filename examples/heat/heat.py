@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 
 import argparse
-import numpy as np
+import os
 import pickle
 
-import odil
-from odil import plotutil
 import matplotlib.pyplot as plt
-from odil import printlog
+import numpy as np
+
+import odil
+from odil import history, printlog
 from odil.runtime import tf
 
 
@@ -106,7 +107,7 @@ def operator_odil(ctx):
     res = [("fu", fu)]
 
     if extra.imp_size:
-        u = u_st[0]
+        u_st[0]
         # Rescale weight to the total number of points.
         k = args.kimp * (np.prod(ctx.size()) / extra.imp_size) ** 0.5
         fuimp = extra.imp_mask * (u_st[0][0] - extra.imp_u) * k
@@ -515,7 +516,7 @@ def make_problem(args):
         state.fields["u_net"] = domain.make_neural_net([2] + args.arch_u + [1])
         operator = operator_pinn
     else:
-        raise RuntimeError(f"Unknown solver={solver}")
+        raise RuntimeError(f"Unknown solver={args.solver}")
 
     if args.infer_k:
         state.fields["k_net"] = domain.make_neural_net([1] + args.arch_k + [1])
@@ -550,7 +551,7 @@ def main():
     )
     odil.util.optimize(args, args.optimizer, problem, state, callback)
 
-    with open("done", "w") as f:
+    with open("done", "w"):
         pass
 
 

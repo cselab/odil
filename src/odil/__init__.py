@@ -1,8 +1,53 @@
-import os, sys
-import importlib.util
+# ruff: noqa: F401
+
+from . import (
+    core,
+    core_min,
+    linsolver,
+)
+from .backend import (
+    ModBase,
+    ModNumpy,
+    ModTensorflow,
+)
+from .core import (
+    Array,
+    Domain,
+    Field,
+    MultigridField,
+    NeuralNet,
+    Problem,
+    State,
+    restrict_to_coarser,
+)
+from .history import (
+    History,
+)
+from .io import (
+    parse_raw_xmf,
+    read_raw,
+    read_raw_with_xmf,
+    write_raw_with_xmf,
+    write_raw_xmf,
+    write_vtk_poly,
+)
+from .optimizer import (
+    EarlyStopError,
+)
+from .util import (
+    make_callback,
+    optimize,
+    printlog,
+    set_log_file,
+    setup_outdir,
+)
 
 
 def lazy_import(name):
+    import importlib.util
+    import os
+    import sys
+
     spec = importlib.util.find_spec(name)
     loader = importlib.util.LazyLoader(spec.loader)
     spec.loader = loader
@@ -14,37 +59,3 @@ def lazy_import(name):
 
 runtime = lazy_import("odil.runtime")
 plot = lazy_import("odil.plot")
-
-from .io import (
-    parse_raw_xmf,
-    read_raw,
-    read_raw_with_xmf,
-    write_raw_xmf,
-    write_raw_with_xmf,
-    write_vtk_poly,
-)
-from .backend import ModBase, ModNumpy, ModTensorflow
-from .history import History
-from .util import (
-    setup_outdir,
-    optimize,
-    make_callback,
-    printlog,
-    set_log_file,
-)
-from .core import (
-    Domain,
-    State,
-    Problem,
-    Field,
-    MultigridField,
-    NeuralNet,
-    Array,
-    restrict_to_coarser,
-)
-from . import linsolver
-from . import core_min
-from . import core
-from .optimizer import EarlyStopError
-
-del os, sys, importlib

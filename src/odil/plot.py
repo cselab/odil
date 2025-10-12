@@ -1,8 +1,6 @@
 import matplotlib
-import matplotlib.pyplot as plt
 import matplotlib.patches
-import os
-
+import matplotlib.pyplot as plt
 import numpy as np
 
 

@@ -3,9 +3,10 @@ Wrappers for backend modules, e.g. TensorFlow, JAX, NumPy, CuPy.
 The interface tends to follow NumPy's conventions.
 """
 
-import numpy as np
 from argparse import Namespace
 from functools import partial
+
+import numpy as np
 
 
 class ModBase:

@@ -1,35 +1,39 @@
-import numpy as np
 import pickle
+from typing import cast
+
+import numpy as np
+
+Value = float | str | np.float32 | np.float64 | np.ndarray | None
 
 
 class History:
 
-    def __init__(self, csvpath=None, warmup=0):
+    def __init__(self, csvpath: str | None = None, warmup: int = 0):
         """
         warmup: `int`
             Write only if `self.count > warmup`.
             Useful if unknown columns appear after the first row.
         """
-        self.data = dict()  # Data columns.
+        self.data: dict[str, list[Value]] = dict()  # Data columns.
         self.count = 0  # Current number of entries.
         self.warmup = warmup
         self.csvcount = 0  # Current number of entries written to CSV.
         self.csvpath = csvpath
-        self.csvkeys = None
+        self.csvkeys: list[str] | None = None
         self.csvfile = open(csvpath, "w") if csvpath is not None else None
 
     @staticmethod
-    def _none_like(value):
+    def _none_like(value: Value) -> Value:
         if value is None:
             return None
-        elif type(value) in [float, np.float32, np.float64]:
+        elif isinstance(value, (float, np.float32, np.float64)):
             return 0.0
-        elif type(value) == int:
+        elif isinstance(value, int):
             return 0
         else:
-            assert "Unknown type: " + str(type(value))
+            raise ValueError("Unknown type: " + str(type(value)))
 
-    def append(self, key, value=None):
+    def append(self, key: str, value: Value | None = None) -> None:
         assert value is None or isinstance(
             value,
             (
@@ -52,7 +56,10 @@ class History:
             value = self._none_like(self.data[key][-1])
         self.data[key].append(value)
 
-    def commit(self):  # Finish the current entry.
+    def commit(self) -> None:
+        """
+        Finish the current entry.
+        """
         maxlen = max(len(self.data[k]) for k in self.data)
         fail = ""
         for k, v in self.data.items():
@@ -62,14 +69,14 @@ class History:
             raise RuntimeError("Missing values for columns: " + fail)
         self.count += 1
 
-    def get(self, key, default=None):
-        return self.data.get(key, default)
+    def get(self, key: str, default: Value | None = None) -> Value:
+        return cast(Value, self.data.get(key, default))
 
-    def append_dict(self, newdict):
+    def append_dict(self, newdict: dict[str, Value]) -> None:
         for k, v in newdict.items():
             self.append(k, v)
 
-    def write(self, nocommit=False):
+    def write(self, nocommit: bool = False) -> None:
         """
         Writes pending rows to current file.
         """
@@ -94,14 +101,14 @@ class History:
             self.csvcount += 1
         self.csvfile.flush()
 
-    def save(self, path):
+    def save(self, path: str) -> None:
         """
         Saves data to pickle.
         """
         with open(path, "wb") as f:
             pickle.dump(self.data, f)
 
-    def load(self, path):
+    def load(self, path: str) -> None:
         """
         Overwrites data from pickle.
         """
@@ -111,5 +118,6 @@ class History:
             self.count = len(next(iter(self.data.values())))
             self.write(nocommit=True)
 
-    def close(self):
-        self.csvfile.close()
+    def close(self) -> None:
+        if self.csvfile:
+            self.csvfile.close()

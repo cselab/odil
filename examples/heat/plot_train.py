@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
-import numpy as np
 import argparse
 import os
-import pickle
-from odil import plotutil
+
 import matplotlib.pyplot as plt
+import numpy as np
+
+from odil import plotutil
 
 
 def load_csv(path):

@@ -1,6 +1,7 @@
 import os
 import sys
-import numpy as np
+
+import numpy
 
 from .backend import ModNumpy, ModTensorflow
 
@@ -30,7 +31,7 @@ if not backend_name:
         import tensorflow as tf
 
         backend_name = "tf"
-    except:
+    except ImportError:
         pass
 
 if not backend_name:
@@ -38,8 +39,8 @@ if not backend_name:
         import jax
 
         backend_name = "jax"
-    except:
-        sys.stderr.write(f"Cannot select a default backend. Tried: tensorflow, jax\n")
+    except ImportError:
+        sys.stderr.write("Cannot select a default backend. Tried: tensorflow, jax\n")
         exit(1)
 
 if backend_name == "tf":
@@ -75,11 +76,7 @@ else:
 # Default data type.
 dtype_name = os.environ.get("ODIL_DTYPE", "float32")
 if dtype_name in ["float32", "float64"]:
-    dtype = np.dtype(dtype_name)
+    dtype = numpy.dtype(dtype_name)
 else:
     sys.stderr.write(f"Expected ODIL_DTYPE=float32 or float64, got '{dtype}' \n")
     exit(1)
-
-del os
-del np
-del sys

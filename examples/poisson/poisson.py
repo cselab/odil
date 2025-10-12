@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
 import argparse
-import numpy as np
 import pickle
-import odil
-from odil import plotutil
+
 import matplotlib.pyplot as plt
-from odil import printlog
+import numpy as np
+
+import odil
+from odil import plotutil, printlog
 
 """
 Solves the Poisson equation in a multi-dimensional cube
@@ -16,7 +17,7 @@ with zero Dirichlet boundary conditions.
 
 def get_ref_u(name, args, domain):
     xw = domain.points()
-    ndim = len(xw)
+    len(xw)
     if name == "hat":
         p = 5
         u = np.prod([(1 - x) * x * 5 for x in xw], axis=0)
@@ -33,7 +34,7 @@ def get_ref_u(name, args, domain):
 
 def get_ref_rhs(name, args, domain):
     xw = domain.points()
-    ndim = len(xw)
+    len(xw)
     if name == "osc":
         pi, cos, sin = np.pi, np.cos, np.sin
         k = args.osc_k
@@ -204,8 +205,6 @@ def plot_func(problem, state, epoch, frame, cbinfo):
         d["u"] = u
         d["ref_u"] = extra.ref_u
         d["rhs"] = extra.rhs
-        if 0 and args.multigrid:  # XXX
-            d["u_cumsum"] = [q.numpy() for q in us]
         d = odil.core.struct_to_numpy(mod, d)
         with open(path, "wb") as f:
             pickle.dump(d, f)
@@ -215,7 +214,6 @@ def plot_func(problem, state, epoch, frame, cbinfo):
 
 
 def get_error(domain, extra, state, key):
-    mod = domain.mod
     state_u = domain.field(state, key)
     du = state_u - extra.ref_u
     return np.sqrt(np.mean(du**2))
@@ -250,9 +248,9 @@ def make_problem(args):
 
     cellbased = args.cellbased
     if cellbased:
-        xw = domain.points(loc="c" * ndim)
+        domain.points(loc="c" * ndim)
     else:
-        xw = domain.points(loc="n" * ndim)
+        domain.points(loc="n" * ndim)
 
     # Reference solution.
     ref_u = get_ref_u(args.ref, args, domain)

@@ -1,13 +1,14 @@
-import sys
-import os
-import json
 import argparse
-import psutil
+import json
+import os
+import sys
 import time
-import numpy as np
 
-from .optimizer import make_optimizer, Optimizer
+import numpy as np
+import psutil
+
 from .history import History
+from .optimizer import Optimizer, make_optimizer
 
 g_log_file = sys.stderr  # File used by printlog()
 g_log_echo = False  # True if printlog() should print to stderr.
@@ -150,7 +151,6 @@ def add_arguments(parser):
 
 def optimize_newton(args, problem, state, callback=None, **kwargs):
     domain = problem.domain
-    mod = domain.mod
 
     def eval_pinfo(state):
         loss, _, terms, names, norms = problem.eval_loss_grad(state)
@@ -268,7 +268,7 @@ def get_gpu_memory_usage_kb():
             d = jax.devices()[0]
             used = d.memory_stats()["bytes_in_use"] // 1024
             pool = d.memory_stats()["pool_bytes"] // 1024
-        except:
+        except (AttributeError, TypeError):
             pass
     return used, pool
 
@@ -319,7 +319,9 @@ def setup_outdir(args, relpath_args=None):
             setattr(args, k, os.path.relpath(getattr(args, k), start=outdir))
 
     # Update arguments.
-    mulint = lambda v, k: None if v is None else max(1, round(v * k))
+    def mulint(v, k):
+        return None if v is None else max(1, round(v * k))
+
     args.plot_every = mulint(args.plot_every, args.every_factor)
     args.history_every = mulint(args.history_every, args.every_factor)
     args.report_every = mulint(args.report_every, args.every_factor)

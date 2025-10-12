@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
 import argparse
-import numpy as np
-import odil
-from odil import printlog
-from odil import plotutil
+
 import matplotlib.pyplot as plt
+import numpy as np
+
+import odil
+from odil import plotutil, printlog
 
 """
 Infers unknown constant parameters of an advection-diffusion equation
@@ -43,7 +44,7 @@ def transform_u(u, extra, mod):
 def operator_adv(ctx):
     mod = ctx.mod
     dt, dx = ctx.step("t", "x")
-    x = ctx.points("x")
+    ctx.points("x")
     it, ix = ctx.indices("t", "x")
     nt, nx = ctx.size("t", "x")
     coeff = ctx.field("coeff")
@@ -149,7 +150,7 @@ def make_problem(args):
     # Evaluate exact solution, boundary and initial conditions.
     tt, xx = domain.points()
     # Node-based in time, cell-based in space.
-    tone = domain.points_1d("t", loc="n")
+    domain.points_1d("t", loc="n")
     xone = domain.points_1d("x", loc="c")
     ref_u = get_ref_u(tt, xx, args)
     u_init = get_ref_u(xone * 0 + domain.lower[0], xone, args)

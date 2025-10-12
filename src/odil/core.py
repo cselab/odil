@@ -1,10 +1,11 @@
-import numpy as np
-import pickle
 import math
+import pickle
 
-from .util import assert_equal, printlog
-from .backend import ModTensorflow
+import numpy as np
+
 from . import core_min
+from .backend import ModTensorflow
+from .util import assert_equal
 
 
 class Domain:
@@ -248,9 +249,9 @@ class Domain:
             Multigrid components on levels `self.mg_cshapes`.
         """
         mod = self.mod
-        factors = mgfield.factors or self.mg_factors or [1] * len(cshapes)
+        factors = mgfield.factors or self.mg_factors
         axes = mgfield.axes or self.mg_axes
-        shapes = [self._get_field_shape(term.cshape, loc=mgfield.loc) for term in mgfield.terms]
+        [self._get_field_shape(term.cshape, loc=mgfield.loc) for term in mgfield.terms]
         assert_equal(len(factors), len(mgfield.terms))
         assert_equal(len(axes), len(mgfield.terms[0].cshape))
         method = mgfield.method or self.mg_interp
@@ -282,7 +283,7 @@ class Domain:
         """
         mod = self.mod
         if isinstance(field, (MultigridField, NeuralNet)):
-            raise TypeError("Expected Field or ndarray, got type {}".format(type(net).__name__))
+            raise TypeError("Expected Field or ndarray, got type {}".format(type(field).__name__))
 
         field = self.init_field(field)
         cshapes = cshapes or self.mg_cshapes
@@ -361,7 +362,6 @@ class Domain:
         """
         Returns list of data arrays of `field`.
         """
-        mod = self.mod
         if isinstance(field, Field):
             return [field.array]
         elif isinstance(field, MultigridField):
@@ -377,7 +377,6 @@ class Domain:
         """
         Returns list of data arrays from fields in `state`.
         """
-        mod = self.mod
         res = []
         for key in state.fields:
             res += self.arrays_from_field(state.fields[key])
@@ -493,7 +492,10 @@ class Domain:
         net = state.fields[key]
         if not isinstance(net, NeuralNet):
             raise TypeError("Expected NeuralNet, got type {} for key='{}'".format(type(net).__name__, key))
-        res = lambda *inputs: eval_neural_net(net, inputs, self.mod)
+
+        def res(*inputs):
+            return eval_neural_net(net, inputs, self.mod)
+
         return res
 
     def get_context(self, state, extra=None, tracers=None):
@@ -652,7 +654,9 @@ def interp_to_finer(u, loc=None, method=None, mod=None, depth=1):
         w = mod.cast(mod.reshape(w, w.shape + (1, 1)), u.dtype)
 
         # Output shape.
-        oshape = lambda s: {"n": s * 2 + 1, "c": s * 2 + 2, ".": s}
+        def oshape(s):
+            return {"n": s * 2 + 1, "c": s * 2 + 2, ".": s}
+
         oshape = tuple(oshape(s)[l] for l, s in zip(loc, upad.shape))
         oshape = (1,) + oshape + (1,)
         strides = tuple(1 if l == "." else 2 for l in loc)
@@ -909,7 +913,7 @@ class Context:
         field = self.state.fields[key]
         if not isinstance(field, (Field, MultigridField, Array)):
             raise TypeError(
-                "Expected Field or MultigridField, got type {} for key='{}'".format(type(net).__name__, key)
+                "Expected Field or MultigridField, got type {} for key='{}'".format(type(field).__name__, key)
             )
         if isinstance(field, Array):
             if len(shift):
@@ -979,7 +983,10 @@ class Context:
         self.watch_func(arrays)
         if self.distinct_shift:
             self.key_to_array_jac[(key, None, None)] = arrays
-        res = lambda *inputs: eval_neural_net(net, inputs, self.mod, frozen=frozen)
+
+        def res(*inputs):
+            return eval_neural_net(net, inputs, self.mod, frozen=frozen)
+
         return res
 
 
@@ -1115,7 +1122,6 @@ class Problem:
         mod = domain.mod
         modsp = modsp or mod.modsp
         if modsp is None:
-            import scipy
             import scipy.sparse as modsp
 
         values, grads, names = self.eval_operator_grad(state)

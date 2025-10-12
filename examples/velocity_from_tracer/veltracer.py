@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
 import argparse
+
+import matplotlib.pyplot as plt
 import numpy as np
+
 import odil
 from odil import printlog
-from odil import plotutil
-import matplotlib.pyplot as plt
 
 
 def u_init_smooth(x, y):
@@ -79,19 +80,15 @@ def operator_advection(ctx):
     vxf_st = stencil_var("vx", frozen=True)
     vx = vx_st[0]
     vxf = vxf_st[0]
-    vxmh = vx
-    vxph = vx
-    vxmhf = (vxf + mod.roll(vxf, shift=1, axis=1)) * 0.5
-    vxphf = (vxf + mod.roll(vxf, shift=-1, axis=1)) * 0.5
+    (vxf + mod.roll(vxf, shift=1, axis=1)) * 0.5
+    (vxf + mod.roll(vxf, shift=-1, axis=1)) * 0.5
 
     vy_st = stencil_var("vy")
     vyf_st = stencil_var("vy", frozen=True)
     vy = vy_st[0]
     vyf = vyf_st[0]
-    vymh = vy
-    vyph = vy
-    vymhf = (vyf + mod.roll(vyf, shift=1, axis=2)) * 0.5
-    vyphf = (vyf + mod.roll(vyf, shift=-1, axis=2)) * 0.5
+    (vyf + mod.roll(vyf, shift=1, axis=2)) * 0.5
+    (vyf + mod.roll(vyf, shift=-1, axis=2)) * 0.5
 
     st = stencil_var("u", shift_t=-1)
     u_x = deriv_fou(st[1], st[0], st[2], vxf)
@@ -161,10 +158,9 @@ def parse_args():
 def plot_func(problem, state, epoch, frame, cbinfo=None):
     domain = problem.domain
     extra = problem.extra
-    args = extra.args
     path0 = "u_{:05d}.png".format(frame)
     path1 = "vx_{:05d}.png".format(frame)
-    path2 = "vy_{:05d}.png".format(frame)
+    "vy_{:05d}.png".format(frame)
     printlog(path0)
 
     slices_it = np.linspace(0, domain.cshape[0], 5, dtype=int)

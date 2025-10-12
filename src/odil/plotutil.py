@@ -1,12 +1,13 @@
 import os
-import numpy as np
 
 import matplotlib
+import numpy as np
 
 if int(os.environ.get("ODIL_AGG", 1)):
     matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import logging
+
+import matplotlib.pyplot as plt
 
 logging.getLogger("matplotlib.font_manager").setLevel(logging.ERROR)
 mplstyle = os.path.join(os.path.dirname(os.path.realpath(__file__)), "odil.mplstyle")
@@ -36,7 +37,10 @@ def apply_clip_box(ax, artists, lower=(0, 0), upper=(1, 1.02)):
 
 def savefig(fig, path_without_ext, extlist=None, skip_existing=False, printf=None, **kwargs):
     if printf is None:
-        printf = lambda _: None
+
+        def printf(_):
+            return None
+
     if extlist is None:
         extlist = g_extlist
     for ext in extlist:

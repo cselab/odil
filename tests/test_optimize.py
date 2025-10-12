@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 import argparse
+
 import numpy as np
 
 import odil
-from odil import printlog
 
 
 def operator(ctx):
@@ -48,13 +48,12 @@ def make_problem(args):
         mg_axes=[True, True],
         mg_nlvl=args.nlvl,
     )
-    mod = domain.mod
     dtype = domain.dtype
 
     xx, yy = domain.points("x", "y", loc="cn")
     ixx, iyy = domain.indices("x", "y", loc="cc")
 
-    from odil import Field, Array
+    from odil import Array, Field
 
     state = odil.State(
         fields={

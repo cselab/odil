@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 import argparse
+
 import numpy as np
+
 import odil
 from odil.runtime import mod
 
@@ -55,6 +57,7 @@ def main():
                 try:
                     failed, msg = test(method, ndim, loc)
                 except Exception as e:
+                    failed = True
                     msg = e
                 count_failed += bool(failed)
                 print(

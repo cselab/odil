@@ -1,5 +1,6 @@
-import numpy as np
 from argparse import Namespace
+
+import numpy as np
 
 
 class Optimizer:
@@ -294,7 +295,7 @@ class AdamNativeOptimizer(Optimizer):
         beta_2=0.999,
         epsilon=1e-7,
         jit=True,
-        **kwargs
+        **kwargs,
     ):
         """
         Based on

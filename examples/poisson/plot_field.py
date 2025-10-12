@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
-import numpy as np
-import pickle
 import argparse
-import math
-from odil import plotutil
+import pickle
+
 import matplotlib.pyplot as plt
+
+from odil import plotutil
 
 plotutil.set_extlist(["png"])
 
