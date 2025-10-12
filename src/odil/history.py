@@ -108,7 +108,7 @@ class History:
         with open(path, "wb") as f:
             pickle.dump(self.data, f)
 
-    def load(self, path: str) -> int:
+    def load(self, path: str) -> None:
         """
         Overwrites data from pickle.
         """
