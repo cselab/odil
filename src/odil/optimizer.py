@@ -294,7 +294,7 @@ class AdamNativeOptimizer(Optimizer):
         beta_2=0.999,
         epsilon=1e-7,
         jit=True,
-        **kwargs
+        **kwargs,
     ):
         """
         Based on

@@ -204,8 +204,6 @@ def plot_func(problem, state, epoch, frame, cbinfo):
         d["u"] = u
         d["ref_u"] = extra.ref_u
         d["rhs"] = extra.rhs
-        if 0 and args.multigrid:  # XXX
-            d["u_cumsum"] = [q.numpy() for q in us]
         d = odil.core.struct_to_numpy(mod, d)
         with open(path, "wb") as f:
             pickle.dump(d, f)

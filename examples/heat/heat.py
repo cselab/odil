@@ -3,10 +3,11 @@
 import argparse
 import numpy as np
 import pickle
+import os
 
 import odil
 import matplotlib.pyplot as plt
-from odil import printlog
+from odil import printlog, history
 from odil.runtime import tf
 
 
@@ -514,7 +515,7 @@ def make_problem(args):
         state.fields["u_net"] = domain.make_neural_net([2] + args.arch_u + [1])
         operator = operator_pinn
     else:
-        raise RuntimeError(f"Unknown solver={solver}")
+        raise RuntimeError(f"Unknown solver={args.solver}")
 
     if args.infer_k:
         state.fields["k_net"] = domain.make_neural_net([1] + args.arch_k + [1])

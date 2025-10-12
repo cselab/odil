@@ -22,9 +22,9 @@ class History:
     def _none_like(value):
         if value is None:
             return None
-        elif type(value) in [float, np.float32, np.float64]:
+        elif isinstance(value, (float, np.float32, np.float64)):
             return 0.0
-        elif type(value) == int:
+        elif isinstance(value, int):
             return 0
         else:
             assert "Unknown type: " + str(type(value))

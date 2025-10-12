@@ -1,20 +1,4 @@
-import os
-import sys
-import importlib.util
-
-
-def lazy_import(name):
-    spec = importlib.util.find_spec(name)
-    loader = importlib.util.LazyLoader(spec.loader)
-    spec.loader = loader
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[name] = module
-    loader.exec_module(module)
-    return module
-
-
-runtime = lazy_import("odil.runtime")
-plot = lazy_import("odil.plot")
+# ruff: noqa: F401
 
 from .io import (
     parse_raw_xmf,
@@ -24,8 +8,14 @@ from .io import (
     write_raw_with_xmf,
     write_vtk_poly,
 )
-from .backend import ModBase, ModNumpy, ModTensorflow
-from .history import History
+from .backend import (
+    ModBase,
+    ModNumpy,
+    ModTensorflow,
+)
+from .history import (
+    History,
+)
 from .util import (
     setup_outdir,
     optimize,
@@ -43,9 +33,29 @@ from .core import (
     Array,
     restrict_to_coarser,
 )
-from . import linsolver
-from . import core_min
-from . import core
-from .optimizer import EarlyStopError
+from . import (
+    linsolver,
+    core_min,
+    core,
+)
+from .optimizer import (
+    EarlyStopError,
+)
 
-del os, sys, importlib
+
+def lazy_import(name):
+    import os
+    import sys
+    import importlib.util
+
+    spec = importlib.util.find_spec(name)
+    loader = importlib.util.LazyLoader(spec.loader)
+    spec.loader = loader
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    loader.exec_module(module)
+    return module
+
+
+runtime = lazy_import("odil.runtime")
+plot = lazy_import("odil.plot")

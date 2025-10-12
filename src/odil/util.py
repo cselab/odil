@@ -267,7 +267,7 @@ def get_gpu_memory_usage_kb():
             d = jax.devices()[0]
             used = d.memory_stats()["bytes_in_use"] // 1024
             pool = d.memory_stats()["pool_bytes"] // 1024
-        except:
+        except AttributeError:
             pass
     return used, pool
 
@@ -320,6 +320,7 @@ def setup_outdir(args, relpath_args=None):
     # Update arguments.
     def mulint(v, k):
         return None if v is None else max(1, round(v * k))
+
     args.plot_every = mulint(args.plot_every, args.every_factor)
     args.history_every = mulint(args.history_every, args.every_factor)
     args.report_every = mulint(args.report_every, args.every_factor)

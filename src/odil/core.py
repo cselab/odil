@@ -248,7 +248,7 @@ class Domain:
             Multigrid components on levels `self.mg_cshapes`.
         """
         mod = self.mod
-        factors = mgfield.factors or self.mg_factors or [1] * len(cshapes)
+        factors = mgfield.factors or self.mg_factors
         axes = mgfield.axes or self.mg_axes
         [self._get_field_shape(term.cshape, loc=mgfield.loc) for term in mgfield.terms]
         assert_equal(len(factors), len(mgfield.terms))
@@ -282,7 +282,7 @@ class Domain:
         """
         mod = self.mod
         if isinstance(field, (MultigridField, NeuralNet)):
-            raise TypeError("Expected Field or ndarray, got type {}".format(type(net).__name__))
+            raise TypeError("Expected Field or ndarray, got type {}".format(type(field).__name__))
 
         field = self.init_field(field)
         cshapes = cshapes or self.mg_cshapes
@@ -491,8 +491,10 @@ class Domain:
         net = state.fields[key]
         if not isinstance(net, NeuralNet):
             raise TypeError("Expected NeuralNet, got type {} for key='{}'".format(type(net).__name__, key))
+
         def res(*inputs):
             return eval_neural_net(net, inputs, self.mod)
+
         return res
 
     def get_context(self, state, extra=None, tracers=None):
@@ -653,6 +655,7 @@ def interp_to_finer(u, loc=None, method=None, mod=None, depth=1):
         # Output shape.
         def oshape(s):
             return {"n": s * 2 + 1, "c": s * 2 + 2, ".": s}
+
         oshape = tuple(oshape(s)[l] for l, s in zip(loc, upad.shape))
         oshape = (1,) + oshape + (1,)
         strides = tuple(1 if l == "." else 2 for l in loc)
@@ -909,7 +912,7 @@ class Context:
         field = self.state.fields[key]
         if not isinstance(field, (Field, MultigridField, Array)):
             raise TypeError(
-                "Expected Field or MultigridField, got type {} for key='{}'".format(type(net).__name__, key)
+                "Expected Field or MultigridField, got type {} for key='{}'".format(type(field).__name__, key)
             )
         if isinstance(field, Array):
             if len(shift):
@@ -979,8 +982,10 @@ class Context:
         self.watch_func(arrays)
         if self.distinct_shift:
             self.key_to_array_jac[(key, None, None)] = arrays
+
         def res(*inputs):
             return eval_neural_net(net, inputs, self.mod, frozen=frozen)
+
         return res
 
 

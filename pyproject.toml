@@ -33,10 +33,6 @@ Issues = "https://github.com/cselab/odil/issues"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.black]
-line-length = 120
-target-version = ['py312']
-
 [project.optional-dependencies]
 tensorflow = ["tensorflow>=2.19.0"]
 jax = ["jax[cuda13]>=0.7.0"]
@@ -44,7 +40,16 @@ jax = ["jax[cuda13]>=0.7.0"]
 [dependency-groups]
 dev = [
     "pytest>=7.4.4",
-    "black>=25.9.0",
+    "black[jupyter]>=25.0.0",
     "ruff>=0.14.0",
     "mypy>=1.18.2",
+]
+
+[tool.black]
+line-length = 120
+target-version = ['py312']
+
+[tool.ruff]
+lint.ignore = [
+    "E741",  # Ambiguous variable name
 ]

@@ -10,7 +10,7 @@ release:
 	V=$$(sed -rn 's/^version = "(.*)"$$/\1/p' pyproject.toml) && git archive --prefix="odil-$$V/" -o "odil-$$V.tar.gz" HEAD
 
 lint:
-	ruff check $(RUFF_FLAGS)
-	black $(BLACK_FLAGS)
+	ruff check --fix --output-format concise $(RUFF_FLAGS) .
+	black $(BLACK_FLAGS) .
 
 .PHONY: default release lint
