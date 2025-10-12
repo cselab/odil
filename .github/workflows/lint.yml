@@ -1,4 +1,4 @@
-name: ruff
+name: lint
 
 on:
   push:
@@ -23,3 +23,7 @@ jobs:
         run: uv sync --locked --dev
       - name: Run ruff
         run: uv run ruff check
+      - name: Run black
+        run: uv run black --check .
+      - name: Run mypy
+        run: uv run make mypy
