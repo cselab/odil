@@ -34,7 +34,7 @@ pip install git+https://github.com/cselab/odil.git
 ```
 uv venv --python 3.12
 . .venv/bin/activate
-uv sync
+uv sync --group dev --extra tensorflow --extra jax
 ```
 
 ## Using GPU
