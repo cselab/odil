@@ -2,11 +2,9 @@
 
 import argparse
 import numpy as np
-import scipy
 import scipy.sparse as sp
 
 import odil
-from odil import printlog
 
 
 def operator(ctx):

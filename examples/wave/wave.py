@@ -5,8 +5,6 @@ import numpy as np
 import pickle
 
 import odil
-from odil import plotutil
-import matplotlib.pyplot as plt
 from odil import printlog
 from odil.runtime import tf
 
@@ -34,7 +32,7 @@ def operator_wave(ctx):
     dt, dx = ctx.step()
     it, ix = ctx.indices()
     nt, nx = ctx.size()
-    x = ctx.points("x")
+    ctx.points("x")
 
     def stencil_var(key):
         st = [
@@ -170,8 +168,6 @@ def plot_func(problem, state, epoch, frame, cbinfo=None):
 
 
 def get_error(domain, extra, state, key):
-    args = extra.args
-    mod = domain.mod
     if key == "u":
         state_u = domain.field(state, key)
         ref_u = extra.ref_u
@@ -244,7 +240,7 @@ def main():
     )
     odil.util.optimize(args, args.optimizer, problem, state, callback)
 
-    with open("done", "w") as f:
+    with open("done", "w"):
         pass
 
 

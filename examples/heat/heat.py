@@ -5,7 +5,6 @@ import numpy as np
 import pickle
 
 import odil
-from odil import plotutil
 import matplotlib.pyplot as plt
 from odil import printlog
 from odil.runtime import tf
@@ -106,7 +105,7 @@ def operator_odil(ctx):
     res = [("fu", fu)]
 
     if extra.imp_size:
-        u = u_st[0]
+        u_st[0]
         # Rescale weight to the total number of points.
         k = args.kimp * (np.prod(ctx.size()) / extra.imp_size) ** 0.5
         fuimp = extra.imp_mask * (u_st[0][0] - extra.imp_u) * k
@@ -550,7 +549,7 @@ def main():
     )
     odil.util.optimize(args, args.optimizer, problem, state, callback)
 
-    with open("done", "w") as f:
+    with open("done", "w"):
         pass
 
 

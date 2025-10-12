@@ -39,7 +39,7 @@ if not backend_name:
 
         backend_name = "jax"
     except:
-        sys.stderr.write(f"Cannot select a default backend. Tried: tensorflow, jax\n")
+        sys.stderr.write("Cannot select a default backend. Tried: tensorflow, jax\n")
         exit(1)
 
 if backend_name == "tf":

@@ -56,8 +56,6 @@ def parse_args():
 
 
 def plot(problem, state, epoch, frame, cbinfo=None):
-    from odil import plotutil
-    import matplotlib.pyplot as plt
 
     domain = problem.domain
     fig, ax = plt.subplots(figsize=(4, 2))

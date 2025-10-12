@@ -3,7 +3,6 @@
 import numpy as np
 import argparse
 import os
-import pickle
 from odil import plotutil
 import matplotlib.pyplot as plt
 

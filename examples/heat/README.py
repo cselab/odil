@@ -36,7 +36,7 @@ add_subdir("out_odiln", "ODIL Newton", "case=2n outdir=out_odiln ./run")
 add_subdir("out_odil", "ODIL Adam", "case=2 outdir=out_odil ./run")
 add_subdir("out_pinn", "PINN Adam", "case=2p gpus=0 outdir=out_pinn ./run")
 
-text += f"""### Training history
+text += """### Training history
 
 ```
 ./plot_train.py

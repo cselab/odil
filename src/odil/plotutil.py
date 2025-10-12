@@ -36,7 +36,8 @@ def apply_clip_box(ax, artists, lower=(0, 0), upper=(1, 1.02)):
 
 def savefig(fig, path_without_ext, extlist=None, skip_existing=False, printf=None, **kwargs):
     if printf is None:
-        printf = lambda _: None
+        def printf(_):
+            return None
     if extlist is None:
         extlist = g_extlist
     for ext in extlist:

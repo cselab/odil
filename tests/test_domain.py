@@ -3,7 +3,6 @@
 import numpy as np
 from copy import deepcopy
 import odil
-from odil.runtime import mod
 
 cases = ["pack", "arrays"]
 

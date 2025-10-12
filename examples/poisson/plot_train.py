@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import numpy as np
-import os
 import argparse
 from odil import plotutil
 import matplotlib.pyplot as plt

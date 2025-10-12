@@ -16,7 +16,7 @@ with zero Dirichlet boundary conditions.
 
 def get_ref_u(name, args, domain):
     xw = domain.points()
-    ndim = len(xw)
+    len(xw)
     if name == "hat":
         p = 5
         u = np.prod([(1 - x) * x * 5 for x in xw], axis=0)
@@ -33,7 +33,7 @@ def get_ref_u(name, args, domain):
 
 def get_ref_rhs(name, args, domain):
     xw = domain.points()
-    ndim = len(xw)
+    len(xw)
     if name == "osc":
         pi, cos, sin = np.pi, np.cos, np.sin
         k = args.osc_k
@@ -215,7 +215,6 @@ def plot_func(problem, state, epoch, frame, cbinfo):
 
 
 def get_error(domain, extra, state, key):
-    mod = domain.mod
     state_u = domain.field(state, key)
     du = state_u - extra.ref_u
     return np.sqrt(np.mean(du**2))
@@ -250,9 +249,9 @@ def make_problem(args):
 
     cellbased = args.cellbased
     if cellbased:
-        xw = domain.points(loc="c" * ndim)
+        domain.points(loc="c" * ndim)
     else:
-        xw = domain.points(loc="n" * ndim)
+        domain.points(loc="n" * ndim)
 
     # Reference solution.
     ref_u = get_ref_u(args.ref, args, domain)

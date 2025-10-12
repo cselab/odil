@@ -4,7 +4,6 @@ import argparse
 import numpy as np
 
 import odil
-from odil import printlog
 
 
 def operator(ctx):
@@ -48,7 +47,6 @@ def make_problem(args):
         mg_axes=[True, True],
         mg_nlvl=args.nlvl,
     )
-    mod = domain.mod
     dtype = domain.dtype
 
     xx, yy = domain.points("x", "y", loc="cn")

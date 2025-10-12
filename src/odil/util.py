@@ -150,7 +150,6 @@ def add_arguments(parser):
 
 def optimize_newton(args, problem, state, callback=None, **kwargs):
     domain = problem.domain
-    mod = domain.mod
 
     def eval_pinfo(state):
         loss, _, terms, names, norms = problem.eval_loss_grad(state)
@@ -319,7 +318,8 @@ def setup_outdir(args, relpath_args=None):
             setattr(args, k, os.path.relpath(getattr(args, k), start=outdir))
 
     # Update arguments.
-    mulint = lambda v, k: None if v is None else max(1, round(v * k))
+    def mulint(v, k):
+        return None if v is None else max(1, round(v * k))
     args.plot_every = mulint(args.plot_every, args.every_factor)
     args.history_every = mulint(args.history_every, args.every_factor)
     args.report_every = mulint(args.report_every, args.every_factor)
