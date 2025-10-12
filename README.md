@@ -29,6 +29,14 @@ or
 pip install git+https://github.com/cselab/odil.git
 ```
 
+### Using `uv`
+
+```
+uv venv --python 3.12
+. .venv/bin/activate
+uv sync
+```
+
 ## Using GPU
 
 To enable GPU support, provide a non-empty list of devices in `CUDA_VISIBLE_DEVICES`.
