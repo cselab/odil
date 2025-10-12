@@ -39,7 +39,7 @@ target-version = ['py312']
 
 [project.optional-dependencies]
 tensorflow = ["tensorflow>=2.19.0"]
-jax = ["jax[cuda]>=0.7.0", "jaxlib>=0.7.0"]
+jax = ["jax[cuda13]>=0.7.0"]
 
 [dependency-groups]
 dev = [
