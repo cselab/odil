@@ -18,25 +18,26 @@ x_{n+1} = x_n + dt * u(x_n, y_n)
 y_{n+1} = y_n + dt * v(x_n, y_n)
 ```
 
-### 2. Step-wise Newton
-Solves implicit Euler system per time step using Newton-Raphson:
+### 2. Step-wise Newton-Raphson
+The non-linear implicit Euler system is:
 ```
 x_{n+1} - x_n = dt * u(x_{n+1}, y_{n+1})
 y_{n+1} - y_n = dt * v(x_{n+1}, y_{n+1})
 ```
-Iteration: `[x,y]^{(m+1)} = [x,y]^{(m)} - J^{-1} * F([x,y]^{(m)})` (m = iteration number)
 
-Newton-Raphson for nonlinear equations: solves `F(x,y) = 0` where F are the equations
+Newton-Raphson solves `F(x,y) = 0` where F are the equations
 ```
 F = [(x - x0)/dt - u(x,y), (y - y0)/dt - v(x,y)]  // 2 equations per step
 J = ∂F/∂[x,y]
 ```
 
+Iteration: `[x,y]^{(m+1)} = [x,y]^{(m)} - J^{-1} * F([x,y]^{(m)})` (m = iteration number)
+
 ### 3. ODIL Methods
 
-ODIL optimizes discrete loss with data, but here uses root finding since the system is determined.
+In general ODIL optimizes discrete loss with data, but here we uses root finding since the system is determined.
 
-Residuals:
+Residuals are the same in step-wise Newton-Raphson:
 ```
 r_{x,i} = (x_i - x_{i-1})/dt - u(x_i, y_i) = 0  // 50 residuals total (25 steps × 2 vars)
 r_{y,i} = (y_i - y_{i-1})/dt - v(x_i, y_i) = 0
