@@ -1,6 +1,7 @@
+import statistics
+
 import numpy as np
 import scipy
-import statistics
 
 # Van der Pol oscillator:  dx/dt = y,  dy/dt = μ(1-x²)y - x
 
