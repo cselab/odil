@@ -223,5 +223,4 @@ for name, s in [
 ]:
     X, Y = zip(*s)
     res = statistics.fmean(residual(X, Y))
-    print(
-        f"{name:<14}  x: {s[-1][0]:6.3f}  y: {s[-1][1]:6.3f}  res: {res:.2e}")
+    print(f"{name:<14}  x: {s[-1][0]:6.3f}  y: {s[-1][1]:6.3f}  res: {res:.2e}")
