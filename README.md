@@ -95,3 +95,8 @@ advised by
    [1](https://cselab.github.io/odil/media/odil_hydrocube_1.mp4)
    [2](https://cselab.github.io/odil/media/odil_hydrocube_2.mp4)
    [3](https://cselab.github.io/odil/media/odil_hydrocube_3.mp4)
+
+8. Amoudruz L, Litvinov S, Papadimitriou C, Koumoutsakos P.
+   Bayesian Inference for PDE-based Inverse Problems using the Optimization of a Discrete Loss.
+   arXiv, 2025.
+   [arXiv:2510.15664](https://arxiv.org/abs/2510.15664)
