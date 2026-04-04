@@ -7,7 +7,7 @@ from .backend import ModNumpy, ModTensorflow
 
 if not int(os.environ.get("ODIL_MT", 0)):
     os.environ["OMP_NUM_THREADS"] = "1"
-    os.environ["XLA_FLAGS"] = "--xla_cpu_multi_thread_eigen=false " "intra_op_parallelism_threads=1"
+    os.environ["XLA_FLAGS"] = "--xla_cpu_multi_thread_eigen=false intra_op_parallelism_threads=1"
     os.environ["TENSORFLOW_INTER_OP_PARALLELISM"] = "1"
     os.environ["TENSORFLOW_INTRA_OP_PARALLELISM"] = "1"
 

@@ -4,7 +4,6 @@ import numpy as np
 
 
 class Optimizer:
-
     def __init__(self, name=None, displayname=None, dtype=None):
         self.name = name
         self.displayname = displayname if displayname is not None else name
@@ -20,14 +19,12 @@ class Optimizer:
 
 
 class EarlyStopError(Exception):
-
     def __init__(self, msg, optinfo):
         super().__init__(msg)
         self.optinfo = optinfo
 
 
 class LbfgsbOptimizer(Optimizer):
-
     def __init__(self, pgtol=1e-16, m=50, maxls=50, factr=0, dtype=None, mod=None, **kwargs):
         """
         pgtol: `float`
@@ -118,7 +115,6 @@ class LbfgsbOptimizer(Optimizer):
 
 
 class LbfgsOptimizer(Optimizer):
-
     def __init__(self, pgtol=1e-16, m=50, maxls=50, factr=0, dtype=None, mod=None, **kwargs):
         """
         pgtol: `float`
@@ -206,18 +202,15 @@ class LbfgsOptimizer(Optimizer):
 
 
 class AdamTfOptimizer(Optimizer):
-
     def __init__(self, dtype=None, mod=None, **kwargs):
         super().__init__(name="adam_tf", displayname="AdamTf", dtype=dtype)
         self.mod = mod
 
     def run(self, x0, loss_grad, epochs=None, callback=None, lr=1e-3, epoch_start=0, **kwargs):
-
         mod = self.mod
         tf = mod.tf
 
         class CustomModel(tf.keras.Model):
-
             def __init__(self, x):
                 super().__init__()
                 self.x = x
@@ -238,7 +231,6 @@ class AdamTfOptimizer(Optimizer):
         model = CustomModel(x)
 
         class CustomCallback(tf.keras.callbacks.Callback):
-
             def on_epoch_end(self, epoch, logs=None):
                 model.epoch = epoch_start + epoch
                 if epoch > 0 and callback:
@@ -254,13 +246,11 @@ class AdamTfOptimizer(Optimizer):
 
 
 class GdOptimizer(Optimizer):
-
     def __init__(self, dtype=None, mod=None, **kwargs):
         super().__init__(name="gd", displayname="GD", dtype=dtype)
         self.mod = mod
 
     def run(self, x0, loss_grad, epochs=None, callback=None, lr=1e-3, epoch_start=0, **kwargs):
-
         mod = self.mod
         x = [mod.copy(e) for e in x0]
         for epoch in range(epoch_start + 1, epoch_start + epochs + 1):
@@ -278,7 +268,6 @@ class GdOptimizer(Optimizer):
 
 
 class AdamNativeOptimizer(Optimizer):
-
     def __init__(self, dtype=None, mod=None, **kwargs):
         super().__init__(name="adamn", displayname="AdamNative", dtype=dtype)
         self.mod = mod

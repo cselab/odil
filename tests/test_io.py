@@ -8,7 +8,6 @@ import odil
 
 
 class TestIO(unittest.TestCase):
-
     def test_raw_xmf(self):
         name = "foo"
         xmfpath = "data.xdmf2"

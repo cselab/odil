@@ -40,27 +40,27 @@ jax = ["jax[cuda13]>=0.7.0"]
 [dependency-groups]
 dev = [
     "pytest>=7.4.4",
-    "black[jupyter]>=25.0.0",
     "ruff>=0.14.0",
     "mypy>=1.18.2",
 ]
 
-[tool.black]
-line-length = 120
-target-version = ['py312']
-
 [tool.ruff]
-lint.select = [
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
     "E",  # Style errors
     "W",  # Style warnings
     "F",  # Logical errors
     "I",  # Import sorting
 ]
-lint.ignore = [
+ignore = [
     "E741",  # Ambiguous variable name
 ]
-output-format = 'concise'
-line-length = 120
+
+[tool.ruff.format]
+quote-style = "double"
 
 [tool.mypy]
 python_version = "3.12"

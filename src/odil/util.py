@@ -37,7 +37,6 @@ def printlog(*msg):
 
 
 class Timer:
-
     def __init__(self):
         self._starts = []  # Stack of pairs (key, time).
         self.counters = dict()  # Key to time.
@@ -47,9 +46,9 @@ class Timer:
 
     def pop(self, key=None):
         start = self._starts.pop()
-        assert (
-            start[0] is None or key is None or start[0] == key
-        ), "Inconsistent keys passed to push() and pop(): " "{:} and {:}".format(start[0], key)
+        assert start[0] is None or key is None or start[0] == key, (
+            "Inconsistent keys passed to push() and pop(): {:} and {:}".format(start[0], key)
+        )
         if key is None:
             key = start[0]
         dt = time.time() - start[1]
@@ -69,7 +68,7 @@ def get_error(u, v):
 
 def add_arguments(parser):
     parser.add_argument(
-        "--epochs", type=int, default=None, help="Maximum epochs, " "defaults to product of plot_every and frames"
+        "--epochs", type=int, default=None, help="Maximum epochs, defaults to product of plot_every and frames"
     )
     parser.add_argument("--every_factor", type=float, default=1, help="Multiplier for all *_every options")
     parser.add_argument("--plot_every", type=int, default=5, help="Epochs between plots")
@@ -82,9 +81,7 @@ def add_arguments(parser):
     parser.add_argument("--seed", default=1000, type=int, help="Seed for numpy.random and tensorflow.random")
     parser.add_argument("--plot_title", type=int, default=0, help="Enable title in plots")
     parser.add_argument("--plotext", type=str, default="pdf", help="Extension of plots")
-    parser.add_argument(
-        "--history_full", type=int, default=0, help="Number of epochs to write " "history at every point"
-    )
+    parser.add_argument("--history_full", type=int, default=0, help="Number of epochs to write history at every point")
     parser.add_argument("--montage", type=int, default=1, help="Run montage after plotting")
     parser.add_argument("--double", type=int, default=None, help="Double precision. Defaults to runtime.dtype")
     parser.add_argument("--echo", type=int, default=0, help="Echo log to stderr")
@@ -121,11 +118,9 @@ def add_arguments(parser):
     )
     parser.add_argument("--dump_data", type=int, default=1, help="Dump data_*.pickle with every plot")
     parser.add_argument(
-        "--jac_nsmp0", type=int, default=50, help="Number of samples " "for initialization of Jacobi optimizer"
+        "--jac_nsmp0", type=int, default=50, help="Number of samples for initialization of Jacobi optimizer"
     )
-    parser.add_argument(
-        "--jac_nsmp1", type=int, default=1, help="Number of samples " "for each step of Jacobi optimizer"
-    )
+    parser.add_argument("--jac_nsmp1", type=int, default=1, help="Number of samples for each step of Jacobi optimizer")
     parser.add_argument(
         "--jac_factor",
         type=float,
@@ -138,7 +133,7 @@ def add_arguments(parser):
         "--jac_epsilon",
         type=float,
         default=1e-8,
-        help="Parameter epsilon in Jacobi optimizer. " "Added to the diagonal to avoid division by zero",
+        help="Parameter epsilon in Jacobi optimizer. Added to the diagonal to avoid division by zero",
     )
     parser.add_argument(
         "--nn_initializer",

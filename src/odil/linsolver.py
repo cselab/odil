@@ -119,9 +119,7 @@ def add_arguments(parser):
     parser.add_argument("--smooth_pre", type=int, default=2, help="Pre-smoothing steps")
     parser.add_argument("--smooth_post", type=int, default=2, help="Post-smoothing steps")
     parser.add_argument("--omega", type=float, default=0.6, help="Jacobi smoother relaxation factor")
-    parser.add_argument(
-        "--ndirect", type=int, default=3, help="Systems on smaller grids " "are solved with direct solver"
-    )
+    parser.add_argument("--ndirect", type=int, default=3, help="Systems on smaller grids are solved with direct solver")
     parser.add_argument(
         "--restriction",
         type=str,

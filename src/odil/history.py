@@ -7,7 +7,6 @@ Value = float | str | np.float32 | np.float64 | np.ndarray | None
 
 
 class History:
-
     def __init__(self, csvpath: str | None = None, warmup: int = 0):
         """
         warmup: `int`

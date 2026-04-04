@@ -61,7 +61,6 @@ def cache_to_file(targetbase, update=False, name_with_arg0=False):
         raise ValueError("Unrecognized extension '{}', expected .pickle.".format(ext))
 
     def decorator(func):
-
         def inner(*args, **kwargs):
             name, ext = os.path.splitext(targetbase)
             if len(args) and name_with_arg0:
