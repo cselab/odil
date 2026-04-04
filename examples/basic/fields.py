@@ -57,7 +57,6 @@ def parse_args():
 
 
 def plot(problem, state, epoch, frame, cbinfo=None):
-
     domain = problem.domain
     fig, ax = plt.subplots(figsize=(4, 2))
     kw = dict(vmin=0, vmax=1, cmap="Greys", clip_on=False, lw=0.5)

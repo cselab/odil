@@ -9,7 +9,6 @@ from .util import assert_equal
 
 
 class Domain:
-
     def __init__(
         self,
         cshape,
@@ -504,7 +503,6 @@ class Domain:
 
 
 class Field:
-
     def __init__(self, array=None, loc=None, cshape=None):
         """
         array: `ndarray`
@@ -527,7 +525,6 @@ class Field:
 
 
 class MultigridField:
-
     def __init__(self, terms=None, loc=None, factors=None, axes=None, method=None):
         """
         terms: `list` of `Field`
@@ -550,7 +547,6 @@ class MultigridField:
 
 
 class NeuralNet:
-
     def __init__(self, weights=None, biases=None, func_in=None, func_out=None, activation=None):
         """
         weights: `list` of `ndarray`
@@ -574,7 +570,6 @@ class NeuralNet:
 
 
 class Array:
-
     def __init__(self, array=None, shape=None):
         """
         array: `ndarray`
@@ -593,7 +588,6 @@ class Array:
 
 
 class State:
-
     def __init__(self, fields=None, initialized=False):
         """
         fields: A dict mapping field names to state variables
@@ -863,9 +857,7 @@ def eval_neural_net(net: NeuralNet, inputs, mod, frozen=False):
 
 
 class Context:
-
     class Raw:
-
         def __init__(self, value):
             self.value = value
 
@@ -991,7 +983,6 @@ class Context:
 
 
 class Problem:
-
     def __init__(self, operator, domain, extra=None, tracers=None, jit=None):
         """
         operator: callable(mod, ctx)
@@ -1055,7 +1046,8 @@ class Problem:
                 assert len(nonempty) == len(set(nonempty)), "Name of fields must be unique, got {}".format(nonempty)
                 values = [f[1] if isinstance(f, tuple) else f for f in ff]
                 terms = [
-                    mod.mean(v.value) if isinstance(v, Context.Raw) else mod.mean(mod.square(v)) for v in values  #
+                    mod.mean(v.value) if isinstance(v, Context.Raw) else mod.mean(mod.square(v))
+                    for v in values  #
                 ]
                 loss = sum(terms)
                 norms = [t if isinstance(v, Context.Raw) else mod.sqrt(t) for t, v in zip(terms, values)]  #
@@ -1321,7 +1313,6 @@ class Problem:
 
         def func(arrays, tracers):
             with tf.GradientTape(persistent=True, watch_accessed_variables=False) as tape:
-
                 domain.arrays_to_state(arrays, cache["state"])
                 ctx = Context(
                     domain,
@@ -1477,7 +1468,6 @@ def latin_hypercube(ndim, size, dtype):
 
 
 class Approx:
-
     def __init__(self, domain):
         self.domain = domain
         self.mod = domain.mod

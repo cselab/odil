@@ -21,9 +21,9 @@ jobs:
         uses: astral-sh/setup-uv@v6
       - name: Install project
         run: uv sync --locked --dev
-      - name: Run ruff
+      - name: Run ruff lint
         run: uv run ruff check
-      - name: Run black
-        run: uv run black --check .
+      - name: Run ruff format check
+        run: uv run ruff format --check
       - name: Run mypy
         run: uv run make mypy

@@ -10,7 +10,6 @@ import numpy as np
 
 
 class ModBase:
-
     def __init__(self, mod=None):
         assert mod is not None
         self.mod = mod
@@ -43,7 +42,6 @@ class ModBase:
 
 
 class ModNumpy(ModBase):
-
     def __init__(self, mod=None, modsp=None, jax=None):
         mod = mod or np
         super().__init__(mod)
@@ -183,7 +181,6 @@ class ModNumpy(ModBase):
 
 
 class ModTensorflow(ModBase):
-
     def __init__(self, mod=None, modsp=None):
         super().__init__(mod)
         self.batch_to_space = mod.batch_to_space
@@ -280,7 +277,6 @@ class ModTensorflow(ModBase):
 
 
 class ModCupy(ModBase):
-
     def __init__(self, mod=None, modsp=None):
         super().__init__(mod)
         self.cast = lambda x, dtype: mod.array(x, dtype=dtype)

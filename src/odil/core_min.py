@@ -4,7 +4,6 @@ import numpy as np
 
 
 class Domain:
-
     def __init__(self, domain=None, ndim=None, lower=None, upper=None, dimnames=None, dtype=None, cshape=None):
         domain = domain or Namespace(ndim=None, lower=0.0, upper=1.0, dimnames=None, dtype=None, cshape=None)
         dtype = dtype or domain.dtype
