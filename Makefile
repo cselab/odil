@@ -19,9 +19,13 @@ lint:
 format:
 	ruff format $(FORMAT_FLAGS)
 
-check: lint format
+fix: lint format
+
+check:
+	ruff check $(RUFF_FLAGS)
+	ruff format --check $(FORMAT_FLAGS)
 
 mypy:
 	mypy $(MYPY_FLAGS) $(MYPY_TARGETS)
 
-.PHONY: default data release lint format check mypy
+.PHONY: default data release lint format fix check mypy
